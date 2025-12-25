@@ -3,7 +3,8 @@ name: Update Products and Deploy to AWS
 on:
   schedule:
     - cron: '0 2 * * *'  # Daily at 2 AM UTC
-  workflow_dispatch:  # Manual trigger
+
+  # Deploy when you push code changes
   push:
     branches:
       - main
@@ -14,6 +15,9 @@ on:
       - 'package.json'
       - 'webpack.config.js'
       - '.github/workflows/**'
+
+  # Allow manual trigger anytime
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
