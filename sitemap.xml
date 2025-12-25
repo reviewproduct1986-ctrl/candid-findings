@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://getproductopinion.com/</loc>
+    <lastmod>2024-12-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Products Page -->
+  <url>
+    <loc>https://getproductopinion.com/products</loc>
+    <lastmod>2024-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Categories -->
+  <url>
+    <loc>https://getproductopinion.com/category/electronics</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://getproductopinion.com/category/health-fitness</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://getproductopinion.com/category/home-office</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://getproductopinion.com/category/kitchen</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Blog -->
+  <url>
+    <loc>https://getproductopinion.com/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- About/Contact (optional - add if you create these pages) -->
+  <url>
+    <loc>https://getproductopinion.com/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://getproductopinion.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- 
+  Add individual product and blog URLs here as they're created
+  Example:
+  <url>
+    <loc>https://getproductopinion.com/product/wireless-headphones</loc>
+    <lastmod>2024-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://getproductopinion.com/images/wireless-headphones.jpg</image:loc>
+      <image:title>Premium Wireless Headphones</image:title>
+    </image:image>
+  </url>
+  -->
+  
+</urlset>

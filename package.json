@@ -1,40 +1,41 @@
 {
-  "name": "product-review",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.1",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "productopinion",
+  "version": "1.0.0",
+  "description": "Get expert product opinions - Comprehensive reviews and recommendations at getproductopinion.com",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "publish": "npm run build && ./scripts/deploy-to-aws.sh",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development",
+    "fetch-products": "node scripts/fetch-products.js",
+    "generate-blogs": "node scripts/generate-blogs.js",
+    "update-all": "npm run fetch-products && npm run generate-blogs && npm run build",
+    "test-automation": "node scripts/fetch-products.js && node scripts/generate-blogs.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "keywords": [
+    "react",
+    "affiliate",
+    "seo",
+    "amazon",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.263.1"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/preset-react": "^7.22.0",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.8.1",
+    "html-webpack-plugin": "^5.5.3",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }

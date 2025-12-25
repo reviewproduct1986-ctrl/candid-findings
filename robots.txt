@@ -1,0 +1,36 @@
+# robots.txt for getproductopinion.com
+
+# Allow all search engines to crawl everything
+User-agent: *
+Allow: /
+
+# Disallow admin areas (if you add any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Disallow search results (to avoid duplicate content)
+# Disallow: /*?search=
+
+# Crawl-delay (optional - use if you have issues with aggressive bots)
+# Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://getproductopinion.com/sitemap.xml
+
+# Specific bot rules (optional)
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# Facebook (for Open Graph)
+User-agent: Facebot
+Allow: /
+
+# Twitter (for Twitter Cards)
+User-agent: Twitterbot
+Allow: /
