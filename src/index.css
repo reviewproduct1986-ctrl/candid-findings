@@ -207,6 +207,7 @@ textarea:focus {
   -webkit-line-clamp: 2;
 }
 
+
 .line-clamp-3 {
   overflow: hidden;
   display: -webkit-box;
