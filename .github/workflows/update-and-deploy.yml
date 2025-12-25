@@ -76,14 +76,14 @@ jobs:
       # Deploy to S3
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/ s3://my-affiliate-site \
+          aws s3 sync build/ s3://my-affiliate-site \
             --delete \
             --cache-control "public, max-age=31536000, immutable" \
             --exclude "index.html" \
             --exclude "*.json"
           
           # Upload index.html and JSON with shorter cache
-          aws s3 sync dist/ s3://my-affiliate-site \
+          aws s3 sync build/ s3://my-affiliate-site \
             --exclude "*" \
             --include "index.html" \
             --include "*.json" \
