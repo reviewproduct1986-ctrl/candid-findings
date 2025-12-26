@@ -189,7 +189,7 @@ export default function ReviewPage() {
           {/* Quick Buy Section - Sticky & Compact */}
           <div className="sticky top-16 z-30 mb-10 -mx-6 md:-mx-12">
             <div className="bg-white/95 backdrop-blur-md border-b-2 border-violet-200 shadow-lg px-6 md:px-12 py-4">
-              <div className="flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-2">
                 <a
                   href={product.affiliate}
                   target="_blank"
@@ -199,6 +199,9 @@ export default function ReviewPage() {
                   View on Amazon
                   <ArrowRight size={20} />
                 </a>
+                <p className="text-[10px] text-slate-400 text-center">
+                  As an Amazon Associate we earn from qualifying purchases
+                </p>
               </div>
             </div>
           </div>
