@@ -1,11 +1,11 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProductListing from './pages/ProductListing';
 
 // Lazy load ReviewPage - only loads when user visits a review
 const ReviewPage = lazy(() => import('./ReviewPage.jsx'));
 
-// Loading component for lazy routes.
+// Loading component for lazy routes
 function RouteLoader() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
@@ -31,6 +31,8 @@ export default function App() {
             </Suspense>
           } 
         />
+        {/* Catch-all route - redirect 404s to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

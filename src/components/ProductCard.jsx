@@ -63,14 +63,14 @@ export default function ProductCard({ product, index }) {
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-2">
-          {/* View Deal Button */}
+          {/* View on Amazon Button */}
           <a
             href={product.affiliate}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-2.5 px-3 rounded-xl font-semibold text-sm text-center hover:shadow-lg hover:shadow-violet-200 transition-all group/btn flex items-center justify-center gap-1.5 whitespace-nowrap"
           >
-            <span>View Deal</span>
+            <span>View on Amazon</span>
             <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
           </a>
 

@@ -28,7 +28,8 @@ export default function ReviewPage() {
         const foundBlog = blogsList.find(b => b.slug === slug);
         
         if (!foundBlog) {
-          setLoading(false);
+          // Blog not found - redirect to home
+          navigate('/', { replace: true });
           return;
         }
         
@@ -36,7 +37,8 @@ export default function ReviewPage() {
         const foundProduct = productsList.find(p => p.id === foundBlog.productId);
         
         if (!foundProduct) {
-          setLoading(false);
+          // Product not found - redirect to home
+          navigate('/', { replace: true });
           return;
         }
         
@@ -59,9 +61,10 @@ export default function ReviewPage() {
       })
       .catch(error => {
         console.error('Error loading data:', error);
-        setLoading(false);
+        // On error, redirect to home
+        navigate('/', { replace: true });
       });
-  }, [slug]);
+  }, [slug, navigate]);
   
   // Loading state
   if (loading) {
@@ -74,24 +77,10 @@ export default function ReviewPage() {
       </div>
     );
   }
-  
-  // If product not found, show 404
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
-        <div className="text-center">
-          <h1 className="text-6xl font-bold text-slate-900 mb-4">404</h1>
-          <p className="text-xl text-slate-600 mb-8">Review not found</p>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-          >
-            <ArrowLeft size={20} />
-            Back to Products
-          </Link>
-        </div>
-      </div>
-    );
+
+  // Safety check - should not happen due to redirect, but prevents errors
+  if (!product || !blog) {
+    return null;
   }
 
   return (
