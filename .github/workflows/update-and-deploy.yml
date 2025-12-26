@@ -15,10 +15,8 @@ on:
       - 'public/**'
       - 'package.json'
       - 'webpack.config.js'
+      - 'webpack.*.js'
       - '.github/workflows/**'
-    paths-ignore:
-      - 'public/data/**'  # Ignore auto-generated data
-      - '*.md'  # Ignore markdown files
   
   # MANUAL: Allows you to trigger manually anytime
   workflow_dispatch:
