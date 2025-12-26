@@ -131,8 +131,19 @@ export function useProductFilters(products) {
       );
     }
     
-    // Search filter (with fuzzy matching)
-    filtered = searchProducts(filtered, searchTerm);
+    // Search filter (with fuzzy matching and relevance sorting)
+    if (searchTerm) {
+      filtered = searchProducts(filtered, searchTerm);
+    } else {
+      // Default sort: newest first (by lastUpdated date)
+      filtered = [...filtered].sort((a, b) => {
+        if (a.lastUpdated && b.lastUpdated) {
+          return new Date(b.lastUpdated) - new Date(a.lastUpdated);
+        }
+        // Fallback to ID comparison if no dates
+        return b.id.localeCompare(a.id);
+      });
+    }
     
     return filtered;
   }, [products, selectedCategory, searchTerm, priceRange, minRating, selectedBadges]);
