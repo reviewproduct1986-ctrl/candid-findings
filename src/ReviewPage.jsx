@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Star, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Footer from './components/Footer';
@@ -95,6 +96,29 @@ export default function ReviewPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Dynamic SEO Meta Tags */}
+      <Helmet>
+        <title>{product.title} Review - ProductOpinion</title>
+        <meta name="description" content={blog.excerpt || blog.content.substring(0, 155) + '...'} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://getproductopinion.com/reviews/${blog.slug}`} />
+        <meta property="og:title" content={`${product.title} Review - ProductOpinion`} />
+        <meta property="og:description" content={blog.excerpt || blog.content.substring(0, 155)} />
+        <meta property="og:image" content={product.image} />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`https://getproductopinion.com/reviews/${blog.slug}`} />
+        <meta name="twitter:title" content={`${product.title} Review`} />
+        <meta name="twitter:description" content={blog.excerpt || blog.content.substring(0, 155)} />
+        <meta name="twitter:image" content={product.image} />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={`https://getproductopinion.com/reviews/${blog.slug}`} />
+      </Helmet>
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 lg:py-2.5">
