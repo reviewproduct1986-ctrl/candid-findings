@@ -23,7 +23,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  S3_BUCKET: my-affiliate-site  # CHANGE THIS to your bucket name!
+  S3_BUCKET: candid-findings  # CHANGE THIS to your bucket name!
 
 jobs:
   update-and-deploy:

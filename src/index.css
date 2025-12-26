@@ -313,7 +313,7 @@ a:active,
 .range-slider input[type="range"] {
   position: absolute;
   width: 100%;
-  height: 0;  /* 0 height for proper alignment - thumbs will still show */
+  height: 4px;
   background: transparent;
   pointer-events: none;
   -webkit-appearance: none;
