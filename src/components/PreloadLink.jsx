@@ -14,7 +14,7 @@ export default function PreloadLink({ to, onMouseEnter, onTouchStart, children, 
     // Check if it's a review route
     if (to.startsWith('/reviews/')) {
       // Dynamically import ReviewPage to trigger chunk loading
-      import('./ReviewPage').then(() => {
+      import('../pages/ReviewPage').then(() => {
         preloaded.current = true;
       }).catch(err => {
         console.warn('Failed to preload ReviewPage:', err);

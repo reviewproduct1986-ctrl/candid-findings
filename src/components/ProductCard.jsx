@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, ArrowRight, Sparkles } from 'lucide-react';
-import PreloadLink from '../PreloadLink';
+import PreloadLink from './PreloadLink';
 
 export default function ProductCard({ product, index }) {
   return (

@@ -44,6 +44,9 @@ export default function Footer() {
             <Link to="/terms" className="text-slate-400 hover:text-violet-400 transition-colors">
               Terms of Service
             </Link>
+            <Link to="/about" className="text-slate-400 hover:text-violet-400 transition-colors">
+              About
+            </Link>
           </div>
           <p className="text-xs text-slate-500 mt-4">
             © 2025 CandidFindings. All rights reserved.
