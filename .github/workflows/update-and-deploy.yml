@@ -8,7 +8,7 @@ on:
   # AUTOMATIC: Runs when you push to main branch
   push:
     branches:
-      - main
+      - production
     paths:
       - 'scripts/**'
       - 'src/**'
