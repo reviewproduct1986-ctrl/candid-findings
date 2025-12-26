@@ -62,32 +62,32 @@ export default function ProductCard({ product, index }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2">
           {/* View Deal Button */}
           <a
             href={product.affiliate}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold text-center hover:shadow-lg hover:shadow-violet-200 transition-all group/btn flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-2.5 px-3 rounded-xl font-semibold text-sm text-center hover:shadow-lg hover:shadow-violet-200 transition-all group/btn flex items-center justify-center gap-1.5 whitespace-nowrap"
           >
-            View Deal
-            <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+            <span>View Deal</span>
+            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
           </a>
 
           {/* Read Review Button */}
           {product.reviewUrl ? (
             <PreloadLink
               to={product.reviewUrl}
-              className="flex-1 bg-white text-violet-600 py-3 px-4 rounded-xl font-semibold hover:bg-violet-50 transition-all border-2 border-violet-200 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full bg-white text-violet-600 py-2.5 px-3 rounded-xl font-semibold text-sm hover:bg-violet-50 transition-all border-2 border-violet-200 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
               title="View Detailed Review"
             >
-              <Sparkles size={18} />
-              <span className="text-sm md:text-base">Read Review</span>
+              <Sparkles size={14} className="flex-shrink-0" />
+              <span>Review</span>
             </PreloadLink>
           ) : (
-            <div className="flex-1 bg-gray-100 text-gray-400 py-3 px-4 rounded-xl font-semibold border-2 border-gray-200 flex items-center justify-center gap-2">
-              <Sparkles size={18} />
-              <span className="text-sm md:text-base">No Review Yet</span>
+            <div className="w-full bg-gray-100 text-gray-400 py-2.5 px-3 rounded-xl font-semibold text-sm border-2 border-gray-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <Sparkles size={14} className="flex-shrink-0" />
+              <span>No Review</span>
             </div>
           )}
         </div>

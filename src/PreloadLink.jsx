@@ -1,5 +1,5 @@
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
 
 /**
  * Smart Link that preloads route chunks on hover/touch

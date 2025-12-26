@@ -73,13 +73,23 @@ html {
 }
 
 /* Focus Indicators for Accessibility */
+/* Use focus-visible to only show outline when keyboard navigating */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline (will only show on focus-visible) */
 a:focus,
 button:focus,
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* Skip to main content link (accessibility) */
@@ -111,6 +121,13 @@ textarea:focus {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Instant active states for better button responsiveness */
+button:active,
+a:active,
+[role="button"]:active {
+  transition-duration: 0ms;
+}
+
 /* Disable transitions during page load for better performance */
 .preload * {
   transition: none !important;
@@ -139,6 +156,65 @@ textarea:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Thin scrollbar for horizontal scroll containers */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}
+
+/* Firefox scrollbar styling */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #c4b5fd transparent;
+}
+
+/* Hide scrollbar completely (for clean look) */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth momentum scrolling on iOS */
+.scroll-smooth-mobile {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Snap scrolling for better mobile experience */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+/* Touch action for better mobile scrolling */
+.touch-pan-x {
+  touch-action: pan-x;
 }
 
 /* Print Styles */
@@ -207,7 +283,6 @@ textarea:focus {
   -webkit-line-clamp: 2;
 }
 
-
 .line-clamp-3 {
   overflow: hidden;
   display: -webkit-box;
@@ -227,4 +302,144 @@ textarea:focus {
 .gpu-accelerate {
   transform: translateZ(0);
   will-change: transform;
+}
+
+/* Dual Range Slider Styles */
+.range-slider {
+  position: relative;
+  height: 8px;
+}
+
+.range-slider input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 0;  /* 0 height for proper alignment - thumbs will still show */
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  top: 4px;  /* Center align with track */
+}
+
+/* Remove default track styling */
+.range-slider input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border: none;
+}
+
+.range-slider input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border: none;
+}
+
+/* Webkit (Chrome, Safari, Edge) - Thumb styles */
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #7c3aed;
+  cursor: grab;
+  pointer-events: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 0;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(124, 58, 237, 0.3);
+}
+
+.range-slider input[type="range"]:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+/* Firefox - Thumb styles */
+.range-slider input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #7c3aed;
+  cursor: grab;
+  pointer-events: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.range-slider input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(124, 58, 237, 0.3);
+}
+
+.range-slider input[type="range"]:active::-moz-range-thumb {
+  cursor: grabbing;
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+/* Focus state for accessibility */
+.range-slider input[type="range"]:focus {
+  outline: none;
+}
+
+.range-slider input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.25);
+}
+
+.range-slider input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.25);
+}
+
+/* Mobile Filter Panel Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

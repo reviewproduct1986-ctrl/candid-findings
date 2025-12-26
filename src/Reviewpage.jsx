@@ -95,21 +95,27 @@ export default function ReviewPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-morphism shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 lg:py-2.5">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-lg flex items-center justify-center">
+            <Link 
+              to="/" 
+              className="flex items-center gap-2.5 flex-shrink-0 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 rounded-lg"
+              aria-label="Go to homepage"
+            >
+              <div className="w-9 h-9 lg:w-10 lg:h-10 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 group-active:scale-95">
                 <Sparkles className="text-white" size={18} />
               </div>
-              <h1 className="text-base md:text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
-                <span className="hidden sm:inline">GetProductOpinion.</span>
-                <span className="sm:hidden">GPO.</span>
-              </h1>
+              <div className="hidden sm:block">
+                <h1 className="font-bold text-slate-900 text-base lg:text-lg leading-tight group-hover:text-violet-600 transition-colors">
+                  GetProductOpinion.
+                </h1>
+                <p className="text-xs text-slate-500 leading-tight">Expert Recommendations</p>
+              </div>
             </Link>
             <Link
               to="/"
-              className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50 transition-all text-sm font-semibold text-slate-700"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-slate-600 hover:text-violet-600 transition-colors text-sm font-medium hover:bg-slate-50 rounded-lg"
             >
               <ArrowLeft size={16} />
               <span className="hidden sm:inline">Back to Products</span>

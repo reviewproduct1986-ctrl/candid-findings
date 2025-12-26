@@ -33,11 +33,30 @@ export default function FilterPanel({
         </button>
       </div>
 
+      {/* Mobile Backdrop */}
+      {showFilters && (
+        <div 
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+          onClick={() => setShowFilters(false)}
+          style={{ animation: 'fadeIn 0.3s ease-out' }}
+        />
+      )}
+
       {/* Filter Panel */}
       <div className={`
-        lg:block bg-white rounded-2xl border border-slate-200 p-6 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto
-        ${showFilters ? 'block' : 'hidden'}
-      `}>
+        lg:block lg:sticky lg:top-24 
+        bg-white rounded-2xl border border-slate-200 p-6 
+        max-h-[calc(100vh-8rem)] overflow-y-auto
+        
+        ${showFilters 
+          ? 'block fixed bottom-0 left-0 right-0 z-50 lg:relative rounded-b-none lg:rounded-2xl max-h-[85vh] lg:max-h-[calc(100vh-8rem)] shadow-2xl lg:shadow-none' 
+          : 'hidden lg:block'
+        }
+      `}
+      style={showFilters ? {
+        animation: 'slideUp 0.3s ease-out'
+      } : undefined}
+      >
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-slate-900 text-lg flex items-center gap-2">
             <Filter size={20} className="text-violet-600" />
@@ -46,7 +65,8 @@ export default function FilterPanel({
           {showFilters && (
             <button
               onClick={() => setShowFilters(false)}
-              className="lg:hidden p-1 hover:bg-slate-100 rounded-lg"
+              className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Close filters"
             >
               <X size={20} />
             </button>
@@ -59,18 +79,65 @@ export default function FilterPanel({
             <label className="block text-sm font-semibold text-slate-700 mb-3">
               Price Range
             </label>
-            <div className="space-y-2">
-              <input
-                type="range"
-                min="0"
-                max="500"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
-              />
-              <div className="flex justify-between text-sm text-slate-600">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
+            <div className="space-y-3">
+              {/* Dual Range Slider Container */}
+              <div className="range-slider relative pt-2 pb-6">
+                {/* Range Track Background */}
+                <div className="absolute w-full h-2 bg-slate-200 rounded-lg top-2"></div>
+                
+                {/* Active Range Highlight */}
+                <div 
+                  className="absolute h-2 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-lg top-2"
+                  style={{
+                    left: `${(priceRange[0] / 500) * 100}%`,
+                    right: `${100 - (priceRange[1] / 500) * 100}%`
+                  }}
+                ></div>
+                
+                {/* Min Slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max="500"
+                  value={priceRange[0]}
+                  onChange={(e) => {
+                    const newMin = parseInt(e.target.value);
+                    if (newMin <= priceRange[1]) {
+                      setPriceRange([newMin, priceRange[1]]);
+                    }
+                  }}
+                  style={{ zIndex: priceRange[0] > priceRange[1] - 50 ? 5 : 3 }}
+                />
+                
+                {/* Max Slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max="500"
+                  value={priceRange[1]}
+                  onChange={(e) => {
+                    const newMax = parseInt(e.target.value);
+                    if (newMax >= priceRange[0]) {
+                      setPriceRange([priceRange[0], newMax]);
+                    }
+                  }}
+                  style={{ zIndex: 4 }}
+                />
+              </div>
+              
+              {/* Price Range Display */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-violet-600">
+                  ${priceRange[0]} - ${priceRange[1]}
+                </span>
+                {(priceRange[0] !== 0 || priceRange[1] !== 500) && (
+                  <button
+                    onClick={() => setPriceRange([0, 500])}
+                    className="text-xs text-slate-500 hover:text-violet-600 transition-colors underline"
+                  >
+                    Reset
+                  </button>
+                )}
               </div>
             </div>
           </div>
