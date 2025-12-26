@@ -5,7 +5,6 @@ import ReactMarkdown from 'react-markdown';
 
 export default function ReviewPage() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   
   const [product, setProduct] = useState(null);
   const [blog, setBlog] = useState(null);
