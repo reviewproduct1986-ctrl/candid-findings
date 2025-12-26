@@ -110,24 +110,7 @@ jobs:
           else
             echo "ℹ️  CloudFront not configured, skipping cache invalidation"
           fi
-      
-      - name: 💾 Commit generated content
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # Add generated files
-          git add public/data/ public/sitemap.xml || true
-          
-          # Check if there are changes
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "🤖 Auto-update: Products, blogs, and sitemap - $(date +'%Y-%m-%d %H:%M UTC')"
-            git push
-            echo "✅ Changes committed and pushed"
-          fi
-      
+
       - name: 📊 Deployment summary
         if: always()
         env:
