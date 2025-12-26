@@ -282,14 +282,14 @@ export default function ReviewPage() {
                   href={product.affiliate}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-violet-200 transition-all flex items-center justify-center gap-2"
+                  className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-4 px-6 sm:px-8 rounded-xl font-bold text-base sm:text-lg hover:shadow-lg hover:shadow-violet-200 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   View Deal - ${product.price}
                   <ArrowRight size={20} />
                 </a>
                 <Link
                   to="/"
-                  className="bg-white text-violet-600 py-4 px-8 rounded-xl font-bold text-lg border-2 border-violet-200 hover:bg-violet-50 transition-all flex items-center justify-center gap-2"
+                  className="bg-white text-violet-600 py-4 px-6 sm:px-8 rounded-xl font-bold text-base sm:text-lg border-2 border-violet-200 hover:bg-violet-50 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   View More Products
                 </Link>
