@@ -5,7 +5,7 @@ import ProductListing from './pages/ProductListing';
 // Lazy load ReviewPage - only loads when user visits a review
 const ReviewPage = lazy(() => import('./ReviewPage.jsx'));
 
-// Loading component for lazy routes
+// Loading component for lazy routes.
 function RouteLoader() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
