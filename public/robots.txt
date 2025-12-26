@@ -1,5 +1,5 @@
-# robots.txt for getproductopinion.com
-# https://getproductopinion.com/robots.txt
+# robots.txt for candidfindings.com
+# https://candidfindings.com/robots.txt
 
 # Allow all search engines to crawl everything
 User-agent: *
@@ -8,7 +8,7 @@ Disallow: /private/
 Disallow: /admin/
 
 # Sitemap location (critical for SEO!)
-Sitemap: https://getproductopinion.com/sitemap.xml
+Sitemap: https://candidfindings.com/sitemap.xml
 
 # Google
 User-agent: Googlebot

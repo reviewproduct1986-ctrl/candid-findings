@@ -11,7 +11,7 @@ export default function Footer() {
             <span className="text-violet-400">ⓘ</span> Amazon Affiliate Disclosure
           </h3>
           <p className="text-sm text-slate-300 leading-relaxed mb-3">
-            GetProductOpinion.com is a participant in the Amazon Services LLC Associates Program, 
+            CandidFindings.com is a participant in the Amazon Services LLC Associates Program, 
             an affiliate advertising program designed to provide a means for sites to earn 
             advertising fees by advertising and linking to Amazon.com. As an Amazon Associate, 
             we earn from qualifying purchases.
@@ -30,11 +30,11 @@ export default function Footer() {
               <Sparkles className="text-white" size={20} />
             </div>
             <p className="font-bold text-white text-lg">
-              GetProductOpinion.
+              CandidFindings
             </p>
           </div>
           <p className="text-sm text-slate-400">
-            Expert product curation and unbiased reviews © 2024
+            Honest product reviews and candid findings © 2024-2025
           </p>
         </div>
       </div>

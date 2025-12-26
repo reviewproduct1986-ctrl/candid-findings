@@ -1,7 +1,7 @@
 {
-  "name": "productopinion",
+  "name": "candidfindings",
   "version": "1.0.0",
-  "description": "Get expert product opinions - Comprehensive reviews and recommendations at getproductopinion.com",
+  "description": "Honest product reviews - Comprehensive recommendations at candidfindings.com",
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
@@ -25,12 +25,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "lucide-react": "^0.263.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.20.0"
+    "lucide-react": "^0.263.1",
+    "react-router-dom": "^6.20.0",
+    "react-markdown": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SITE_URL = 'https://getproductopinion.com'; // Update with your actual domain
+const SITE_URL = 'https://candidfindings.com'; // Update with your actual domain
 
 /**
  * Load blogs from JSON

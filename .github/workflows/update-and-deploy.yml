@@ -132,6 +132,6 @@ jobs:
           fi
           echo "   S3 Website: http://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
           echo ""
-          echo "🗺️ Sitemap: https://getproductopinion.com/sitemap.xml"
+          echo "🗺️ Sitemap: https://candidfindings.com/sitemap.xml"
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

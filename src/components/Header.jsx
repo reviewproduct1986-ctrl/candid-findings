@@ -25,9 +25,9 @@ export default function Header({
             </div>
             <div className="hidden sm:block">
               <h1 className="font-bold text-slate-900 text-base lg:text-lg leading-tight group-hover:text-violet-600 transition-colors">
-                GetProductOpinion.
+                CandidFindings
               </h1>
-              <p className="text-xs text-slate-500 leading-tight">Expert Recommendations</p>
+              <p className="text-xs text-slate-500 leading-tight">Honest Recommendations</p>
             </div>
           </Link>
 

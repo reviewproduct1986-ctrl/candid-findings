@@ -98,25 +98,25 @@ export default function ReviewPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Dynamic SEO Meta Tags */}
       <Helmet>
-        <title>{product.title} Review - ProductOpinion</title>
+        <title>{product.title} Review - CandidFindings</title>
         <meta name="description" content={blog.excerpt || blog.content.substring(0, 155) + '...'} />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://getproductopinion.com/reviews/${blog.slug}`} />
-        <meta property="og:title" content={`${product.title} Review - ProductOpinion`} />
+        <meta property="og:url" content={`https://candidfindings.com/reviews/${blog.slug}`} />
+        <meta property="og:title" content={`${product.title} Review - CandidFindings`} />
         <meta property="og:description" content={blog.excerpt || blog.content.substring(0, 155)} />
         <meta property="og:image" content={product.image} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://getproductopinion.com/reviews/${blog.slug}`} />
+        <meta name="twitter:url" content={`https://candidfindings.com/reviews/${blog.slug}`} />
         <meta name="twitter:title" content={`${product.title} Review`} />
         <meta name="twitter:description" content={blog.excerpt || blog.content.substring(0, 155)} />
         <meta name="twitter:image" content={product.image} />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={`https://getproductopinion.com/reviews/${blog.slug}`} />
+        <link rel="canonical" href={`https://candidfindings.com/reviews/${blog.slug}`} />
       </Helmet>
 
       {/* Header */}
