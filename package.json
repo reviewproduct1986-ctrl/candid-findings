@@ -6,12 +6,12 @@
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
     "dev": "webpack serve --config webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
-    "build:dev": "webpack --config webpack.dev.js",
-    "build:analyze": "cross-env NODE_ENV=production webpack --config webpack.prod.js --analyze",
+    "build": "react-scripts build && cross-env NODE_ENV=production webpack --config webpack.prod.js",
     "fetch-products": "node scripts/fetch-products.js",
     "generate-blogs": "node scripts/generate-blogs.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
+    "postbuild": "react-snap",
+    "prebuild": "node generate-routes.js",
     "update-all": "npm run fetch-products && npm run generate-blogs && npm run generate-sitemap && npm run build",
     "test-automation": "node scripts/fetch-products.js && node scripts/generate-blogs.js && node scripts/generate-sitemap.js"
   },
@@ -24,13 +24,23 @@
   ],
   "author": "",
   "license": "MIT",
+  "reactSnap": {
+    "include": "./routes.txt",
+    "inlineCss": true,
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true
+    }
+  },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "lucide-react": "^0.263.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "lucide-react": "^0.263.1",
+    "react-markdown": "^9.0.1",
     "react-router-dom": "^6.20.0",
-    "react-markdown": "^9.0.1"
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
@@ -42,6 +52,7 @@
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "html-webpack-plugin": "^5.5.3",
+    "react-snap": "^1.23.0",
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.88.0",

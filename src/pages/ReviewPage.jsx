@@ -128,6 +128,10 @@ export default function ReviewPage() {
         <meta property="og:image" content={product.image} />
         <meta property="og:type" content="article" />
         <link rel="canonical" href={`https://candidfindings.com/reviews/${slug}`} />
+        
+        {/* Preload hero image for faster LCP */}
+        <link rel="preload" as="image" href={product.image} fetchpriority="high" />
+        
         {faqSchema && (
           <script type="application/ld+json">
             {JSON.stringify(faqSchema)}
@@ -166,7 +170,12 @@ export default function ReviewPage() {
           {/* Desktop: Horizontal layout with product info */}
           <div className="hidden md:flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img src={product.image} alt={product.title} className="w-16 h-16 rounded-lg object-cover" />
+              <img 
+                src={product.image} 
+                alt={product.title} 
+                className="w-16 h-16 rounded-lg object-cover"
+                loading="lazy"
+              />
               <div>
                 <div className="font-bold text-slate-900 text-sm">{product.title}</div>
                 <div className="flex items-center gap-2">
@@ -285,25 +294,31 @@ export default function ReviewPage() {
             </div>
 
             <div className="mb-10">
-              <img src={product.image} alt={`${product.title} - Product review image`} className="w-full h-96 object-cover rounded-2xl shadow-lg" />
+              <img 
+                src={product.image} 
+                alt={`${product.title} - Product review image`}
+                className="w-full h-96 object-cover rounded-2xl shadow-lg"
+                fetchPriority="high"
+                loading="eager"
+              />
             </div>
 
             {/* Table of Contents - NO SCROLL OFFSET NEEDED! */}
             {tableOfContents.length > 0 && (
-              <div className="not-prose mb-8 border border-slate-200 rounded-xl overflow-hidden">
+              <div className="not-prose mb-8 border border-slate-200 rounded-xl overflow-hidden transition-all duration-300">
                 <button
                   onClick={() => setTocExpanded(!tocExpanded)}
-                  className="w-full flex items-center justify-between p-5 bg-gradient-to-r from-slate-50 to-gray-50 hover:from-slate-100 hover:to-gray-100 transition-all group"
+                  className="w-full flex items-center justify-between p-5 bg-gradient-to-r from-slate-50 to-gray-50 hover:from-slate-100 hover:to-gray-100 transition-all duration-300 group"
                 >
                   <div className="flex items-center gap-2">
-                    <BookOpen className="text-violet-600" size={20} />
-                    <h2 className="font-bold text-slate-900">Table of Contents</h2>
-                    <span className="text-xs text-slate-500">({totalSections} sections)</span>
+                    <BookOpen className="text-violet-600 transition-transform duration-300 group-hover:scale-110" size={20} />
+                    <h2 className="font-bold text-slate-900 transition-colors duration-300 group-hover:text-violet-600">Table of Contents</h2>
+                    <span className="text-xs text-slate-500 transition-all duration-300 group-hover:text-violet-500">({totalSections} sections)</span>
                   </div>
-                  <ChevronDown className={`text-slate-400 transition-transform ${tocExpanded ? 'rotate-180' : ''}`} size={20} />
+                  <ChevronDown className={`text-slate-400 transition-all duration-300 ${tocExpanded ? 'rotate-180 text-violet-600' : ''}`} size={20} />
                 </button>
 
-                {tocExpanded && (
+                <div className={`transition-all duration-500 ease-in-out ${tocExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
                   <div className="p-5 bg-white">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {tableOfContents.map((heading, index) => (
@@ -314,7 +329,8 @@ export default function ReviewPage() {
                           className="block p-4 rounded-xl transition-all hover:shadow-md"
                           style={{
                             backgroundColor: heading.level === 2 ? '#f0f9ff' : '#fef3c7',
-                            borderLeft: heading.level === 2 ? '4px solid #3b82f6' : '4px solid #f59e0b'
+                            borderLeft: heading.level === 2 ? '4px solid #3b82f6' : '4px solid #f59e0b',
+                            animation: `fadeInUp 0.3s ease-out ${index * 0.03}s both`
                           }}
                         >
                           <span className="font-semibold">{heading.text}</span>
@@ -328,7 +344,7 @@ export default function ReviewPage() {
                       {blog?.verdict && <a href="#verdict" onClick={() => setTocExpanded(false)} className="block p-4 rounded-xl bg-violet-50 border-l-4 border-violet-500"><span className="font-semibold">Final Verdict</span></a>}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             )}
 
@@ -436,7 +452,12 @@ export default function ReviewPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedProducts.map((relatedProduct) => (
                   <div key={relatedProduct.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <img src={relatedProduct.image} alt={relatedProduct.title} className="w-full h-48 object-cover" />
+                    <img 
+                      src={relatedProduct.image} 
+                      alt={relatedProduct.title} 
+                      className="w-full h-48 object-cover"
+                      loading="lazy"
+                    />
                     <div className="p-5">
                       <h3 className="font-bold text-lg text-slate-900 mb-2">{relatedProduct.title}</h3>
                       <div className="flex items-center gap-2 mb-3">
@@ -471,6 +492,17 @@ export default function ReviewPage() {
           margin: 2rem auto;
           border-radius: 1rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>

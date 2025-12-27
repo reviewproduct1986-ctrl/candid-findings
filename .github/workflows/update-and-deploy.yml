@@ -88,7 +88,7 @@ jobs:
           
           # Upload index.html, JSON files, and sitemap with no cache (always fresh)
           aws s3 sync dist/ s3://${{ env.S3_BUCKET }} \
-            --cache-control "public, max-age=0, must-revalidate" \
+            --cache-control "no-cache, no-store, must-revalidate" \
             --exclude "*" \
             --include "index.html" \
             --include "*.json" \
