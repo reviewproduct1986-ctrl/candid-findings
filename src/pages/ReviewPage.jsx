@@ -118,7 +118,7 @@ export default function ReviewPage() {
     (blog?.targetAudience ? 1 : 0) + 
     (blog?.verdict ? 1 : 0);
 
-  return (
+  return ( 
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pb-24">
       <Helmet>
         <title>{product.title} Review - CandidFindings</title>
