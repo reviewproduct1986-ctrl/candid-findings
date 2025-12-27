@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ProsCons({ blog }) {
+export default function ProsCons({ blog, scrollOffset = 256 }) {
   if (!blog?.pros && !blog?.cons) return null;
 
   return (
@@ -8,7 +8,11 @@ export default function ProsCons({ blog }) {
       {/* Pros Section */}
       {blog?.pros && blog.pros.length > 0 && (
         <div className="my-12">
-          <h3 id="pros" className="text-2xl font-bold text-slate-900 mb-4 scroll-mt-48">
+          <h3 
+            id="pros" 
+            className="text-2xl font-bold text-slate-900 mb-4"
+            style={{ scrollMarginTop: `${256}px` }}
+          >
             What We Love (Pros)
           </h3>
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200">
@@ -27,7 +31,11 @@ export default function ProsCons({ blog }) {
       {/* Cons Section */}
       {blog?.cons && blog.cons.length > 0 && (
         <div className="my-12">
-          <h3 id="cons" className="text-2xl font-bold text-slate-900 mb-4 scroll-mt-48">
+          <h3 
+            id="cons" 
+            className="text-2xl font-bold text-slate-900 mb-4"
+            style={{ scrollMarginTop: `${scrollOffset}px` }}
+          >
             Potential Drawbacks (Cons)
           </h3>
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-orange-200">
