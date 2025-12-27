@@ -10,7 +10,8 @@ export default function FilterPanel({
   setMinRating,
   selectedBadges,
   setSelectedBadges,
-  availableBadges
+  availableBadges,
+  maxPrice = 500 // Default to 500 if not provided
 }) {
   const toggleBadge = (badge) => {
     setSelectedBadges(prev =>
@@ -48,20 +49,15 @@ export default function FilterPanel({
         bg-white rounded-2xl border border-slate-200 p-6 
         max-h-[calc(100vh-8rem)] overflow-y-auto
         
-        ${showFilters 
-          ? 'block fixed bottom-0 left-0 right-0 z-50 lg:relative rounded-b-none lg:rounded-2xl max-h-[85vh] lg:max-h-[calc(100vh-8rem)] shadow-2xl lg:shadow-none' 
-          : 'hidden lg:block'
-        }
-      `}
-      style={showFilters ? {
-        animation: 'slideUp 0.3s ease-out'
-      } : undefined}
-      >
+        ${showFilters ? 'fixed inset-x-4 top-24 bottom-24 z-50 lg:relative lg:inset-auto' : 'hidden'}
+      `}>
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-slate-900 text-lg flex items-center gap-2">
             <Filter size={20} className="text-violet-600" />
             Filters
           </h3>
+          
+          {/* Mobile Close Button */}
           {showFilters && (
             <button
               onClick={() => setShowFilters(false)}
@@ -89,8 +85,8 @@ export default function FilterPanel({
                 <div 
                   className="absolute h-2 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-lg top-2"
                   style={{
-                    left: `${(priceRange[0] / 500) * 100}%`,
-                    right: `${100 - (priceRange[1] / 500) * 100}%`
+                    left: `${(priceRange[0] / maxPrice) * 100}%`,
+                    right: `${100 - (priceRange[1] / maxPrice) * 100}%`
                   }}
                 ></div>
                 
@@ -98,7 +94,7 @@ export default function FilterPanel({
                 <input
                   type="range"
                   min="0"
-                  max="500"
+                  max={maxPrice}
                   aria-label="Minimum price"
                   value={priceRange[0]}
                   onChange={(e) => {
@@ -107,6 +103,7 @@ export default function FilterPanel({
                       setPriceRange([newMin, priceRange[1]]);
                     }
                   }}
+                  className="absolute w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-violet-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-violet-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-lg"
                   style={{ zIndex: priceRange[0] > priceRange[1] - 50 ? 5 : 3 }}
                 />
                 
@@ -114,7 +111,7 @@ export default function FilterPanel({
                 <input
                   type="range"
                   min="0"
-                  max="500"
+                  max={maxPrice}
                   aria-label="Maximum price"
                   value={priceRange[1]}
                   onChange={(e) => {
@@ -123,23 +120,20 @@ export default function FilterPanel({
                       setPriceRange([priceRange[0], newMax]);
                     }
                   }}
+                  className="absolute w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-violet-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-violet-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-lg"
                   style={{ zIndex: 4 }}
                 />
               </div>
               
               {/* Price Range Display */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-violet-600">
-                  ${priceRange[0]} - ${priceRange[1]}
-                </span>
-                {(priceRange[0] !== 0 || priceRange[1] !== 500) && (
-                  <button
-                    onClick={() => setPriceRange([0, 500])}
-                    className="text-xs text-slate-500 hover:text-violet-600 transition-colors underline"
-                  >
-                    Reset
-                  </button>
-                )}
+              <div className="flex items-center justify-between text-sm">
+                <div className="px-3 py-2 bg-slate-100 rounded-lg font-medium text-slate-700">
+                  ${priceRange[0]}
+                </div>
+                <div className="text-slate-400">—</div>
+                <div className="px-3 py-2 bg-slate-100 rounded-lg font-medium text-slate-700">
+                  ${priceRange[1]}
+                </div>
               </div>
             </div>
           </div>
@@ -149,20 +143,47 @@ export default function FilterPanel({
             <label className="block text-sm font-semibold text-slate-700 mb-3">
               Minimum Rating
             </label>
-            <div className="flex gap-2">
-              {[0, 3, 4, 4.5].map((rating) => (
-                <button
-                  key={rating}
-                  onClick={() => setMinRating(rating)}
-                  className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                    minRating === rating
-                      ? 'bg-violet-600 text-white'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
-                >
-                  {rating === 0 ? 'All' : `${rating}+`}
-                </button>
+            <div className="space-y-2">
+              {[4.5, 4.0, 3.5, 3.0].map((rating) => (
+                <label key={rating} className="flex items-center gap-3 cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="rating"
+                    checked={minRating === rating}
+                    onChange={() => setMinRating(rating)}
+                    className="w-4 h-4 text-violet-600 focus:ring-violet-500"
+                  />
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm text-slate-700 group-hover:text-violet-600 transition-colors">
+                      {rating}+
+                    </span>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                </label>
               ))}
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="radio"
+                  name="rating"
+                  checked={minRating === 0}
+                  onChange={() => setMinRating(0)}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500"
+                />
+                <span className="text-sm text-slate-700 group-hover:text-violet-600 transition-colors">
+                  All Ratings
+                </span>
+              </label>
             </div>
           </div>
 
@@ -170,40 +191,38 @@ export default function FilterPanel({
           {availableBadges.length > 0 && (
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-3">
-                Tags
+                Special Badges
               </label>
-              <div className="flex flex-wrap gap-2">
+              <div className="space-y-2">
                 {availableBadges.map((badge) => (
-                  <button
-                    key={badge}
-                    onClick={() => toggleBadge(badge)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      selectedBadges.includes(badge)
-                        ? 'bg-violet-600 text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    {badge}
-                  </button>
+                  <label key={badge} className="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={selectedBadges.includes(badge)}
+                      onChange={() => toggleBadge(badge)}
+                      className="w-4 h-4 text-violet-600 rounded focus:ring-violet-500"
+                    />
+                    <span className="text-sm px-2 py-1 bg-amber-100 text-amber-700 rounded-full font-medium group-hover:bg-amber-200 transition-colors">
+                      {badge}
+                    </span>
+                  </label>
                 ))}
               </div>
             </div>
           )}
-
-          {/* Clear Filters */}
-          {(minRating > 0 || priceRange[0] > 0 || priceRange[1] < 500 || selectedBadges.length > 0) && (
-            <button
-              onClick={() => {
-                setMinRating(0);
-                setPriceRange([0, 500]);
-                setSelectedBadges([]);
-              }}
-              className="w-full px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition-all"
-            >
-              Clear All Filters
-            </button>
-          )}
         </div>
+
+        {/* Clear Filters Button */}
+        <button
+          onClick={() => {
+            setPriceRange([0, maxPrice]);
+            setMinRating(0);
+            setSelectedBadges([]);
+          }}
+          className="w-full mt-6 py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition-colors"
+        >
+          Clear All Filters
+        </button>
       </div>
     </>
   );

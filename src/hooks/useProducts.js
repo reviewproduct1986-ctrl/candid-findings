@@ -46,10 +46,30 @@ export function useProductData() {
 export function useProductFilters(products) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 500]);
   const [minRating, setMinRating] = useState(0);
   const [selectedBadges, setSelectedBadges] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+
+  // Calculate max price dynamically from products
+  const maxPrice = useMemo(() => {
+    if (products.length === 0) return 500; // Default fallback
+    
+    // Find the highest price among all products
+    const highest = Math.max(...products.map(p => p.price));
+    
+    // Round up to nearest 50 for cleaner slider
+    return Math.ceil(highest / 50) * 50;
+  }, [products]);
+
+  // Initialize price range with dynamic max (only once when products load)
+  const [priceRange, setPriceRange] = useState([0, maxPrice]);
+
+  // Update max price when products change
+  useEffect(() => {
+    if (products.length > 0) {
+      setPriceRange(prev => [prev[0], maxPrice]);
+    }
+  }, [maxPrice, products.length]);
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -166,6 +186,7 @@ export function useProductFilters(products) {
     // Computed
     categories,
     availableBadges,
-    filteredProducts
+    filteredProducts,
+    maxPrice // Export max price for FilterPanel
   };
 }

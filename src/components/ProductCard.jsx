@@ -3,20 +3,33 @@ import { Star, ArrowRight, Sparkles } from 'lucide-react';
 import PreloadLink from './PreloadLink';
 
 export default function ProductCard({ product, index }) {
+  // Calculate discount percentage if listPrice exists and is higher
+  const hasDiscount = product.listPrice && product.listPrice > product.price;
+  const discountPercent = hasDiscount 
+    ? Math.round(((product.listPrice - product.price) / product.listPrice) * 100)
+    : 0;
+
   return (
     <div
-      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-violet-200"
+      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-violet-200 flex flex-col h-full"
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* Product Image */}
-      <div className="relative overflow-hidden aspect-square bg-gradient-to-br from-slate-100 to-slate-200">
+      {/* Product Image - Fixed aspect ratio */}
+      <div className="relative overflow-hidden aspect-square bg-gradient-to-br from-slate-100 to-slate-200 flex-shrink-0">
         <img
           src={product.image}
-          alt={`${product.title} - ${product.category} - ${product.rating} Stars - $${product.price}`}
+          alt={`${product.title} - ${product.category} - ${product.rating} Stars - $${product.price?.toFixed(2)}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           loading={index < 3 ? "eager" : "lazy"}
           fetchpriority={index < 3 ? "high" : "auto"}
         />
+        
+        {/* Discount Badge */}
+        {hasDiscount && (
+          <div className="absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
+            Save {discountPercent}%
+          </div>
+        )}
         
         {/* Badge */}
         {product.badge && (
@@ -26,19 +39,19 @@ export default function ProductCard({ product, index }) {
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="p-6">
+      {/* Product Info - Flexible height with proper spacing */}
+      <div className="p-6 flex flex-col flex-grow">
         {/* Category */}
-        <div className="inline-block px-3 py-1 bg-violet-100 text-violet-700 text-xs font-semibold rounded-full mb-3">
+        <div className="inline-block px-3 py-1 bg-violet-100 text-violet-700 text-xs font-semibold rounded-full mb-3 self-start">
           {product.category}
         </div>
 
-        {/* Title */}
-        <h3 className="font-bold text-slate-900 text-lg mb-2 line-clamp-2 group-hover:text-violet-600 transition-colors">
+        {/* Title - Fixed height with line clamp */}
+        <h3 className="font-bold text-slate-900 text-lg mb-2 line-clamp-2 min-h-[3.5rem] group-hover:text-violet-600 transition-colors">
           {product.title}
         </h3>
 
-        {/* Rating */}
+        {/* Rating - Fixed height */}
         <div className="flex items-center gap-3 mb-4">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
@@ -54,20 +67,30 @@ export default function ProductCard({ product, index }) {
           </span>
         </div>
 
-        {/* Price */}
+        {/* Price - Fixed minimum height with discount support */}
         <div className="mb-6">
-          <div className="flex items-baseline gap-2 mb-1">
+          <div className="flex items-baseline gap-2 mb-1 min-h-[2.5rem] flex-wrap">
+            {hasDiscount && (
+              <p className="text-lg text-slate-400 line-through">
+                ${product.listPrice?.toFixed(2)}
+              </p>
+            )}
             <p className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-              ${product.price}
+              ${product.price?.toFixed(2)}
             </p>
+            {hasDiscount && (
+              <span className="text-sm font-semibold text-green-600 whitespace-nowrap">
+                Save ${(product.listPrice - product.price).toFixed(2)}
+              </span>
+            )}
           </div>
           <p className="text-[10px] text-slate-500">
             Price may vary on Amazon
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col gap-2">
+        {/* Action Buttons - Push to bottom with mt-auto */}
+        <div className="mt-auto flex flex-col gap-2">
           {/* View on Amazon Button */}
           <a
             href={product.affiliate}

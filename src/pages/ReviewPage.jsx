@@ -14,6 +14,13 @@ export default function ReviewPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tocExpanded, setTocExpanded] = useState(false);
+
+  // Calculate discount if listPrice exists
+  const hasDiscount = product?.listPrice && product.listPrice > product.price;
+  const discountPercent = hasDiscount 
+    ? Math.round(((product.listPrice - product.price) / product.listPrice) * 100)
+    : 0;
+  const savings = hasDiscount ? product.listPrice - product.price : 0;
   
   // Format date helper
   const formatDate = (dateString) => {
@@ -181,7 +188,17 @@ export default function ReviewPage() {
                 <div className="flex items-center gap-2">
                   <Star size={14} className="fill-amber-400 text-amber-400" />
                   <span className="text-sm text-slate-600">{product.rating}</span>
-                  <span className="text-lg font-bold text-violet-600">${product.price}</span>
+                  {hasDiscount ? (
+                    <>
+                      <span className="text-sm text-slate-400 line-through">${product.listPrice?.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-green-600">${product.price?.toFixed(2)}</span>
+                      <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                        {discountPercent}% off
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-lg font-bold text-violet-600">${product.price?.toFixed(2)}</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -283,8 +300,30 @@ export default function ReviewPage() {
                   <div className="text-sm text-slate-600">Rating</div>
                 </div>
                 <div className="bg-gradient-to-br from-violet-50 to-purple-50 border-2 border-violet-200 p-5 rounded-2xl">
-                  <div className="text-3xl font-bold text-slate-900">${product.price}</div>
-                  <div className="text-sm text-slate-600">Current Price</div>
+                  {hasDiscount ? (
+                    <>
+                      {/* Original price (strikethrough) */}
+                      <div className="text-lg text-slate-400 line-through mb-1">
+                        ${product.listPrice}
+                      </div>
+                      
+                      {/* Sale price */}
+                      <div className="text-3xl font-bold text-green-600 mb-2">
+                        ${product.price?.toFixed(2)}
+                      </div>
+                      
+                      {/* Savings badge */}
+                      <div className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                        <span>💰</span>
+                        <span>Save ${savings} ({discountPercent}% off)</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-3xl font-bold text-slate-900">${product.price?.toFixed(2)}</div>
+                      <div className="text-sm text-slate-600">Current Price</div>
+                    </>
+                  )}
                 </div>
                 <div className="bg-gradient-to-br from-slate-50 to-gray-50 border-2 border-slate-200 p-5 rounded-2xl">
                   <div className="text-sm font-semibold text-slate-900">Last Updated</div>
@@ -465,7 +504,7 @@ export default function ReviewPage() {
                         ))}
                         <span className="text-sm text-slate-600">{relatedProduct.rating}</span>
                       </div>
-                      <div className="text-2xl font-bold text-violet-600 mb-4">${relatedProduct.price}</div>
+                      <div className="text-2xl font-bold text-violet-600 mb-4">${relatedProduct.price?.toFixed(2)}</div>
                       {relatedProduct.reviewUrl ? (
                         <Link to={relatedProduct.reviewUrl} className="block w-full bg-violet-600 text-white text-center py-2 rounded-lg hover:bg-violet-700 font-semibold">
                           Read Review
