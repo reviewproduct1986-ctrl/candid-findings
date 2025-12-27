@@ -99,6 +99,7 @@ export default function FilterPanel({
                   type="range"
                   min="0"
                   max="500"
+                  htmlFor="Minimum price"
                   value={priceRange[0]}
                   onChange={(e) => {
                     const newMin = parseInt(e.target.value);
@@ -114,6 +115,7 @@ export default function FilterPanel({
                   type="range"
                   min="0"
                   max="500"
+                  htmlFor="Maximum price"
                   value={priceRange[1]}
                   onChange={(e) => {
                     const newMax = parseInt(e.target.value);

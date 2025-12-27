@@ -1,7 +1,8 @@
 import React from 'react';
-import { hydrate, render } from "react-dom";
-import './index.css';
+import ReactDOM from 'react-dom/client';
 import App from './App';
+
+import './index.css';
 
 // Import Inter font weights
 import '@fontsource/inter/400.css';  // Regular
@@ -11,20 +12,10 @@ import '@fontsource/inter/700.css';  // Bold
 import '@fontsource/inter/800.css';  // Extra-Bold
 import '@fontsource/inter/900.css';  // Black
 
-const rootElement = document.getElementById("root");
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-if (rootElement.hasChildNodes()) {
-  hydrate(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-    rootElement
-  );
-} else {
-  render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-    rootElement
-  );
-}
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
