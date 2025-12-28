@@ -155,6 +155,26 @@ async function fetchAmazonProducts() {
       ],
       description: '',
       lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-7',
+      title: "Best Choice Products Heated Shiatsu Foot Massager for Pain Relief, Plantar Fasciitis, Neuropathy, Blood Circulation w/Compact Design - Satin Black",
+      category: 'Health & Household',
+      price: 89.99,
+      listPrice: 129.99,
+      rating: 4.3,
+      reviews: 7893,
+      image: 'https://m.media-amazon.com/images/I/81eUUEK-MQL._AC_SX679_.jpg',
+      asin: 'B08M6G51XP',
+      affiliate: `https://amazon.com/dp/B08M6G51XP?tag=${config.partnerTag}`,
+      features: [
+        'TRY ALL FOUR MASSAGES',
+        '360-DEGREE HANDLE',
+        'BUILT-IN HEAT THERAPY:',
+        'SCREEN AND REMOTE FUNCTIONALITY'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
     }
   ];
 
