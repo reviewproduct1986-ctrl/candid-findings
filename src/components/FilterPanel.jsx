@@ -134,7 +134,7 @@ export default function FilterPanel({
           )}
         </div>
 
-        {/* Price Range Blocks - Dynamic */}
+        {/* Price Range Blocks - Consistent styling */}
         <div>
           <div className="flex items-center gap-2 mb-3">
             <DollarSign className="w-5 h-5 text-slate-600" />
@@ -147,8 +147,8 @@ export default function FilterPanel({
                 onClick={() => handlePriceRangeClick(range)}
                 className={`px-3 py-2.5 rounded-lg font-medium transition-all text-sm ${
                   currentPriceRangeId === range.id
-                    ? 'bg-violet-600 text-white shadow-md ring-2 ring-violet-300'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:shadow'
+                    ? 'bg-violet-600 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 {range.label}
