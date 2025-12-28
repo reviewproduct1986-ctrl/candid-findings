@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import Footer from '../components/Footer';
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import { Star, ArrowRight, Sparkles, BookOpen, ChevronDown, ShoppingCart } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { Star, Sparkles, BookOpen, ChevronDown, ShoppingCart } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Footer from '../components/Footer';
 
 export default function ReviewPage() {
@@ -128,22 +129,89 @@ export default function ReviewPage() {
   return ( 
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pb-24">
       <Helmet>
-        <title>{product.title} Review - CandidFindings</title>
-        <meta name="description" content={blog.excerpt} />
-        <meta property="og:title" content={`${product.title} Review`} />
-        <meta property="og:description" content={blog.excerpt} />
-        <meta property="og:image" content={product.image} />
-        <meta property="og:type" content="article" />
+        {/* Primary Meta Tags */}
+        <title>{blog.title} | CandidFindings</title>
+        <meta name="description" content={blog.metaDescription} />
         <link rel="canonical" href={`https://candidfindings.com/reviews/${slug}`} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="CandidFindings" />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.metaDescription} />
+        <meta property="og:url" content={`https://candidfindings.com/reviews/${slug}`} />
+        <meta property="og:image" content={product.image} />
+        <meta property="og:image:secure_url" content={product.image} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={`${product.title} Review Image`} />
+        
+        {/* Article Metadata */}
+        <meta property="article:published_time" content={blog.publishedDate} />
+        <meta property="article:modified_time" content={blog.updatedDate} />
+        <meta property="article:author" content="CandidFindings" />
+        <meta property="article:section" content={product.category} />
+        {blog.keywords?.slice(0, 5).map((keyword, i) => (
+          <meta key={i} property="article:tag" content={keyword} />
+        ))}
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.title} />
+        <meta name="twitter:description" content={blog.metaDescription} />
+        <meta name="twitter:image" content={product.image} />
+        <meta name="twitter:image:alt" content={`${product.title} Review`} />
         
         {/* Preload hero image for faster LCP */}
         <link rel="preload" as="image" href={product.image} fetchpriority="high" />
         
+        {/* FAQ Schema */}
         {faqSchema && (
           <script type="application/ld+json">
             {JSON.stringify(faqSchema)}
           </script>
         )}
+        
+        {/* Product Review Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Review",
+            "itemReviewed": {
+              "@type": "Product",
+              "name": product.title,
+              "image": product.image,
+              "brand": {
+                "@type": "Brand",
+                "name": product.category
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": product.rating,
+                "reviewCount": product.reviews
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": product.price,
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock",
+                "url": product.affiliate
+              }
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": product.rating,
+              "bestRating": "5"
+            },
+            "author": {
+              "@type": "Organization",
+              "name": "CandidFindings"
+            },
+            "datePublished": blog.publishedDate,
+            "dateModified": blog.updatedDate,
+            "description": blog.metaDescription
+          })}
+        </script>
       </Helmet>
 
       {/* Header - NO STICKY */}
@@ -390,17 +458,57 @@ export default function ReviewPage() {
             <div className="prose prose-lg prose-slate max-w-none">
               {blog?.content && (
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]} 
                   components={{
-                    h2: ({node, children, ...props}) => {
-                      const text = children?.toString() || '';
-                      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                      return <h2 id={id} className="text-3xl font-bold text-slate-900 mt-8 mb-4" {...props}>{children}</h2>;
-                    },
-                    h3: ({node, children, ...props}) => {
-                      const text = children?.toString() || '';
-                      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                      return <h3 id={id} className="text-2xl font-bold text-slate-900 mt-6 mb-3" {...props}>{children}</h3>;
-                    }
+                      h1: ({node, children, ...props}) => {
+                        const text = children?.toString() || '';
+                        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        return <h1 id={id} className="text-4xl font-bold text-slate-900 mt-10 mb-6" {...props}>{children}</h1>;
+                      },
+                      h2: ({node, children, ...props}) => {
+                        const text = children?.toString() || '';
+                        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        return <h2 id={id} className="text-3xl font-bold text-slate-900 mt-8 mb-4" {...props}>{children}</h2>;
+                      },
+                      h3: ({node, children, ...props}) => {
+                        const text = children?.toString() || '';
+                        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        return <h3 id={id} className="text-2xl font-bold text-slate-900 mt-6 mb-3" {...props}>{children}</h3>;
+                      },
+                      h4: ({node, children, ...props}) => {
+                        const text = children?.toString() || '';
+                        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        return <h4 id={id} className="text-xl font-bold text-slate-900 mt-4 mb-2" {...props}>{children}</h4>;
+                      },
+                      p: ({node, children, ...props}) => {
+                        return <p className="mb-4 text-slate-700 leading-relaxed" {...props}>{children}</p>;
+                      },
+                      ul: ({node, children, ...props}) => {
+                        return <ul className="list-disc list-inside mb-4 space-y-2" {...props}>{children}</ul>;
+                      },
+                      ol: ({node, children, ...props}) => {
+                        return <ol className="list-decimal list-inside mb-4 space-y-2" {...props}>{children}</ol>;
+                      },
+                      li: ({node, children, ...props}) => {
+                        return <li className="text-slate-700" {...props}>{children}</li>;
+                      },
+                      strong: ({node, children, ...props}) => {
+                        return <strong className="font-bold text-slate-900" {...props}>{children}</strong>;
+                      },
+                      em: ({node, children, ...props}) => {
+                        return <em className="italic" {...props}>{children}</em>;
+                      },
+                      code: ({node, inline, children, ...props}) => {
+                        return inline 
+                          ? <code className="px-1.5 py-0.5 bg-slate-100 rounded text-sm font-mono text-violet-600" {...props}>{children}</code>
+                          : <code className="block p-4 bg-slate-100 rounded-lg text-sm font-mono overflow-x-auto mb-4" {...props}>{children}</code>;
+                      },
+                      blockquote: ({node, children, ...props}) => {
+                        return <blockquote className="border-l-4 border-violet-500 pl-4 italic text-slate-600 my-4" {...props}>{children}</blockquote>;
+                      },
+                      a: ({node, children, href, ...props}) => {
+                        return <a href={href} className="text-violet-600 hover:text-violet-700 underline" target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
+                      }
                   }}
                 >
                   {blog.content}

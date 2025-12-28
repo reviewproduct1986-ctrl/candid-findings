@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import ProductListing from './pages/ProductListing';
 
 // Lazy load pages - only loads when user visits
@@ -25,60 +26,62 @@ function RouteLoader() {
 // Main App component with Router
 export default function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true }}>
-      <Routes>
-        <Route path="/" element={<ProductListing />} />
-        <Route 
-          path="/reviews/:slug" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <ReviewPage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/guides" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BuyingGuidesList />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/guides/:slug" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BuyingGuidePage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/about" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <AboutPage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/privacy-policy" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <PrivacyPolicy />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/terms" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <TermsOfService />
-            </Suspense>
-          } 
-        />
-        {/* Catch-all route - redirect 404s to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter future={{ v7_startTransition: true }}>
+        <Routes>
+          <Route path="/" element={<ProductListing />} />
+          <Route 
+            path="/reviews/:slug" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <ReviewPage />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/guides" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <BuyingGuidesList />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/guides/:slug" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <BuyingGuidePage />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/about" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <AboutPage />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/privacy-policy" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <PrivacyPolicy />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/terms" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <TermsOfService />
+              </Suspense>
+            } 
+          />
+          {/* Catch-all route - redirect 404s to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }

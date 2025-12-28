@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Shield, Heart, Search, CheckCircle } from 'lucide-react';
 import Footer from '../components/Footer';
 

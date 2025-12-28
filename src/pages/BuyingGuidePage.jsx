@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Star, ArrowRight, Sparkles, BookOpen, Check } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Footer from '../components/Footer';

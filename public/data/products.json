@@ -1,1 +1,107 @@
-{"products":[{"id":"1766871873267-1","title":"Apple AirPods Pro 2 Wireless Earbuds","category":"Electronics","price":199,"listPrice":249,"rating":4.6,"reviews":43120,"image":"https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SX679_.jpg","asin":"B0D1XD1ZV3","affiliate":"https://amazon.com/dp/B0D1XD1ZV3?tag=candidfinding-20\"","badge":"Best Seller","features":["PIONEERING HEARING","INTELLIGENT NOISE CONTROL","CUSTOMIZABLE FIT","WATER RESISTANT","PERSONALIZED SPATIAL AUDIO"],"description":"","lastUpdated":"2025-12-27T21:44:33.267Z"},{"id":"1766871873268-3","title":"The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist ","category":"Books","price":23.5,"rating":4.5,"reviews":598079,"image":"https://m.media-amazon.com/images/I/81G1WltKQGL._SY466_.jpg","asin":"0349132852","affiliate":"https://amazon.com/dp/0349132852?tag=candidfinding-20\"","badge":"Best Seller","features":["#1 New York Times"],"description":"","lastUpdated":"2025-12-27T21:44:33.268Z"},{"id":"1766871873268-4","title":"The Let Them Theory: A Life-Changing Tool That Millions of People Can't Stop Talking About","category":"Books","price":14.99,"rating":4.6,"reviews":33469,"image":"https://m.media-amazon.com/images/I/91ZVf3kNrcL._SY466_.jpg","asin":"1401971369","affiliate":"https://amazon.com/dp/1401971369?tag=candidfinding-20\"","badge":"Best Seller","features":["Over 7 Million Copies Sold!"],"description":"","lastUpdated":"2025-12-27T21:44:33.268Z"},{"id":"1766871873268-5","title":"Owala FreeSip Insulated Stainless Steel Water Bottle with Straw, BPA-Free Sports Water Bottle, Great for Travel, 32 Oz, Black Cherry","category":"Sports","price":34.94,"rating":4.7,"reviews":101276,"image":"https://m.media-amazon.com/images/I/61cXY4wGQSL._AC_SX679_.jpg","asin":"B0FK1LF5PM","affiliate":"https://amazon.com/dp/B0FK1LF5PM?tag=candidfinding-20\"","badge":"Best Seller","features":["32-ounce insulated stainless-steel water bottle","Patented FreeSip spout design","Protective push-to-open lid","Double-wall insulation","BPA and phthalate-free"],"description":"","lastUpdated":"2025-12-27T21:44:33.268Z"},{"id":"1766871873268-6","title":"Boxbollen® Boxing Reflex Ball - Celebrity-Endorsed Home Workout Game - App-Connected Punch Counter - Hand Eye Coordination Training Ball - Christmas Gift for Boxers, All Ages - Stocking Stuffer","category":"Sports","price":25.4,"listPrice":29.99,"rating":4,"reviews":9465,"image":"https://m.media-amazon.com/images/I/6168dfLpdnL._AC_SX679_.jpg","asin":"B0BZ8MB4KM","affiliate":"https://amazon.com/dp/B0BZ8MB4KM?tag=candidfinding-20\"","badge":"Best Seller","features":["IMPROVE HAND-EYE COORDINATION","INTERACTIVE BOXBALL APP","STOCKING STUFFER","CELEBRITY-USED","QUALITY AND DURABILITY"],"description":"","lastUpdated":"2025-12-27T21:44:33.268Z"}],"metadata":{"total":5,"updated":"2025-12-27T21:44:33.268Z"}}
+{
+    "products": [
+        {
+            "id": "1766871873267-1",
+            "title": "Apple AirPods Pro 2 Wireless Earbuds",
+            "category": "Electronics",
+            "price": 199,
+            "listPrice": 249,
+            "rating": 4.6,
+            "reviews": 43120,
+            "image": "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SX679_.jpg",
+            "asin": "B0D1XD1ZV3",
+            "affiliate": "https://amazon.com/dp/B0D1XD1ZV3?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "PIONEERING HEARING",
+                "INTELLIGENT NOISE CONTROL",
+                "CUSTOMIZABLE FIT",
+                "WATER RESISTANT",
+                "PERSONALIZED SPATIAL AUDIO"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-28T01:32:49.283Z"
+        },
+        {
+            "id": "1766871873268-3",
+            "title": "The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist ",
+            "category": "Books",
+            "price": 23.5,
+            "rating": 4.5,
+            "reviews": 598079,
+            "image": "https://m.media-amazon.com/images/I/81G1WltKQGL._SY466_.jpg",
+            "asin": "0349132852",
+            "affiliate": "https://amazon.com/dp/0349132852?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "#1 New York Times"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-28T01:32:49.283Z"
+        },
+        {
+            "id": "1766871873268-4",
+            "title": "The Let Them Theory: A Life-Changing Tool That Millions of People Can't Stop Talking About",
+            "category": "Books",
+            "price": 14.99,
+            "rating": 4.6,
+            "reviews": 33469,
+            "image": "https://m.media-amazon.com/images/I/91ZVf3kNrcL._SY466_.jpg",
+            "asin": "1401971369",
+            "affiliate": "https://amazon.com/dp/1401971369?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "Over 7 Million Copies Sold!"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-28T01:32:49.283Z"
+        },
+        {
+            "id": "1766871873268-5",
+            "title": "Owala FreeSip Insulated Stainless Steel Water Bottle with Straw, BPA-Free Sports Water Bottle, Great for Travel, 32 Oz, Black Cherry",
+            "category": "Sports",
+            "price": 34.94,
+            "rating": 4.7,
+            "reviews": 101276,
+            "image": "https://m.media-amazon.com/images/I/61cXY4wGQSL._AC_SX679_.jpg",
+            "asin": "B0FK1LF5PM",
+            "affiliate": "https://amazon.com/dp/B0FK1LF5PM?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "32-ounce insulated stainless-steel water bottle",
+                "Patented FreeSip spout design",
+                "Protective push-to-open lid",
+                "Double-wall insulation",
+                "BPA and phthalate-free"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-28T01:32:49.283Z"
+        },
+        {
+            "id": "1766871873268-6",
+            "title": "Boxbollen® Boxing Reflex Ball - Celebrity-Endorsed Home Workout Game - App-Connected Punch Counter - Hand Eye Coordination Training Ball - Christmas Gift for Boxers, All Ages - Stocking Stuffer",
+            "category": "Sports",
+            "price": 25.4,
+            "listPrice": 29.99,
+            "rating": 4,
+            "reviews": 9465,
+            "image": "https://m.media-amazon.com/images/I/6168dfLpdnL._AC_SX679_.jpg",
+            "asin": "B0BZ8MB4KM",
+            "affiliate": "https://amazon.com/dp/B0BZ8MB4KM?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "IMPROVE HAND-EYE COORDINATION",
+                "INTERACTIVE BOXBALL APP",
+                "STOCKING STUFFER",
+                "CELEBRITY-USED",
+                "QUALITY AND DURABILITY"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-28T01:32:49.283Z"
+        }
+    ],
+    "metadata": {
+        "total": 5,
+        "updated": "2025-12-28T01:32:49.283Z"
+    }
+}

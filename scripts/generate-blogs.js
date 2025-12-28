@@ -2,7 +2,7 @@
 
 /**
  * Generate SEO-optimized blog posts for products using Claude AI
- * Updates blogs.json - No HTML generation needed (React Router handles rendering)
+ * FIXED: Better JSON parsing and quote handling
  */
 
 const fs = require('fs');
@@ -10,35 +10,25 @@ const path = require('path');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-/**
- * Read products from JSON file
- */
 function loadProducts() {
-  // Try both locations: public/data and data
   const publicPath = path.join(__dirname, '../public/data/products.json');
   const dataPath = path.join(__dirname, '../data/products.json');
   
   let filePath = publicPath;
   if (!fs.existsSync(publicPath) && fs.existsSync(dataPath)) {
     filePath = dataPath;
-    console.log(`📂 Using data/products.json (should be in public/data/ for React)`);
   }
   
   if (!fs.existsSync(filePath)) {
     console.error('❌ products.json not found!');
-    console.error('   Checked: public/data/products.json and data/products.json');
     process.exit(1);
   }
 
   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  return data.products || data; // Support both wrapped and unwrapped formats
+  return data.products || data;
 }
 
-/**
- * Read existing blogs to avoid regenerating
- */
 function loadExistingBlogs() {
-  // Try both locations
   const publicPath = path.join(__dirname, '../public/data/blogs.json');
   const dataPath = path.join(__dirname, '../data/blogs.json');
   
@@ -54,10 +44,72 @@ function loadExistingBlogs() {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
+function getOptimalTokens(product) {
+  if (product.price < 50) return 1500;
+  if (product.price < 100) return 2000;
+  if (product.price < 300) return 2500;
+  if (product.price < 500) return 3000;
+  return 3500;
+}
+
+function cleanMarkdown(content) {
+  if (!content) return '';
+  
+  return content
+    .replace(/## ##/g, '##')
+    .replace(/### ###/g, '###')
+    .replace(/#### ####/g, '####')
+    .replace(/# #/g, '#')
+    .replace(/\\#/g, '#')
+    .replace(/\n\n\n+/g, '\n\n')
+    .trim();
+}
+
 /**
- * Generate blog post for a product using Claude AI
+ * Parse JSON with better error handling
+ * FIX: Handles unescaped quotes and malformed JSON
+ */
+function parseAIResponse(textContent) {
+  // Remove markdown code fences
+  let cleanJson = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  
+  try {
+    // Try normal parsing first
+    return JSON.parse(cleanJson);
+  } catch (error) {
+    console.log('   ⚠️  JSON parsing failed, attempting to fix...');
+    
+    // Try to extract JSON from the response
+    const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      cleanJson = jsonMatch[0];
+      
+      try {
+        return JSON.parse(cleanJson);
+      } catch (error2) {
+        console.error('   ❌ Could not parse JSON even after extraction');
+        console.error('   Error:', error2.message);
+        
+        // Save the problematic response for debugging
+        const debugPath = path.join(__dirname, 'debug-response.txt');
+        fs.writeFileSync(debugPath, textContent);
+        console.error(`   💾 Saved problematic response to: ${debugPath}`);
+        
+        throw new Error('JSON parsing failed - see debug-response.txt');
+      }
+    }
+    
+    throw error;
+  }
+}
+
+/**
+ * Generate blog post with improved error handling
  */
 async function generateBlogPost(product) {
+  console.log('Generating blog for:', product.title);
+  console.log('   Tokens:', getOptimalTokens(product));
+  
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -68,7 +120,7 @@ async function generateBlogPost(product) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
+        max_tokens: getOptimalTokens(product),
         messages: [
           {
             role: "user",
@@ -87,7 +139,7 @@ Requirements:
 2. Meta description (150-160 characters)
 3. Comprehensive review in MARKDOWN format with:
    - Introduction highlighting key benefits
-   - Multiple ## sections for detailed features
+   - Multiple h2 sections (##) for detailed features
    - Real-world use cases
    - Detailed analysis of performance
 4. 7 specific pros (not generic)
@@ -97,39 +149,50 @@ Requirements:
 8. 8-10 SEO keywords
 9. URL slug (lowercase, hyphens, include product name and "review")
 
-IMPORTANT: 
-- Content should be in MARKDOWN with ## headings for sections
+CRITICAL FORMATTING RULES:
+- Use ONLY single ## for h2 headings (NOT ## ##)
+- Do NOT use quotes in text unless absolutely necessary
+- If you must use quotes, use single quotes (') not double quotes (")
+- Avoid apostrophes in contractions - write "do not" instead of "don't"
 - Write 600-800 words of actual review content
 - Be specific about features, not generic
-- Include numbers and specific details from the product info
+- Include numbers and specific details
 
-Format as JSON with these exact fields:
+Format ONLY as valid JSON with NO special characters in strings:
 {
-  "title": "...",
-  "slug": "...",
-  "metaDescription": "...",
-  "content": "Full markdown content with ## headings...",
-  "keywords": ["...", "..."],
-  "pros": ["...", "..."],
-  "cons": ["...", "..."],
-  "verdict": "...",
-  "targetAudience": "..."
-}`
+  "title": "Product Name Review...",
+  "slug": "product-name-review",
+  "metaDescription": "Brief description without quotes",
+  "content": "Full markdown content...",
+  "keywords": ["keyword1", "keyword2"],
+  "pros": ["First pro", "Second pro"],
+  "cons": ["First con", "Second con"],
+  "verdict": "Final verdict text",
+  "targetAudience": "Who should buy this"
+}
+
+IMPORTANT: Ensure all text fields avoid special characters that would break JSON parsing.`
           }
         ],
       })
     });
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`API error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
     const textContent = data.content.find(c => c.type === "text")?.text || "";
     
-    // Clean JSON from markdown code fences
-    const cleanJson = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    const blogData = JSON.parse(cleanJson);
+    // Parse with better error handling
+    const blogData = parseAIResponse(textContent);
+
+    // Clean the markdown content
+    if (blogData.content) {
+      blogData.content = cleanMarkdown(blogData.content);
+      console.log(`   🧹 Cleaned markdown content`);
+    }
 
     return {
       id: `blog-${product.id}`,
@@ -141,95 +204,69 @@ Format as JSON with these exact fields:
     };
 
   } catch (error) {
-    console.error(`❌ Error generating blog for ${product.title}:`, error.message);
+    console.error(`❌ Error generating blog for ${product.title}:`);
+    console.error(`   ${error.message}`);
+    
+    if (error.message.includes('JSON')) {
+      console.error('');
+      console.error('💡 TIP: The AI generated invalid JSON, likely due to unescaped quotes.');
+      console.error('   Retrying might work, or check debug-response.txt for details.');
+    }
+    
     return null;
   }
 }
 
-/**
- * Generate blog posts for products that don't have them yet
- */
 async function generateMissingBlogs(products, existingBlogs) {
   const existingProductIds = new Set(existingBlogs.posts.map(b => b.productId));
   const productsNeedingBlogs = products.filter(p => !existingProductIds.has(p.id));
   
   if (productsNeedingBlogs.length === 0) {
     console.log('✅ All products already have blog posts!');
-    console.log('   No API calls needed - saving money! 💰');
     return existingBlogs.posts;
   }
 
-  // Cost estimation
-  const estimatedTokensPerPost = 4000; // max_tokens setting
-  const costPer1MTokens = 3.00; // Claude Sonnet 4 output cost
-  const estimatedCost = (productsNeedingBlogs.length * estimatedTokensPerPost / 1000000) * costPer1MTokens;
-  
   console.log('');
-  console.log('💰 COST ESTIMATION:');
-  console.log(`   - Products needing blogs: ${productsNeedingBlogs.length}`);
-  console.log(`   - Estimated tokens: ~${(productsNeedingBlogs.length * estimatedTokensPerPost).toLocaleString()}`);
-  console.log(`   - Estimated cost: ~$${estimatedCost.toFixed(2)} USD`);
-  console.log('');
-  console.log('📋 Products that will be processed:');
-  productsNeedingBlogs.forEach((p, i) => {
-    console.log(`   ${i + 1}. ${p.title}`);
-  });
-  console.log('');
-  console.log('💡 TIP: Only products without existing blogs will be processed.');
-  console.log('   Already generated blogs are preserved to save costs.');
-  console.log('');
-
   console.log(`🤖 Generating blog posts for ${productsNeedingBlogs.length} products...`);
+  console.log('');
   
   const newBlogPosts = [];
   let successCount = 0;
   let failCount = 0;
   
-  // Generate posts sequentially to avoid rate limits
   for (let i = 0; i < productsNeedingBlogs.length; i++) {
     const product = productsNeedingBlogs[i];
-    console.log(`[${i + 1}/${productsNeedingBlogs.length}] Generating blog for: ${product.title}`);
+    console.log(`[${i + 1}/${productsNeedingBlogs.length}] ${product.title}`);
     
     const blog = await generateBlogPost(product);
     if (blog) {
       newBlogPosts.push(blog);
       successCount++;
-      console.log(`   ✅ Success! Generated ${blog.content.length} characters of content`);
+      console.log(`   ✅ Success! (${blog.content.length} characters)`);
     } else {
       failCount++;
-      console.log(`   ❌ Failed to generate blog`);
+      console.log(`   ❌ Failed - skipping`);
     }
     
-    // Small delay to avoid rate limiting
     if (i < productsNeedingBlogs.length - 1) {
-      console.log('   ⏳ Waiting 2s to avoid rate limits...');
+      console.log('   ⏳ Waiting 2s...');
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
 
   console.log('');
-  console.log('📊 GENERATION SUMMARY:');
-  console.log(`   - Success: ${successCount}`);
-  console.log(`   - Failed: ${failCount}`);
-  console.log(`   - Total new blogs: ${newBlogPosts.length}`);
+  console.log('📊 SUMMARY:');
+  console.log(`   Success: ${successCount}`);
+  console.log(`   Failed: ${failCount}`);
   console.log('');
 
-  // Combine existing and new blogs
-  const allBlogs = [...existingBlogs.posts, ...newBlogPosts];
-  console.log(`💾 Final blog count: ${allBlogs.length} total (${existingBlogs.posts.length} existing + ${newBlogPosts.length} new)`);
-  
-  return allBlogs;
+  return [...existingBlogs.posts, ...newBlogPosts];
 }
 
-/**
- * Save blog posts to JSON (no HTML files needed with React Router)
- */
 function saveBlogPosts(blogPosts) {
-  // Save to both data/ and public/data/ for compatibility
   const dataDirPublic = path.join(__dirname, '../public/data');
   const dataDir = path.join(__dirname, '../data');
   
-  // Create directories if needed
   if (!fs.existsSync(dataDirPublic)) {
     fs.mkdirSync(dataDirPublic, { recursive: true });
   }
@@ -245,35 +282,22 @@ function saveBlogPosts(blogPosts) {
     }
   };
   
-  // Save to both locations - minified JSON (no spaces) for faster loading
   const jsonPathPublic = path.join(dataDirPublic, 'blogs.json');
   const jsonPath = path.join(dataDir, 'blogs.json');
   
-  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData));
-  fs.writeFileSync(jsonPath, JSON.stringify(blogsData));
+  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData, null, 2));
+  fs.writeFileSync(jsonPath, JSON.stringify(blogsData, null, 2));
   
-  // Calculate file sizes
-  const statsPublic = fs.statSync(jsonPathPublic);
-  const fileSizeKB = (statsPublic.size / 1024).toFixed(2);
-  
-  console.log(`✅ Saved ${blogPosts.length} blog posts to:`);
-  console.log(`   - ${jsonPathPublic} (${fileSizeKB} KB minified)`);
-  console.log(`   - ${jsonPath}`);
-  console.log(`   React Router will handle rendering at /reviews/:slug`);
+  console.log(`✅ Saved ${blogPosts.length} blog posts`);
 }
 
-/**
- * Main execution
- */
 async function main() {
   try {
-    console.log('🚀 Starting blog generation...');
-    console.log('   (React Router architecture - no HTML files needed)');
+    console.log('🚀 Blog Generation (Fixed JSON Parsing)');
+    console.log('');
     
-    // Validate API key
     if (!ANTHROPIC_API_KEY) {
-      console.error('❌ ANTHROPIC_API_KEY environment variable not set!');
-      console.error('   Set it with: export ANTHROPIC_API_KEY=your_key_here');
+      console.error('❌ API key not set!');
       process.exit(1);
     }
 
@@ -281,7 +305,7 @@ async function main() {
     console.log(`📦 Loaded ${products.length} products`);
 
     const existingBlogs = loadExistingBlogs();
-    console.log(`📄 Found ${existingBlogs.posts.length} existing blog posts`);
+    console.log(`📄 Found ${existingBlogs.posts.length} existing blogs`);
 
     const allBlogs = await generateMissingBlogs(products, existingBlogs);
     
@@ -292,42 +316,12 @@ async function main() {
 
     saveBlogPosts(allBlogs);
     
-    const newPostsCount = allBlogs.length - existingBlogs.posts.length;
-    
-    console.log('🎉 Blog generation completed successfully!');
-    console.log('');
-    console.log('📊 FINAL STATISTICS:');
-    console.log(`   - Total posts: ${allBlogs.length}`);
-    console.log(`   - Existing posts (preserved): ${existingBlogs.posts.length}`);
-    console.log(`   - New posts (generated): ${newPostsCount}`);
-    console.log(`   - Average keywords per post: ${(allBlogs.reduce((sum, b) => sum + (b.keywords?.length || 0), 0) / allBlogs.length).toFixed(1)}`);
-    console.log('');
-    
-    if (existingBlogs.posts.length > 0) {
-      const savedCost = (existingBlogs.posts.length * 4000 / 1000000) * 3.00;
-      console.log('💰 COST SAVINGS:');
-      console.log(`   - Blogs skipped (already exist): ${existingBlogs.posts.length}`);
-      console.log(`   - Estimated savings: ~$${savedCost.toFixed(2)} USD`);
-      console.log(`   - Only paid for ${newPostsCount} new blog(s)! ✅`);
-      console.log('');
-    }
-    
-    console.log('📍 Blog posts available at:');
-    allBlogs.slice(0, 5).forEach(blog => {
-      console.log(`   - /reviews/${blog.slug}`);
-    });
-    if (allBlogs.length > 5) {
-      console.log(`   ... and ${allBlogs.length - 5} more`);
-    }
-    console.log('');
-    console.log('💡 Next step: Run generate-sitemap.js to update sitemap.xml');
+    console.log('🎉 Complete!');
     
   } catch (error) {
     console.error('❌ Error:', error.message);
-    console.error(error.stack);
     process.exit(1);
   }
 }
 
-// Run the script
 main();
