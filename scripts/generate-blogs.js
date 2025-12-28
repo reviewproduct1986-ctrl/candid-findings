@@ -109,7 +109,8 @@ function parseAIResponse(textContent) {
 async function generateBlogPost(product) {
   console.log('Generating blog for:', product.title);
   console.log('   Tokens:', getOptimalTokens(product));
-  
+  const currentYear = new Date().getFullYear();
+
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -133,6 +134,7 @@ Rating: ${product.rating}/5 (${product.reviews.toLocaleString()} reviews)
 Features: ${product.features?.join(', ') || 'N/A'}
 Description: ${product.description || ''}
 ASIN: ${product.asin || 'N/A'}
+Current Year: ${currentYear}
 
 Requirements:
 1. Engaging, SEO-friendly headline (60-70 characters)
