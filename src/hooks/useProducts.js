@@ -14,9 +14,9 @@ export function useProductData() {
       fetch('/data/blogs.json').then(res => res.json())
     ])
       .then(([productsData, blogsData]) => {
-        // Extract arrays from response
-        const productsList = productsData.products || [];
-        const blogsList = blogsData.posts || [];
+        // Extract arrays from response with safety checks
+        const productsList = productsData?.products || [];
+        const blogsList = blogsData?.posts || [];
         
         // Add review URLs to products based on blog slugs
         const productsWithReviews = productsList.map(product => {
@@ -33,6 +33,8 @@ export function useProductData() {
       })
       .catch(error => {
         console.error('Error loading data:', error);
+        setProducts([]); // Ensure empty array on error
+        setBlogs([]);
         setLoading(false);
       });
   }, []);
@@ -43,7 +45,7 @@ export function useProductData() {
 /**
  * Hook to filter and search products
  */
-export function useProductFilters(products) {
+export function useProductFilters(products = []) { // Default to empty array
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [minRating, setMinRating] = useState(0);
@@ -52,10 +54,16 @@ export function useProductFilters(products) {
 
   // Calculate max price dynamically from products
   const maxPrice = useMemo(() => {
-    if (products.length === 0) return 500; // Default fallback
+    if (!products || products.length === 0) return 500; // Default fallback
     
-    // Find the highest price among all products
-    const highest = Math.max(...products.map(p => p.price));
+    // Filter out invalid products and find highest price
+    const validPrices = products
+      .filter(p => p && typeof p.price === 'number')
+      .map(p => p.price);
+    
+    if (validPrices.length === 0) return 500;
+    
+    const highest = Math.max(...validPrices);
     
     // Round up to nearest 50 for cleaner slider
     return Math.ceil(highest / 50) * 50;
@@ -66,30 +74,39 @@ export function useProductFilters(products) {
 
   // Update max price when products change
   useEffect(() => {
-    if (products.length > 0) {
+    if (products && products.length > 0) {
       setPriceRange(prev => [prev[0], maxPrice]);
     }
-  }, [maxPrice, products.length]);
+  }, [maxPrice, products]);
 
-  // Get unique categories
+  // Get unique categories with safety checks
   const categories = useMemo(() => {
-    const cats = ['All', ...new Set(products.map(p => p.category))];
-    return cats;
+    if (!products || products.length === 0) return ['All'];
+    
+    const validCategories = products
+      .filter(p => p && p.category) // Filter out invalid products
+      .map(p => p.category);
+    
+    const uniqueCategories = [...new Set(validCategories)];
+    return ['All', ...uniqueCategories];
   }, [products]);
 
-  // Get unique badges
+  // Get unique badges with safety checks
   const availableBadges = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    
     const badges = products
-      .filter(p => p.badge)
+      .filter(p => p && p.badge) // Filter out products without badges
       .map(p => p.badge);
+    
     return [...new Set(badges)];
   }, [products]);
 
   // Fuzzy search function
   const fuzzyScore = (str, query) => {
-    if (!query) return 1;
-    str = str.toLowerCase();
-    query = query.toLowerCase();
+    if (!query || !str) return 0;
+    str = String(str).toLowerCase();
+    query = String(query).toLowerCase();
     
     let score = 0;
     let queryIndex = 0;
@@ -106,14 +123,15 @@ export function useProductFilters(products) {
 
   // Weighted fuzzy search
   const searchProducts = (products, term) => {
-    if (!term) return products;
+    if (!term || !products) return products;
     
     return products
+      .filter(p => p && p.title) // Filter out invalid products
       .map(product => {
         const titleScore = fuzzyScore(product.title, term) * 3;
-        const categoryScore = fuzzyScore(product.category, term) * 2;
+        const categoryScore = fuzzyScore(product.category || '', term) * 2;
         const descScore = product.description ? fuzzyScore(product.description, term) : 0;
-        const featureScore = product.features 
+        const featureScore = product.features && Array.isArray(product.features)
           ? Math.max(...product.features.map(f => fuzzyScore(f, term))) 
           : 0;
         
@@ -125,9 +143,12 @@ export function useProductFilters(products) {
       .sort((a, b) => b.searchScore - a.searchScore);
   };
 
-  // Apply all filters
+  // Apply all filters with comprehensive safety checks
   const filteredProducts = useMemo(() => {
-    let filtered = products;
+    if (!products || products.length === 0) return [];
+    
+    // Filter out invalid products first
+    let filtered = products.filter(p => p && p.title && typeof p.price === 'number');
     
     // Category filter
     if (selectedCategory !== 'All') {
@@ -141,7 +162,9 @@ export function useProductFilters(products) {
     
     // Rating filter
     if (minRating > 0) {
-      filtered = filtered.filter(p => p.rating >= minRating);
+      filtered = filtered.filter(p => 
+        typeof p.rating === 'number' && p.rating >= minRating
+      );
     }
     
     // Badge filter
@@ -161,7 +184,10 @@ export function useProductFilters(products) {
           return new Date(b.lastUpdated) - new Date(a.lastUpdated);
         }
         // Fallback to ID comparison if no dates
-        return b.id.localeCompare(a.id);
+        if (a.id && b.id) {
+          return String(b.id).localeCompare(String(a.id));
+        }
+        return 0;
       });
     }
     

@@ -26,7 +26,8 @@ export default function ProductListing() {
     setShowFilters,
     categories,
     availableBadges,
-    filteredProducts
+    filteredProducts,
+    maxPrice
   } = useProductFilters(products);
 
   return (
@@ -90,6 +91,7 @@ export default function ProductListing() {
               selectedBadges={selectedBadges}
               setSelectedBadges={setSelectedBadges}
               availableBadges={availableBadges}
+              maxPrice={maxPrice}
             />
           </div>
 
