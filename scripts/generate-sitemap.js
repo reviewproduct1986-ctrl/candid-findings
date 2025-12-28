@@ -97,23 +97,6 @@ function generateSitemap(blogs, products) {
     });
   }
 
-  // Add category pages if there are multiple categories
-  const categories = [...new Set(products.map(p => p.category))];
-  if (categories.length > 1) {
-    xml += `  <!-- Category Pages -->\n`;
-    categories.forEach(category => {
-      const slug = category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-      xml += `  <url>
-    <loc>${SITE_URL}/?category=${encodeURIComponent(category)}</loc>
-    <lastmod>${now}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-`;
-    });
-  }
-
   xml += `</urlset>`;
   
   return xml;
