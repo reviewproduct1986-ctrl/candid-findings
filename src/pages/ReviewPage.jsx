@@ -224,7 +224,7 @@ export default function ReviewPage() {
               "image": product.image,
               "brand": {
                 "@type": "Brand",
-                "name": product.category
+                "name": product.brand || extractBrand(product.title) || "Various"
               },
               "aggregateRating": {
                 "@type": "AggregateRating",
