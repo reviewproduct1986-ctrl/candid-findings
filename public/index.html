@@ -64,16 +64,22 @@
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "CandidFindings",
-      "url": "https://candidfindings.com",
-      "description": "Honest, unbiased product reviews and candid findings to help you make smarter shopping decisions",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://candidfindings.com/?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "CandidFindings",
+        "url": "https://candidfindings.com",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://candidfindings.com/favicon.svg",
+            "width": 1200,
+            "height": 630
+        },
+        "description": "Honest, unbiased product reviews and candid findings to help you make smarter shopping decisions",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Service",
+            "url": "https://candidfindings.com/about"
+        }
     }
     </script>
     
