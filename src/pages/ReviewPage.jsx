@@ -77,6 +77,47 @@ export default function ReviewPage() {
       });
   }, [slug, navigate]);
 
+  // MANUAL META TAG UPDATES - Bypasses Helmet issues
+  useEffect(() => {
+    if (!blog || !product) return;
+    
+    // Update title
+    document.title = `${blog.title || product.title + ' Review'} | CandidFindings`;
+    
+    // Helper function to update/create meta tags
+    const setMeta = (selector, attr, attrName, content) => {
+      let meta = document.querySelector(selector);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attr, attrName);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+    
+    // Update all meta tags
+    setMeta('meta[name="description"]', 'name', 'description', 
+      blog.metaDescription || blog.excerpt || product.description);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', 
+      blog.title || product.title + ' Review');
+    setMeta('meta[property="og:description"]', 'property', 'og:description', 
+      blog.metaDescription || blog.excerpt || product.description);
+    setMeta('meta[property="og:image"]', 'property', 'og:image', 
+      product.image);
+    setMeta('meta[property="og:url"]', 'property', 'og:url', 
+      `https://candidfindings.com/reviews/${slug}`);
+    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', 
+      blog.title || product.title + ' Review');
+    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', 
+      blog.metaDescription || blog.excerpt || product.description);
+    setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', 
+      product.image);
+    setMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 
+      'summary_large_image');
+    
+    console.log('✅ Meta tags updated:', document.title);
+  }, [blog, product, slug]);
+
   const tableOfContents = useMemo(() => {
     if (!blog?.content) return [];
     
