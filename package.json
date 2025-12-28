@@ -11,7 +11,8 @@
     "generate-blogs": "node scripts/generate-blogs.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "update-all": "npm run fetch-products && npm run generate-blogs && npm run generate-sitemap && npm run build",
-    "test-automation": "node scripts/fetch-products.js && node scripts/generate-blogs.js && node scripts/generate-sitemap.js"
+    "test-automation": "node scripts/fetch-products.js && node scripts/generate-blogs.js && node scripts/generate-sitemap.js",
+    "postbuild": "react-snap"
   },
   "keywords": [
     "react",
@@ -52,5 +53,15 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "webpack-merge": "^5.10.0"
+  },
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
+    "waitFor": 1000,
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true
+    }
   }
 }

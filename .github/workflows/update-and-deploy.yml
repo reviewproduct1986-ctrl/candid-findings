@@ -62,7 +62,7 @@ jobs:
       - name: 🗺️ Generate sitemap
         run: node scripts/generate-sitemap.js
         continue-on-error: true  # Don't fail if no blogs yet
-      
+
       - name: 🏗️ Build production site
         run: npm run build
       
