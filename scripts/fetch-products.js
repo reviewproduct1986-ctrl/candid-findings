@@ -175,6 +175,62 @@ async function fetchAmazonProducts() {
       ],
       description: '',
       lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-8',
+      title: "Mkeke Magnetic for iPhone 17 Pro Max Case Clear, [Compatible with MagSafe] [Not Yellowing] [Military-Grade Drop Protection] Phone Bumper for iPhone 6.9 inch 2025",
+      category: 'Cell Phones & Accessories',
+      price: 24.99,
+      rating: 4.6,
+      reviews: 130568,
+      image: 'https://m.media-amazon.com/images/I/71HlmTfU9QL._AC_SX679_.jpg',
+      asin: 'B0FJ88517V',
+      affiliate: `https://amazon.com/dp/B0FJ88517V?tag=${config.partnerTag}`,
+      features: [
+        'Magnetic Ready',
+        'Only for iPhone 17 Pro Max',
+        'Military-Grade Protection',
+        'Raised Protective Bezel'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-9',
+      title: "Fintie Case for iPad 6th / 5th Generation (2018 2017 Model, 9.7 Inch), iPad Air 2 / Air 1 (9.7 Inch) - [Corner Protection] Multi-Angle Viewing Stand Cover with Pocket, Purple",
+      category: 'Electronics',
+      price: 14.99,
+      rating: 4.6,
+      reviews: 49204,
+      image: 'https://m.media-amazon.com/images/I/71i46di116L._AC_SX679_.jpg',
+      asin: 'B06XRVX2ZB',
+      affiliate: `https://amazon.com/dp/B06XRVX2ZB?tag=${config.partnerTag}`,
+      features: [
+        'iPad 6th Generation',
+        'Premium composition leather',
+        'Built-in magnetic strip'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-10',
+      title: "Akkerds Case Compatible with iPad 10.2 Inch 2021/2020/2019, for iPad 9th/8th/7th Generation Case with Pencil Holder, Protective with Soft TPU Back, Auto Sleep/Wake Cover, Navyblue",
+      category: 'Electronics',
+      price: 15.99,
+      listPrice: 16.99,
+      rating: 4.6,
+      reviews: 36786,
+      image: 'https://m.media-amazon.com/images/I/61CJGMz8+xL._AC_SX679_.jpg',
+      asin: 'B0D3QFFNSF',
+      affiliate: `https://amazon.com/dp/B0D3QFFNSF?tag=${config.partnerTag}`,
+      features: [
+        'Durable PU leather and TPU',
+        'Built-in magnetic strip',
+        'Trifold stand design'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
     }
   ];
 
