@@ -31,11 +31,13 @@ export default function Header({
             </div>
           </Link>
 
-          {/* Search Bar - More Prominent */}
+          {/* Search Bar - Shows "search" button on mobile keyboard */}
           <div className="flex-1 max-w-xl relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-600" size={20} />
             <input
-              type="text"
+              type="search"
+              inputMode="search"
+              enterKeyHint="search"
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

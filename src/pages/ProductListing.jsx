@@ -99,6 +99,23 @@ export default function ProductListing() {
     setMeta('meta[property="og:url"]', 'property', 'og:url', categoryUrl);
   }, [selectedCategory, pageTitle, pageDescription]);
 
+  // Scroll to product grid when category changes
+  useEffect(() => {
+    // Find the product grid container
+    const productGrid = document.querySelector('[data-product-grid]');
+    if (productGrid && selectedCategory) {
+      // Smooth scroll to the product grid with offset for sticky header
+      const headerHeight = 140; // Approximate header height
+      const yOffset = -headerHeight;
+      const y = productGrid.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  }, [selectedCategory]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
       <Helmet>
@@ -208,7 +225,7 @@ export default function ProductListing() {
           </div>
 
           {/* Products Grid */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3" data-product-grid>
             
             {/* Amazon Search - Consistent with no-results design */}
             {searchTerm && filteredProducts.length > 0 && (
