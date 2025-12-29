@@ -231,6 +231,44 @@ async function fetchAmazonProducts() {
       ],
       description: '',
       lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-11',
+      title: "Sun Bum Kids SPF 50 Sunscreen Clear Body Spray - Broad Spectrum Water-Resistant with Vitamin E - Wet or Dry Skin Application - Hawaii 104 Act Compliant (Without Octinoxate & Oxybenzone) - 6 oz",
+      category: 'Beauty & Personal Care',
+      price: 13.1,
+      listPrice: 18.49,
+      rating: 4.8,
+      reviews: 1525,
+      image: 'https://m.media-amazon.com/images/I/51++nh8DlQL._SX679_.jpg',
+      asin: 'B0BSZ5VJMV',
+      affiliate: `https://amazon.com/dp/B0BSZ5VJMV?tag=${config.partnerTag}`,
+      features: [
+        'KIDS SPF 50 CLEAR SUNSCREEN SPRAY',
+        'SUN BUM KIDS COLLECTION',
+        'FSA/HSA eligible'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: Date.now() + '-12',
+      title: "Genexa Children's Clean Acetaminophen | Pediatrician Preferred Ingredients | Pain & Fever Reducer for Kids | Dye Free, 0% Artificial Additives | Ages 2-11, Delicious Organic Blueberry Liquid, 4 fl oz",
+      category: 'Health & Household',
+      price: 14.99,
+      rating: 4.7,
+      reviews: 6668,
+      image: 'https://m.media-amazon.com/images/I/71X7w+OcTiL._AC_SX679_.jpg',
+      asin: 'B0CHXSLHQZ',
+      affiliate: `https://amazon.com/dp/B0CHXSLHQZ?tag=${config.partnerTag}`,
+      features: [
+        'Pain & Fever Reducer for Kids',
+        'Pediatrician Preferred Ingredients',
+        'Easy-to-Take Liquid',
+        'Ingredients Kids Want'
+      ],
+      description: '',
+      lastUpdated: new Date().toISOString()
     }
   ];
 
