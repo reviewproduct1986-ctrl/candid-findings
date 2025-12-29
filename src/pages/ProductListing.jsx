@@ -7,6 +7,7 @@ import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
 import { useProductData, useProductFilters } from '../hooks/useProducts';
 import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
+import { getAmazonSearchUrl } from '../utils/affiliateConfig';
 
 export default function ProductListing() {
   // Load data
@@ -51,6 +52,30 @@ export default function ProductListing() {
     generateBreadcrumbSchema(selectedCategory),
     [selectedCategory]
   );
+
+  // Track search terms in Google Analytics (debounced - waits for user to finish typing)
+  useEffect(() => {
+    // Only track if there's a search term
+    if (!searchTerm || searchTerm.trim() === '') {
+      return;
+    }
+
+    // Debounce: Wait 1 second after user stops typing
+    const timeoutId = setTimeout(() => {
+      // Track the search event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'search', {
+          search_term: searchTerm,
+          search_category: selectedCategory !== 'All' ? selectedCategory : undefined,
+          results_count: filteredProducts.length,
+          has_results: filteredProducts.length > 0
+        });
+      }
+    }, 1000); // 1 second delay
+
+    // Cleanup: Cancel previous timeout if user keeps typing
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, selectedCategory, filteredProducts.length]);
 
   // Update meta tags when category changes
   useEffect(() => {
@@ -184,6 +209,44 @@ export default function ProductListing() {
 
           {/* Products Grid */}
           <div className="lg:col-span-3">
+            
+            {/* Amazon Search - Consistent with no-results design */}
+            {searchTerm && filteredProducts.length > 0 && (
+              <div className="mb-6 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-center sm:text-left">
+                    <p className="text-slate-700 font-medium">
+                      Looking for more options for "<span className="text-violet-600 font-semibold">{searchTerm}</span>"?
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Browse thousands more on Amazon
+                    </p>
+                  </div>
+                  <a
+                    href={getAmazonSearchUrl(searchTerm)}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    onClick={() => {
+                      if (typeof gtag !== 'undefined') {
+                        gtag('event', 'amazon_search_from_results', {
+                          event_category: 'Affiliate',
+                          event_label: searchTerm,
+                          search_term: searchTerm,
+                          results_count: filteredProducts.length
+                        });
+                      }
+                    }}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-200 transition-all whitespace-nowrap"
+                  >
+                    <span>Search on Amazon</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+            
             {/* Results Count */}
             <div className="mb-6">
               <p className="text-slate-600">
@@ -223,20 +286,52 @@ export default function ProductListing() {
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">No products found</h3>
                 <p className="text-slate-600 mb-6">
-                  Try adjusting your filters or search terms
+                  {searchTerm 
+                    ? `We don't have a review for "${searchTerm}" yet, but you can search for it on Amazon`
+                    : 'Try adjusting your filters or search terms'
+                  }
                 </p>
-                <button
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('All');
-                    setPriceRange([0, maxPrice]);
-                    setMinRating(0);
-                    setSelectedBadges([]);
-                  }}
-                  className="px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 transition-colors"
-                >
-                  Clear All Filters
-                </button>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  {/* Amazon Search Button - Only show if there's a search term */}
+                  {searchTerm && (
+                    <a
+                      href={getAmazonSearchUrl(searchTerm)}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      onClick={() => {
+                        // Track fallback Amazon search in Google Analytics
+                        if (typeof gtag !== 'undefined') {
+                          gtag('event', 'amazon_fallback_search', {
+                            event_category: 'Affiliate',
+                            event_label: searchTerm,
+                            search_term: searchTerm
+                          });
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-200 transition-all"
+                    >
+                      <span>Search on Amazon</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                  
+                  {/* Clear Filters Button */}
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setSelectedCategory('All');
+                      setPriceRange([0, maxPrice]);
+                      setMinRating(0);
+                      setSelectedBadges([]);
+                    }}
+                    className="px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 transition-colors"
+                  >
+                    Clear All Filters
+                  </button>
+                </div>
               </div>
             )}
           </div>
