@@ -9,29 +9,50 @@
   <!-- Homepage -->
   <url>
     <loc>https://candidfindings.com/</loc>
-    <lastmod>2025-12-26</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Product Review Pages -->
   <url>
-    <loc>https://candidfindings.com/reviews/premium-wireless-noise-cancelling-headphones-review-2024</loc>
-    <lastmod>2025-12-26</lastmod>
+    <loc>https://candidfindings.com/reviews/apple-airpods-pro-2-review-2025</loc>
+    <lastmod>2025-12-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/reviews/smart-fitness-watch-heart-rate-monitor-gps-review</loc>
-    <lastmod>2025-12-26</lastmod>
+    <loc>https://candidfindings.com/reviews/the-housemaid-review-psychological-thriller</loc>
+    <lastmod>2025-12-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/reviews/best-ergonomic-office-chair-lumbar-support-review</loc>
-    <lastmod>2025-12-26</lastmod>
+    <loc>https://candidfindings.com/reviews/let-them-theory-book-review-2025</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/owala-freesip-water-bottle-review</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/boxbollen-boxing-reflex-ball-review</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/best-choice-products-heated-shiatsu-foot-massager-review</loc>
+    <lastmod>2025-12-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -39,23 +60,52 @@
   <!-- Category Pages -->
   <url>
     <loc>https://candidfindings.com/?category=Electronics</loc>
-    <lastmod>2025-12-26</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Health%20%26%20Fitness</loc>
-    <lastmod>2025-12-26</lastmod>
+    <loc>https://candidfindings.com/?category=Books</loc>
+    <lastmod>2025-12-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Home%20%26%20Office</loc>
-    <lastmod>2025-12-26</lastmod>
+    <loc>https://candidfindings.com/?category=Sports</loc>
+    <lastmod>2025-12-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/?category=Health%20%26%20Household</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Static Pages -->
+  <url>
+    <loc>https://candidfindings.com/about</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/privacy-policy</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/terms</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>

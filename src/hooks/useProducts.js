@@ -14,9 +14,9 @@ export function useProductData() {
       fetch('/data/blogs.json').then(res => res.json())
     ])
       .then(([productsData, blogsData]) => {
-        // Extract arrays from response with safety checks
-        const productsList = productsData?.products || [];
-        const blogsList = blogsData?.posts || [];
+        // Extract arrays from response
+        const productsList = productsData.products || [];
+        const blogsList = blogsData.posts || [];
         
         // Add review URLs to products based on blog slugs
         const productsWithReviews = productsList.map(product => {
@@ -33,8 +33,6 @@ export function useProductData() {
       })
       .catch(error => {
         console.error('Error loading data:', error);
-        setProducts([]); // Ensure empty array on error
-        setBlogs([]);
         setLoading(false);
       });
   }, []);
@@ -45,68 +43,73 @@ export function useProductData() {
 /**
  * Hook to filter and search products
  */
-export function useProductFilters(products = []) { // Default to empty array
+export function useProductFilters(products) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 500]);
   const [minRating, setMinRating] = useState(0);
   const [selectedBadges, setSelectedBadges] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Calculate max price dynamically from products
-  const maxPrice = useMemo(() => {
-    if (!products || products.length === 0) return 500; // Default fallback
+  // Read URL parameters on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get('category');
     
-    // Filter out invalid products and find highest price
-    const validPrices = products
+    if (categoryParam) {
+      setSelectedCategory(decodeURIComponent(categoryParam));
+    }
+  }, []); // Only run on mount
+
+  // Update URL when category changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    
+    if (selectedCategory && selectedCategory !== 'All') {
+      params.set('category', selectedCategory);
+    } else {
+      params.delete('category');
+    }
+    
+    const newUrl = params.toString() ? `?${params.toString()}` : '/';
+    window.history.replaceState({}, '', newUrl);
+  }, [selectedCategory]);
+
+  // Update price range max when products load
+  useEffect(() => {
+    if (maxPrice > 0 && priceRange[1] === 500) {
+      setPriceRange([0, maxPrice]);
+    }
+  }, [maxPrice]);
+
+  // Get unique categories
+  const categories = useMemo(() => {
+    const cats = ['All', ...new Set(products.map(p => p.category))];
+    return cats;
+  }, [products]);
+
+  // Get unique badges
+  const availableBadges = useMemo(() => {
+    const badges = products
+      .filter(p => p.badge)
+      .map(p => p.badge);
+    return [...new Set(badges)];
+  }, [products]);
+
+  // Calculate max price from all products
+  const maxPrice = useMemo(() => {
+    if (products.length === 0) return 500;
+    const prices = products
       .filter(p => p && typeof p.price === 'number')
       .map(p => p.price);
-    
-    if (validPrices.length === 0) return 500;
-    
-    const highest = Math.max(...validPrices);
-    
-    // Round up to nearest 50 for cleaner slider
-    return Math.ceil(highest / 50) * 50;
-  }, [products]);
-
-  // Initialize price range with dynamic max (only once when products load)
-  const [priceRange, setPriceRange] = useState([0, maxPrice]);
-
-  // Update max price when products change
-  useEffect(() => {
-    if (products && products.length > 0) {
-      setPriceRange(prev => [prev[0], maxPrice]);
-    }
-  }, [maxPrice, products]);
-
-  // Get unique categories with safety checks
-  const categories = useMemo(() => {
-    if (!products || products.length === 0) return ['All'];
-    
-    const validCategories = products
-      .filter(p => p && p.category) // Filter out invalid products
-      .map(p => p.category);
-    
-    const uniqueCategories = [...new Set(validCategories)];
-    return ['All', ...uniqueCategories];
-  }, [products]);
-
-  // Get unique badges with safety checks
-  const availableBadges = useMemo(() => {
-    if (!products || products.length === 0) return [];
-    
-    const badges = products
-      .filter(p => p && p.badge) // Filter out products without badges
-      .map(p => p.badge);
-    
-    return [...new Set(badges)];
+    return prices.length > 0 ? Math.ceil(Math.max(...prices)) : 500;
   }, [products]);
 
   // Fuzzy search function
   const fuzzyScore = (str, query) => {
-    if (!query || !str) return 0;
-    str = String(str).toLowerCase();
-    query = String(query).toLowerCase();
+    if (!query) return 1;
+    str = str.toLowerCase();
+    query = query.toLowerCase();
     
     let score = 0;
     let queryIndex = 0;
@@ -123,15 +126,14 @@ export function useProductFilters(products = []) { // Default to empty array
 
   // Weighted fuzzy search
   const searchProducts = (products, term) => {
-    if (!term || !products) return products;
+    if (!term) return products;
     
     return products
-      .filter(p => p && p.title) // Filter out invalid products
       .map(product => {
         const titleScore = fuzzyScore(product.title, term) * 3;
-        const categoryScore = fuzzyScore(product.category || '', term) * 2;
+        const categoryScore = fuzzyScore(product.category, term) * 2;
         const descScore = product.description ? fuzzyScore(product.description, term) : 0;
-        const featureScore = product.features && Array.isArray(product.features)
+        const featureScore = product.features 
           ? Math.max(...product.features.map(f => fuzzyScore(f, term))) 
           : 0;
         
@@ -143,12 +145,9 @@ export function useProductFilters(products = []) { // Default to empty array
       .sort((a, b) => b.searchScore - a.searchScore);
   };
 
-  // Apply all filters with comprehensive safety checks
+  // Apply all filters
   const filteredProducts = useMemo(() => {
-    if (!products || products.length === 0) return [];
-    
-    // Filter out invalid products first
-    let filtered = products.filter(p => p && p.title && typeof p.price === 'number');
+    let filtered = products;
     
     // Category filter
     if (selectedCategory !== 'All') {
@@ -162,9 +161,7 @@ export function useProductFilters(products = []) { // Default to empty array
     
     // Rating filter
     if (minRating > 0) {
-      filtered = filtered.filter(p => 
-        typeof p.rating === 'number' && p.rating >= minRating
-      );
+      filtered = filtered.filter(p => p.rating >= minRating);
     }
     
     // Badge filter
@@ -184,10 +181,7 @@ export function useProductFilters(products = []) { // Default to empty array
           return new Date(b.lastUpdated) - new Date(a.lastUpdated);
         }
         // Fallback to ID comparison if no dates
-        if (a.id && b.id) {
-          return String(b.id).localeCompare(String(a.id));
-        }
-        return 0;
+        return b.id.localeCompare(a.id);
       });
     }
     
@@ -212,7 +206,7 @@ export function useProductFilters(products = []) { // Default to empty array
     // Computed
     categories,
     availableBadges,
-    filteredProducts,
-    maxPrice // Export max price for FilterPanel
+    maxPrice,
+    filteredProducts
   };
 }

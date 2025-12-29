@@ -179,7 +179,7 @@ export default function BuyingGuidePage() {
                             </h3>
                           </div>
                           <div className="text-right">
-                            <div className="text-3xl font-bold text-violet-600">${product.price}</div>
+                            <div className="text-3xl font-bold text-violet-600">${product.price?.toFixed(2)}</div>
                             <div className="flex items-center gap-1 mt-1">
                               <Star className="text-yellow-500 fill-yellow-500" size={18} />
                               <span className="font-semibold">{product.rating}</span>
