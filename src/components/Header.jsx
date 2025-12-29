@@ -32,18 +32,23 @@ export default function Header({
           </Link>
 
           {/* Search Bar - Shows "search" button on mobile keyboard */}
-          <div className="flex-1 max-w-xl relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-600" size={20} />
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              document.activeElement.blur();
+            }}
+            className="flex-1 max-w-xl relative"
+          >
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-600 pointer-events-none" size={20} />
             <input
-              type="search"
-              inputMode="search"
+              type="text"
               enterKeyHint="search"
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all shadow-sm hover:border-slate-300 hover:shadow-md"
             />
-          </div>
+          </form>
         </div>
 
         {/* Category Tabs - More padding between buttons */}
