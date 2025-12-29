@@ -2,11 +2,12 @@ import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import PreloadLink from './PreloadLink';
 import StarRating from './review/StarRating';
+import '../css/ProductCard.css';
 
 export default function ProductCard({ product, index }) {
   return (
     <div
-      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-violet-200"
+      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-violet-200 flex flex-col"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       {/* Product Image */}
@@ -35,11 +36,11 @@ export default function ProductCard({ product, index }) {
       </div>
 
       {/* Product Info */}
-      <div className="p-6">
-        {/* Category - Now Clickable */}
+      <div className="p-6 flex flex-col flex-1">
+        {/* Category Badge */}
         <PreloadLink
           to={`/?category=${encodeURIComponent(product.category)}`}
-          className="inline-block px-3 py-1 bg-violet-100 text-violet-700 text-xs font-semibold rounded-full mb-3 hover:bg-violet-200 transition-colors cursor-pointer"
+          className="category-badge"
           title={`View all ${product.category} products`}
         >
           {product.category}
@@ -58,10 +59,10 @@ export default function ProductCard({ product, index }) {
           </span>
         </div>
 
-        {/* Price */}
-        <div className="mb-6">
+        {/* Price - Fixed height for alignment */}
+        <div className="mb-6 min-h-[80px]">
           {product.listPrice && product.listPrice > product.price ? (
-            // Discount Display (matches screenshot design)
+            // Discount Display
             <>
               <div className="flex items-baseline gap-2 mb-1">
                 <p className="text-base text-slate-400 line-through">
@@ -88,8 +89,8 @@ export default function ProductCard({ product, index }) {
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col gap-2">
+        {/* Action Buttons - Pushed to bottom */}
+        <div className="mt-auto flex flex-col gap-2">
           {/* View on Amazon Button */}
           <a
             href={product.affiliate}

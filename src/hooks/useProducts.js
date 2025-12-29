@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * Hook to load products and blogs from JSON files
@@ -44,36 +45,25 @@ export function useProductData() {
  * Hook to filter and search products
  */
 export function useProductFilters(products) {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [minRating, setMinRating] = useState(0);
   const [selectedBadges, setSelectedBadges] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Read URL parameters on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get('category');
-    
-    if (categoryParam) {
-      setSelectedCategory(decodeURIComponent(categoryParam));
-    }
-  }, []); // Only run on mount
+  // Get category from URL params
+  const selectedCategory = searchParams.get('category') || 'All';
 
-  // Update URL when category changes
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    
-    if (selectedCategory && selectedCategory !== 'All') {
-      params.set('category', selectedCategory);
+  // Function to update category (and URL)
+  const setSelectedCategory = (category) => {
+    if (category === 'All') {
+      searchParams.delete('category');
     } else {
-      params.delete('category');
+      searchParams.set('category', category);
     }
-    
-    const newUrl = params.toString() ? `?${params.toString()}` : '/';
-    window.history.replaceState({}, '', newUrl);
-  }, [selectedCategory]);
+    setSearchParams(searchParams);
+  };
 
   // Update price range max when products load
   useEffect(() => {
