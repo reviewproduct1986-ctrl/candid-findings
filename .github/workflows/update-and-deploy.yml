@@ -1,9 +1,9 @@
 name: Update Products and Deploy to AWS
 
 on:
-  # AUTOMATIC: Runs daily at 2 AM UTC
+  # AUTOMATIC: Runs daily at 1 AM UTC
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 1 * * *'
   
   # AUTOMATIC: Runs when you push to main branch
   push:
