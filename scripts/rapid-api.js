@@ -312,16 +312,17 @@ ${colors.reset}`);
     }
   }
 
+  updatedProducts
   // Save
   const outputData = {
-    products: updatedProducts,
+    products: Array.from(updatedProducts.values()),
     metadata: {
       total: updatedProducts.length,
       updated: new Date().toISOString()
     }
   };
 
-  fs.writeFileSync(productsPath, JSON.stringify(outputData, null, 2), 'utf8');
+  fs.writeFileSync(productsPath, JSON.stringify(outputData), 'utf8');
 
   // Summary
   console.log(`\n${colors.bright}${colors.cyan}
