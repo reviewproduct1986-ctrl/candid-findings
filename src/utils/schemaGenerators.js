@@ -1,5 +1,8 @@
 // Schema generators for SEO
 
+/**
+ * Generate FAQ schema for review pages
+ */
 export function generateFAQSchema(blog) {
   if (!blog?.faqs || blog.faqs.length === 0) return null;
   
@@ -17,6 +20,9 @@ export function generateFAQSchema(blog) {
   };
 }
 
+/**
+ * Generate Review schema for review pages
+ */
 export function generateReviewSchema(product, blog) {
   if (!product || !blog) return null;
 
@@ -107,5 +113,85 @@ export function generateReviewSchema(product, blog) {
     },
     "datePublished": blog.publishedDate,
     "dateModified": blog.updatedDate || blog.publishedDate
+  };
+}
+
+/**
+ * Generate ItemList schema for category pages
+ * Shows collection of products in a category
+ */
+export function generateItemListSchema(category, products) {
+  // Don't generate schema for "All" or if no products
+  if (!category || category === 'All' || !products || products.length === 0) {
+    return null;
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `${category} Products`,
+    "description": `Curated collection of ${category} products with expert reviews`,
+    "numberOfItems": products.length,
+    "itemListElement": products.slice(0, 10).map((product, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "name": product.title,
+        "description": product.description || `${product.title} - ${category}`,
+        "image": product.image,
+        "url": product.reviewUrl 
+          ? `https://candidfindings.com${product.reviewUrl}`
+          : product.affiliate,
+        "offers": {
+          "@type": "Offer",
+          "price": product.price.toFixed(2),
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": product.affiliate
+        },
+        "aggregateRating": product.reviews ? {
+          "@type": "AggregateRating",
+          "ratingValue": product.rating.toString(),
+          "reviewCount": product.reviews.toString(),
+          "bestRating": "5",
+          "worstRating": "1"
+        } : undefined,
+        "brand": {
+          "@type": "Brand",
+          "name": product.brand || product.title.split(' ')[0]
+        }
+      }
+    }))
+  };
+}
+
+/**
+ * Generate BreadcrumbList schema for category pages
+ * Shows navigation hierarchy: Home > Category
+ */
+export function generateBreadcrumbSchema(category) {
+  // Don't generate schema for "All" or if no category
+  if (!category || category === 'All') {
+    return null;
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://candidfindings.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": category,
+        "item": `https://candidfindings.com/?category=${encodeURIComponent(category)}`
+      }
+    ]
   };
 }

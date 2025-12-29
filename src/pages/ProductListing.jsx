@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import FilterPanel from '../components/FilterPanel';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
 import { useProductData, useProductFilters } from '../hooks/useProducts';
+import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
 
 export default function ProductListing() {
   // Load data
@@ -30,8 +32,74 @@ export default function ProductListing() {
     maxPrice
   } = useProductFilters(products);
 
+  // Generate page title and description based on category
+  const pageTitle = selectedCategory && selectedCategory !== 'All'
+    ? `${selectedCategory} Products | CandidFindings`
+    : 'CandidFindings | Honest Product Reviews & Recommendations';
+
+  const pageDescription = selectedCategory && selectedCategory !== 'All'
+    ? `Browse our curated selection of ${selectedCategory} products. Expert reviews, honest opinions, and smart recommendations to help you make better buying decisions.`
+    : 'Discover expert-curated product reviews and honest opinions. From electronics to home essentials, find products you\'ll actually love with CandidFindings.';
+
+  // Generate schemas using modular generators
+  const itemListSchema = useMemo(() => 
+    generateItemListSchema(selectedCategory, filteredProducts),
+    [selectedCategory, filteredProducts]
+  );
+
+  const breadcrumbSchema = useMemo(() => 
+    generateBreadcrumbSchema(selectedCategory),
+    [selectedCategory]
+  );
+
+  // Update meta tags when category changes
+  useEffect(() => {
+    const setMeta = (selector, attr, attrName, content) => {
+      let meta = document.querySelector(selector);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attr, attrName);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    setMeta('meta[name="description"]', 'name', 'description', pageDescription);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', pageTitle);
+    setMeta('meta[property="og:description"]', 'property', 'og:description', pageDescription);
+    
+    const categoryUrl = selectedCategory && selectedCategory !== 'All'
+      ? `https://candidfindings.com/?category=${encodeURIComponent(selectedCategory)}`
+      : 'https://candidfindings.com/';
+    setMeta('meta[property="og:url"]', 'property', 'og:url', categoryUrl);
+  }, [selectedCategory, pageTitle, pageDescription]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link 
+          rel="canonical" 
+          href={selectedCategory && selectedCategory !== 'All'
+            ? `https://candidfindings.com/?category=${encodeURIComponent(selectedCategory)}`
+            : 'https://candidfindings.com/'
+          } 
+        />
+        
+        {/* Schema Markup */}
+        {itemListSchema && (
+          <script type="application/ld+json">
+            {JSON.stringify(itemListSchema)}
+          </script>
+        )}
+        {breadcrumbSchema && (
+          <script type="application/ld+json">
+            {JSON.stringify(breadcrumbSchema)}
+          </script>
+        )}
+      </Helmet>
+
       {/* Header */}
       <Header
         searchTerm={searchTerm}
@@ -47,16 +115,35 @@ export default function ProductListing() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6">
               <TrendingUp size={16} />
-              <span>Curated Product Recommendations</span>
+              <span>
+                {selectedCategory && selectedCategory !== 'All' 
+                  ? `${selectedCategory} Products`
+                  : 'Curated Product Recommendations'
+                }
+              </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
-              Discover Products You'll{' '}
-              <span className="bg-gradient-to-r from-amber-200 to-yellow-300 bg-clip-text text-transparent">
-                Actually Love
-              </span>
+              {selectedCategory && selectedCategory !== 'All' ? (
+                <>
+                  Best {selectedCategory}{' '}
+                  <span className="bg-gradient-to-r from-amber-200 to-yellow-300 bg-clip-text text-transparent">
+                    Products
+                  </span>
+                </>
+              ) : (
+                <>
+                  Discover Products You'll{' '}
+                  <span className="bg-gradient-to-r from-amber-200 to-yellow-300 bg-clip-text text-transparent">
+                    Actually Love
+                  </span>
+                </>
+              )}
             </h1>
             <p className="text-lg sm:text-xl text-violet-100 mb-8">
-              Expert-curated reviews and honest opinions to help you make smarter choices
+              {selectedCategory && selectedCategory !== 'All'
+                ? `Expert-curated ${selectedCategory.toLowerCase()} reviews and honest opinions`
+                : 'Expert-curated reviews and honest opinions to help you make smarter choices'
+              }
             </p>
             <div className="flex flex-wrap gap-4 justify-center text-sm">
               <div className="flex items-center gap-2">
@@ -105,6 +192,9 @@ export default function ProductListing() {
                 {searchTerm && (
                   <span> for "{searchTerm}"</span>
                 )}
+                {selectedCategory && selectedCategory !== 'All' && !searchTerm && (
+                  <span> in {selectedCategory}</span>
+                )}
               </p>
             </div>
 
@@ -139,7 +229,7 @@ export default function ProductListing() {
                   onClick={() => {
                     setSearchTerm('');
                     setSelectedCategory('All');
-                    setPriceRange([0, 500]);
+                    setPriceRange([0, maxPrice]);
                     setMinRating(0);
                     setSelectedBadges([]);
                   }}
