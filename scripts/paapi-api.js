@@ -14,6 +14,27 @@
  * Usage: node update-products-paapi.js
  */
 
+/* yml
+
+# OPTION 2: Amazon PA-API (official, free)
+# Uncomment this block and comment out the RapidAPI block above
+# - name: Install PA-API SDK
+#   run: npm install paapi5-nodejs-sdk
+# 
+# - name: Update products with PA-API
+#   env:
+#     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+#     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+#     AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
+#   run: |
+#     # Add credentials to script
+#     sed -i "s/YOUR_ACCESS_KEY_HERE/$AWS_ACCESS_KEY/" update-products-paapi.js
+#     sed -i "s/YOUR_SECRET_KEY_HERE/$AWS_SECRET_KEY/" update-products-paapi.js
+#     sed -i "s/YOUR_ASSOCIATE_TAG_HERE/$AMAZON_PARTNER_TAG/" update-products-paapi.js
+#     # Run updater
+#     node update-products-paapi.js
+*/
+
 const fs = require('fs');
 const path = require('path');
 
