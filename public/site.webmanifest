@@ -1,6 +1,6 @@
 {
-  "name": "ProductOpinion - Expert Product Reviews",
-  "short_name": "ProductOpinion",
+  "name": "CandidFindings - Expert Product Reviews",
+  "short_name": "CandidFindings",
   "description": "Get expert product opinions and comprehensive reviews to make smarter shopping decisions",
   "start_url": "/",
   "display": "standalone",
