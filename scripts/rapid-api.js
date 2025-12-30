@@ -21,8 +21,7 @@ const isoDate = new Date().toISOString().slice(0, 10)
 
 // ⚠️ CONFIGURATION - ADD YOUR API KEY HERE
 const CONFIG = {
-  rapidApiKey: '6bac5b5110mshc5f115711b25f83p12f32djsn7ab3e451fa00',
-  // rapidApiKey: process.env.RAPIDAPI_KEY,
+  rapidApiKey: process.env.RAPIDAPI_KEY,
   productsFile: './public/data/products.json',
   backupFile: `./public/data/products.backup.${isoDate}.json`,
   delayBetweenRequests: 2000, // 2 seconds
