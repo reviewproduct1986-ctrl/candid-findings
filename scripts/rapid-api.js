@@ -102,6 +102,7 @@ function fetchProductData(asin) {
  * Parse API response
  */
 function parseApiResponse(apiData) {
+  console.log('apiData: ', apiData);
   const data = {
     available: true,
     price: null,
@@ -166,7 +167,8 @@ function parseApiResponse(apiData) {
     data.reviewCount = parseInt(reviewStr);
   }
 
-  return data;
+  console.log('data: ', data);
+  return data?.price ? data : null;
 }
 
 /**
@@ -190,8 +192,9 @@ async function updateProduct(product, index, total) {
     const apiData = await fetchProductData(asin);
     
     const newData = parseApiResponse(apiData);
+    console.log('newData: ', newData);
 
-    if (!newData.available) {
+    if (!newData?.available) {
       console.log(`  ${colors.red}✗ Product unavailable${colors.reset}`);
       stats.unavailable++;
       return {
@@ -312,8 +315,7 @@ ${colors.reset}`);
     }
   }
 
-  updatedProducts
-  // Save
+  // Save updatedProducts
   const outputData = {
     products: Array.from(updatedProducts.values()),
     metadata: {

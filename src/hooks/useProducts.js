@@ -16,7 +16,7 @@ export function useProductData() {
     ])
       .then(([productsData, blogsData]) => {
         // Extract arrays from response
-        const productsList = productsData.products || [];
+        const productsList = productsData.products?.filter(({available}) => available) || [];
         const blogsList = blogsData.posts || [];
         
         // Add review URLs to products based on blog slugs
