@@ -1,0 +1,29 @@
+{
+    "products": [
+        
+        {
+            "id": "1766871873268-4",
+            "title": "The Let Them Theory: A Life-Changing Tool That Millions of People Can't Stop Talking About",
+            "category": "Books",
+            "price": 14.99,
+            "rating": 4.6,
+            "reviews": 33648,
+            "image": "https://m.media-amazon.com/images/I/91ZVf3kNrcL._SY466_.jpg",
+            "asin": "1401971369",
+            "affiliate": "https://amazon.com/dp/1401971369?tag=candidfinding-20",
+            "badge": "Best Seller",
+            "features": [
+                "Over 7 Million Copies Sold!"
+            ],
+            "description": "",
+            "lastUpdated": "2025-12-29T23:03:27.932Z",
+            "listPrice": 29.99,
+            "lastChecked": "2025-12-29T23:11:29.412Z",
+            "available": true
+        }
+    ],
+    "metadata": {
+        "total": 9,
+        "updated": "2025-12-29T23:12:01.978Z"
+    }
+}

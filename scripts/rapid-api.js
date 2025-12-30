@@ -101,7 +101,6 @@ function fetchProductData(asin) {
  * Parse API response
  */
 function parseApiResponse(apiData) {
-  console.log('apiData: ', apiData);
   const data = {
     available: true,
     price: null,

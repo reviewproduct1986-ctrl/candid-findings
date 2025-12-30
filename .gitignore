@@ -39,9 +39,6 @@ yarn.lock
 .env.development
 .env.production
 
-# product data backup files
-public/data/products.backup.*
-
 # OS files
 Thumbs.db
 
