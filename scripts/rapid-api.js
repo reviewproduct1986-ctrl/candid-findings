@@ -165,7 +165,6 @@ function parseApiResponse(apiData) {
     data.reviewCount = parseInt(reviewStr);
   }
 
-  console.log('data: ', data);
   return data?.price ? data : null;
 }
 
