@@ -268,7 +268,6 @@ async function main() {
 ${colors.reset}`);
 
   // Check API key
-  console.log('CONFIG: ', CONFIG);
   if (CONFIG.rapidApiKey === 'YOUR_RAPIDAPI_KEY_HERE') {
     console.error(`${colors.red}Error: Please add your RapidAPI key to the script${colors.reset}\n`);
     console.log('1. Sign up at https://rapidapi.com');
