@@ -25,6 +25,10 @@ env:
   AWS_REGION: us-east-1
   S3_BUCKET: candid-findings 
 
+# Add this if missing:
+permissions:
+  contents: write
+
 jobs:
   update-products:
     runs-on: ubuntu-latest

@@ -190,7 +190,6 @@ async function updateProduct(product, index, total) {
     const apiData = await fetchProductData(asin);
     
     const newData = parseApiResponse(apiData);
-    console.log('newData: ', newData);
 
     if (!newData?.available) {
       console.log(`  ${colors.red}✗ Product unavailable${colors.reset}`);
