@@ -5,6 +5,9 @@ on:
     # Runs at 1:15 AM PST / 9:15AM AM UTC daily
     - cron: '45 * * * *'
   
+  # Allow manual trigger from Actions tab
+  workflow_dispatch:
+
   # AUTOMATIC: Runs when you push to main branch
   push:
     branches:
@@ -17,9 +20,6 @@ on:
       - 'webpack.config.js'
       - 'webpack.*.js'
       - '.github/workflows/**'
-
-  # Allow manual trigger from Actions tab
-  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
