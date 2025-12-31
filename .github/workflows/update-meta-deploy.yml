@@ -51,7 +51,7 @@ jobs:
       - name: Update products with RapidAPI
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-        run: node scripts/rapid-api.js
+        run: node scripts/rapid-api.js >> public/data/cron.txt
       
       - name: 🗺️ Generate sitemap
         run: node scripts/generate-sitemap.js
@@ -141,7 +141,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data/products*.json
-          git add public/data/cron.log
+          git add public/data/cron.txt
           git commit -m "🤖 Update products - $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
       
