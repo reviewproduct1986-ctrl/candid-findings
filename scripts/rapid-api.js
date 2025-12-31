@@ -22,7 +22,7 @@ const isoDate = new Date().toISOString().slice(0, 10)
 // ⚠️ CONFIGURATION - ADD YOUR API KEY HERE
 const CONFIG = {
   rapidApiKey: process.env.RAPIDAPI_KEY,
-  cronLogFile: './public/data/cron.log',
+  cronLogFile: './public/data/cron.txt',
   productsFile: './public/data/products.json',
   backupFile: `./public/data/products.backup.${isoDate}.json`,
   delayBetweenRequests: 2000, // 2 seconds
