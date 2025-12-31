@@ -22,6 +22,7 @@ const isoDate = new Date().toISOString().slice(0, 10)
 // ⚠️ CONFIGURATION - ADD YOUR API KEY HERE
 const CONFIG = {
   rapidApiKey: process.env.RAPIDAPI_KEY,
+  cronLogFile: './public/data/cron.log',
   productsFile: './public/data/products.json',
   backupFile: `./public/data/products.backup.${isoDate}.json`,
   delayBetweenRequests: 2000, // 2 seconds
@@ -278,6 +279,7 @@ ${colors.reset}`);
   }
 
   const productsPath = path.resolve(CONFIG.productsFile);
+  const cronLogPath = path.resolve(CONFIG.cronLogFile);
   const backupPath = path.resolve(CONFIG.backupFile);
 
   if (!fs.existsSync(productsPath)) {
@@ -321,6 +323,7 @@ ${colors.reset}`);
   };
 
   fs.writeFileSync(productsPath, JSON.stringify(outputData), 'utf8');
+  fs.writeFileSync(cronLogPath, `${(new Date).toLocaleString()}`, 'utf8');
 
   // Summary
   console.log(`\n${colors.bright}${colors.cyan}
