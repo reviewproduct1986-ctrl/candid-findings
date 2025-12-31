@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="64" fill="#7c3aed"/>
+  
+  <!-- Inner circle -->
+  <circle cx="64" cy="64" r="52" fill="#8b5cf6"/>
+  
+  <!-- Star shape for reviews/ratings -->
+  <path d="M64 20 L70 46 L96 46 L75 61 L82 87 L64 72 L46 87 L53 61 L32 46 L58 46 Z" 
+        fill="#ffffff" 
+        opacity="0.95"/>
+  
+  <!-- Checkmark for verified/trusted -->
+  <path d="M50 64 L58 72 L78 52" 
+        stroke="#fbbf24" 
+        stroke-width="6" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        fill="none"/>
+</svg>
