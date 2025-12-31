@@ -2,8 +2,8 @@ name: Update Amazon Products Info
 
 on:
   schedule:
-    # Runs at 3:00 AM UTC daily
-    - cron: '30 * * * *'
+    # Runs at 1:15 AM PST / 9:15AM AM UTC daily
+    - cron: '45 * * * *'
   
   # AUTOMATIC: Runs when you push to main branch
   push:
