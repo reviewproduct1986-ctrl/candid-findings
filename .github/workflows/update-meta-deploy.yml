@@ -1,0 +1,151 @@
+name: Update Amazon Products Info
+
+on:
+  schedule:
+    # Runs at 2:48 AM PST / 10:48AM AM UTC daily
+    - cron: '48 10 * * *'
+  
+  # Allow manual trigger from Actions tab
+  workflow_dispatch:
+
+  # AUTOMATIC: Runs when you push to main branch
+  push:
+    branches:
+      - production
+    paths:
+      - 'scripts/**'
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'webpack.config.js'
+      - 'webpack.*.js'
+      - '.github/workflows/**'
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: candid-findings 
+
+# Add this if missing:
+permissions:
+  contents: write
+
+jobs:
+  update-products:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      # Choose ONE option below - comment out the other
+      
+      # OPTION 1: RapidAPI (faster, easier)
+      # - name: Update products with RapidAPI
+      #   env:
+      #     RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+      #   run: node scripts/rapid-api.js >> public/data/cron.txt
+      
+      - name: 🗺️ Generate sitemap
+        run: node scripts/generate-sitemap.js
+        continue-on-error: true  # Don't fail if no blogs yet
+
+      - name: 🏗️ Build production site
+        run: npm run build
+      
+      - name: 🔑 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: 📤 Deploy to S3
+        run: |
+          echo "Uploading to S3..."
+          
+          # Upload all files except index.html, JSON, and sitemap with long cache
+          aws s3 sync dist/ s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --exclude "index.html" \
+            --exclude "*.json" \
+            --exclude "data/*" \
+            --exclude "sitemap.xml"
+          
+          # Upload index.html, JSON files, and sitemap with no cache (always fresh)
+          aws s3 sync dist/ s3://${{ env.S3_BUCKET }} \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --exclude "*" \
+            --include "index.html" \
+            --include "*.json" \
+            --include "data/*" \
+            --include "sitemap.xml"
+          
+          echo "✅ S3 upload complete"
+      
+      - name: ⚡ Invalidate CloudFront cache (if configured)
+        env:
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            echo "🔄 Invalidating CloudFront cache..."
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/*"
+            echo "✅ CloudFront invalidation triggered"
+          else
+            echo "ℹ️  CloudFront not configured, skipping cache invalidation"
+          fi
+
+      - name: 📊 Deployment summary
+        if: always()
+        env:
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📦 DEPLOYMENT SUMMARY"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Status: ${{ job.status }}"
+          echo "Bucket: ${{ env.S3_BUCKET }}"
+          echo "Region: ${{ env.AWS_REGION }}"
+          echo "Time: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          echo ""
+          echo "🌐 Check your site:"
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            echo "   CloudFront: https://[your-distribution].cloudfront.net"
+          fi
+          echo "   S3 Website: http://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
+          echo ""
+          echo "🗺️ Sitemap: https://candidfindings.com/sitemap.xml"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: Check for changes
+        id: verify_diff
+        run: |
+          git diff --quiet public/data/products*.json || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push changes
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/products*.json
+          git add public/data/cron.txt
+          git commit -m "🤖 Update products - $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+      
+      - name: No changes detected
+        if: steps.verify_diff.outputs.changed != 'true'
+        run: |
+          echo "✓ No changes to products.json - skipping commit"
