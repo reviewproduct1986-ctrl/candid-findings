@@ -1,7 +1,10 @@
 // Schema generators for SEO
 
-function generateShortName(title) {
-  return title.length > 150 ? title.substring(0, 147) + '...' : title;
+function CleanAndShort(title) {
+  const newTtitle = title.replace(/®/g, '')
+    .replace(/™/g, '')
+    .replace(/©/g, '')
+  return newTtitle.length > 150 ? newTtitle.substring(0, 147) + '...' : newTtitle;
 }
 
 /**
@@ -36,7 +39,7 @@ export function generateReviewSchema(product, blog) {
     "reviewBody": blog.excerpt || blog.metaDescription,
     "itemReviewed": {
       "@type": "Product",
-      "name": generateShortName(product.title),
+      "name": CleanAndShort(product.title),
       "description": product.description || blog.metaDescription,
       "image": product.image,
       "sku": product.id,
@@ -141,7 +144,7 @@ export function generateItemListSchema(category, products) {
       "position": index + 1,
       "item": {
         "@type": "Product",
-        "name": generateShortName(product.title),
+        "name": CleanAndShort(product.title),
         "description": product.description || `${product.title} - ${category}`,
         "image": product.image,
         "url": product.reviewUrl 
