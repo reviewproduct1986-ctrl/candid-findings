@@ -239,6 +239,92 @@
             "listPrice": 14.99,
             "lastChecked": "2026-01-03T11:01:19.179Z",
             "available": true
+        },
+        {
+            "id": "1767050944640-13",
+            "title": "Ello Pop & Fill Stainless Steel Water Bottle with Quick Fill Technology, Double Walled Vacuum Insulated Metal, Leak Proof Locking Lid, Sip & Chug, BPA Free, Holiday Gift for Him Her, 22oz, 32oz, 40oz",
+            "category": "Home & Kitchen",
+            "price": 12.47,
+            "rating": 4.2,
+            "reviews": 5956,
+            "image": "https://m.media-amazon.com/images/I/71n4ODRlQqL._AC_SL1500_.jpg",
+            "asin": "B0CPKT4Q41",
+            "affiliate": "https://amazon.com/dp/B0CPKT4Q41?tag=candidfinding-20",
+            "features": [
+                "QUICK FILL LID",
+                "DUAL SIP AND CHUG",
+                "100% LEAK-PROOF",
+                "DISHWASHER SAFE"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "listPrice": 20.79,
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-14",
+            "title": "Ello Duraglass Refresh 3.4 Cup Meal Prep Sets 10Pc, 5 Pack Set- Glass Food Storage Container with Silicone Boot and Airtight BPA-Free Plastic Lids, Dishwasher, Microwave and Freezer Safe,Dusk Delight",
+            "category": "Home & Kitchen",
+            "price": 34.99,
+            "listPrice": 42.99,
+            "rating": 4.7,
+            "reviews": 6978,
+            "image": "https://m.media-amazon.com/images/I/71puooYROPL._AC_SL1500_.jpg",
+            "asin": "B0FMH4JNRB",
+            "affiliate": "https://amazon.com/dp/B0FMH4JNRB?tag=candidfinding-20",
+            "features": [
+                "5-PACK MEAL PREP CONTAINERS",
+                "DURAGLASS",
+                "LEAK-PROOF AND AIRTIGHT",
+                "MEALPREP IN STYLE"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-15",
+            "title": "Crocs Kids' Classic Glitter Clog",
+            "category": "Clothing, Shoes & Jewelry",
+            "price": 29.99,
+            "listPrice": 39.99,
+            "rating": 4.8,
+            "reviews": 11823,
+            "image": "https://m.media-amazon.com/images/I/81GmAOPpLbL._AC_SX625_.jpg",
+            "asin": "B0DQY8GKPQ",
+            "affiliate": "https://amazon.com/dp/B0DQY8GKPQ?tag=candidfinding-20",
+            "features": [
+                "Sparkle in Every Step",
+                "Secure Fit for Playful Adventures",
+                "Customizable Charm and Comfort"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-16",
+            "title": "Bento Box for Kids Girls Boys, Bento Box Adult Lunch Box with 4 Compartments, Lunch Containers with Utensils, Sauce Jar, Muffin Liners for School, 40 Oz/5 Cup, Blue",
+            "category": "Home & Kitchen",
+            "price": 9.99,
+            "listPrice": 13.99,
+            "rating": 4.4,
+            "reviews": 5601,
+            "image": "https://m.media-amazon.com/images/I/71DPWB7cpdL._AC_SL1500_.jpg",
+            "asin": "B0CM6L132Z",
+            "affiliate": "https://amazon.com/dp/B0CM6L132Z?tag=candidfinding-20",
+            "features": [
+                "8-in-one",
+                "Sturdy Plastic & BPA-free:",
+                "With 4 Compartments"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
         }
     ],
     "metadata": {
