@@ -1,5 +1,9 @@
 // Schema generators for SEO
 
+function generateShortName(title) {
+  return title.length > 150 ? title.substring(0, 147) + '...' : title;
+}
+
 /**
  * Generate FAQ schema for review pages
  */
@@ -32,7 +36,7 @@ export function generateReviewSchema(product, blog) {
     "reviewBody": blog.excerpt || blog.metaDescription,
     "itemReviewed": {
       "@type": "Product",
-      "name": product.title,
+      "name": generateShortName(product.title),
       "description": product.description || blog.metaDescription,
       "image": product.image,
       "sku": product.id,
@@ -137,7 +141,7 @@ export function generateItemListSchema(category, products) {
       "position": index + 1,
       "item": {
         "@type": "Product",
-        "name": product.title,
+        "name": generateShortName(product.title),
         "description": product.description || `${product.title} - ${category}`,
         "image": product.image,
         "url": product.reviewUrl 
