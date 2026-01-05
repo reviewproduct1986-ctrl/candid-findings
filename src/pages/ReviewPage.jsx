@@ -11,7 +11,7 @@ import ReviewHero from '../components/review/ReviewHero';
 import TableOfContents from '../components/review/TableOfContents';
 import ProsCons from '../components/review/ProsCons';
 import FAQSection from '../components/review/FAQSection';
-import RelatedProducts from '../components/review/RelatedProducts';
+import ProductCard from '../components/ProductCard';
 import { markdownComponents } from '../utils/markdownComponents';
 import { generateFAQSchema, generateReviewSchema } from '../utils/schemaGenerators';
 
@@ -217,7 +217,24 @@ export default function ReviewPage() {
           </div>
         </article>
 
-        <RelatedProducts products={relatedProducts} />
+        {relatedProducts.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              You May Also Like
+            </h2>
+            
+            {/* ✅ Use ProductCard component */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map(product => (
+                <ProductCard 
+                  key={product.id} 
+                  product={product}
+                  showCategory={false}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

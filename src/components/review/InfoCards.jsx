@@ -42,6 +42,9 @@ export default function InfoCards({ product, hasDiscount, savings, discountPerce
             <div className="text-sm text-slate-600">Current Price</div>
           </>
         )}
+        <p className="text-xs text-slate-500 mt-1">
+          Price may vary on Amazon
+        </p>
       </div>
     </div>
   );
