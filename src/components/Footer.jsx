@@ -49,7 +49,7 @@ export default function Footer() {
             </Link>
           </div>
           <p className="text-xs text-slate-500 mt-4">
-            © 2025 CandidFindings. All rights reserved.
+            © 2026 CandidFindings. All rights reserved.
           </p>
         </div>
       </div>
