@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Privacy Policy</h1>
-              <p className="text-slate-600 text-sm mt-1">Last updated: January 15, 2025</p>
+              <p className="text-slate-600 text-sm mt-1">Last updated: January 5, 2026</p>
             </div>
           </div>
 
@@ -73,6 +73,61 @@ export default function PrivacyPolicy() {
                 <li>Comments or feedback (if applicable)</li>
                 <li>Any other information you choose to provide</li>
               </ul>
+            </section>
+
+            {/* Email Communications - NEW SECTION */}
+            <section className="mb-8 bg-violet-50/50 rounded-lg p-6 border border-violet-100">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Email Communications & Newsletter</h2>
+              
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Newsletter Subscription</h3>
+              <p className="text-slate-700 mb-4">
+                When you subscribe to our email newsletter, we collect:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                <li>Your email address</li>
+                <li>Date and time of subscription</li>
+                <li>IP address (for security purposes)</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">How We Use Your Email</h3>
+              <p className="text-slate-700 mb-4">
+                We use your email address to:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                <li>Send weekly product recommendations and deals</li>
+                <li>Provide exclusive offers to subscribers</li>
+                <li>Share updates about CandidFindings</li>
+                <li>Send important service-related announcements</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Email Service Provider</h3>
+              <p className="text-slate-700 mb-4">
+                We use <strong>MailChimp</strong> (owned by Intuit) to manage our email list and send newsletters. Your email address is stored on MailChimp's servers, which are located in the United States. MailChimp's privacy policy can be found at:{' '}
+                <a href="https://www.intuit.com/privacy/statement/" target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:text-violet-700 underline">
+                  https://www.intuit.com/privacy/statement/
+                </a>
+              </p>
+
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Your Rights</h3>
+              <p className="text-slate-700 mb-4">
+                You have the right to:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                <li><strong>Unsubscribe:</strong> Click the "Unsubscribe" link at the bottom of any email</li>
+                <li><strong>Update your preferences:</strong> Manage your subscription settings via email links</li>
+                <li><strong>Request deletion:</strong> Email hello@candidfindings.com to delete your data</li>
+                <li><strong>Access your data:</strong> Request a copy of the data we have about you</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Email Frequency</h3>
+              <p className="text-slate-700 mb-4">
+                We send approximately one email per week. We may occasionally send additional emails for special offers or important updates. <strong>We will never spam you or sell your email address to third parties.</strong>
+              </p>
+
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Data Security</h3>
+              <p className="text-slate-700 mb-4">
+                We take reasonable measures to protect your email address from unauthorized access or disclosure. However, no internet transmission is 100% secure.
+              </p>
             </section>
 
             {/* How We Use Your Information */}
@@ -139,7 +194,7 @@ export default function PrivacyPolicy() {
                 We do not sell, trade, or otherwise transfer your personal information to third parties. However, we may share information with:
               </p>
               <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li><strong>Service Providers:</strong> Companies that help us operate our website (e.g., Google Analytics, hosting providers)</li>
+                <li><strong>Service Providers:</strong> Companies that help us operate our website (e.g., MailChimp, Google Analytics, hosting providers)</li>
                 <li><strong>Amazon:</strong> When you click on affiliate links, Amazon receives information necessary to process referrals</li>
                 <li><strong>Legal Requirements:</strong> If required by law or to protect our rights</li>
               </ul>
@@ -227,7 +282,7 @@ export default function PrivacyPolicy() {
               </p>
               <ul className="list-none space-y-2 text-slate-700">
                 <li><strong>Website:</strong> candidfindings.com</li>
-                <li><strong>Email:</strong> privacy@candidfindings.com</li>
+                <li><strong>Email:</strong> hello@candidfindings.com</li>
               </ul>
             </section>
           </div>

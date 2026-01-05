@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Shield, Heart, Search, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Shield, Heart, Search, CheckCircle, Mail } from 'lucide-react';
 import Footer from '../components/Footer';
 
 export default function AboutPage() {
@@ -119,8 +119,66 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* Stay Connected - NEW SECTION */}
+          <section className="mb-10 bg-gradient-to-br from-violet-50 to-indigo-50 rounded-xl p-6 border border-violet-100">
+            <div className="flex gap-4 mb-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                <Mail className="text-white" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">Stay Connected</h2>
+                <p className="text-slate-700 leading-relaxed">
+                  Subscribe to our weekly newsletter to get the best product recommendations 
+                  delivered to your inbox.
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-3 sm:ml-16">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="text-violet-600 flex-shrink-0 mt-0.5" size={18} />
+                <p className="text-slate-700">
+                  <strong>Weekly product picks</strong> – Curated recommendations just for you
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="text-violet-600 flex-shrink-0 mt-0.5" size={18} />
+                <p className="text-slate-700">
+                  <strong>Exclusive deals</strong> – Get notified about the best prices
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="text-violet-600 flex-shrink-0 mt-0.5" size={18} />
+                <p className="text-slate-700">
+                  <strong>No spam, ever</strong> – Unsubscribe anytime with one click
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 sm:ml-16 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => {
+                  window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                  });
+                }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors cursor-pointer"
+              >
+                <Mail size={18} />
+                Subscribe to Newsletter
+              </button>
+              <Link
+                to="/privacy-policy"
+                className="inline-flex items-center justify-center px-6 py-3 border border-violet-200 text-violet-700 rounded-lg font-semibold hover:bg-violet-50 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </section>
+
           {/* Transparency */}
-          <section className="mb-10 bg-violet-50 rounded-xl p-6">
+          <section className="mb-10 bg-amber-50 rounded-xl p-6 border border-amber-100">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Commitment to Transparency</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
               <strong>We earn commissions from Amazon purchases.</strong> However, this never 
