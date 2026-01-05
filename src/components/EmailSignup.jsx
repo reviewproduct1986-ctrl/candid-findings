@@ -3,7 +3,7 @@ import { Mail, Check, AlertCircle, Loader2, X, Inbox, AlertTriangle } from 'luci
 
 export default function EmailSignup() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -45,7 +45,6 @@ export default function EmailSignup() {
     setStatus('loading');
 
     try {
-      // Build the MailChimp URL with JSONP support
       const baseUrl = `https://${mailchimpDomain}.list-manage.com/subscribe/post-json`;
       const params = new URLSearchParams({
         u: mailchimpUserId,
@@ -55,13 +54,10 @@ export default function EmailSignup() {
       });
 
       const url = `${baseUrl}?${params.toString()}`;
-
-      // Create a unique callback name for this request
       const callbackName = 'mailchimpCallback_' + Date.now();
       let timeoutId;
       let scriptElement;
 
-      // Create promise to handle JSONP response
       const jsonpRequest = new Promise((resolve, reject) => {
         timeoutId = setTimeout(() => {
           cleanup();
@@ -94,27 +90,22 @@ export default function EmailSignup() {
         }
       };
 
-      // Wait for response
       const data = await jsonpRequest;
 
-      console.log('MailChimp response:', data); // Debug log
+      console.log('MailChimp response:', data);
 
-      // Parse response
       if (data.result === 'success') {
-        // ✅ IMPORTANT: Check if success message contains "already subscribed"
-        // MailChimp sometimes returns success with "already subscribed" message
         const msg = data.msg || '';
         const cleanMsg = msg
-          .replace(/<[^>]*>/g, '') // Remove HTML tags
+          .replace(/<[^>]*>/g, '')
           .replace(/&amp;/g, '&')
           .replace(/&lt;/g, '<')
           .replace(/&gt;/g, '>')
           .replace(/&quot;/g, '"')
           .toLowerCase();
 
-        console.log('Success message (cleaned):', cleanMsg); // Debug log
+        console.log('Success message (cleaned):', cleanMsg);
 
-        // Check if it's actually "already subscribed" disguised as success
         if (
           cleanMsg.includes('already subscribed') ||
           cleanMsg.includes('already a list member') ||
@@ -123,12 +114,10 @@ export default function EmailSignup() {
           cleanMsg.includes('already on the list') ||
           cleanMsg.includes('already receiving')
         ) {
-          // It's actually "already subscribed" - show as error
           console.log('⚠️ Already subscribed detected in SUCCESS message');
           setStatus('error');
           setMessage("You're already subscribed! Check your inbox for previous emails.");
         } else {
-          // True success - new subscription
           console.log('✅ True success - new subscriber');
           setStatus('success');
           setMessage('Welcome! Check your inbox for our welcome email.');
@@ -137,7 +126,6 @@ export default function EmailSignup() {
         }
 
       } else if (data.result === 'error') {
-        // MailChimp returned an error
         let errorMessage = 'Something went wrong. Please try again.';
         
         if (data.msg) {
@@ -154,7 +142,6 @@ export default function EmailSignup() {
           
           console.log('Error message (cleaned):', cleanMsg);
           
-          // Check for already subscribed
           if (
             cleanMsg.includes('already subscribed') ||
             cleanMsg.includes('already a list member') ||
@@ -166,7 +153,6 @@ export default function EmailSignup() {
             console.log('✅ Already subscribed detected in ERROR message');
             errorMessage = "You're already subscribed! Check your inbox for previous emails.";
           }
-          // Invalid email
           else if (
             cleanMsg.includes('invalid') ||
             cleanMsg.includes('enter a valid') ||
@@ -174,7 +160,6 @@ export default function EmailSignup() {
           ) {
             errorMessage = 'Please enter a valid email address (e.g., you@example.com)';
           }
-          // Too many signups
           else if (
             cleanMsg.includes('too many') ||
             cleanMsg.includes('recent') ||
@@ -182,11 +167,9 @@ export default function EmailSignup() {
           ) {
             errorMessage = 'Too many signup attempts. Please try again in a few minutes.';
           }
-          // Domain-specific errors
           else if (cleanMsg.includes('domain')) {
             errorMessage = 'This email domain is not allowed. Please use a different email.';
           }
-          // Use MailChimp's message (cleaned)
           else {
             errorMessage = cleanMsg.charAt(0).toUpperCase() + cleanMsg.slice(1);
           }
@@ -196,7 +179,6 @@ export default function EmailSignup() {
         setMessage(errorMessage);
 
       } else {
-        // Unexpected response format
         console.warn('Unexpected MailChimp response:', data);
         setStatus('error');
         setMessage('Unexpected response. Please try again.');
@@ -206,7 +188,6 @@ export default function EmailSignup() {
       console.error('Subscription error:', error);
       
       if (error.message === 'Request timeout') {
-        // Timeout - assume success
         setStatus('success');
         setMessage('Welcome! Check your inbox for our welcome email.');
         setShowModal(true);
@@ -240,7 +221,8 @@ export default function EmailSignup() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="flex gap-2">
+          {/* ✅ FIXED: Stack vertically on mobile, side-by-side on desktop */}
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               value={email}
@@ -254,7 +236,7 @@ export default function EmailSignup() {
             <button
               type="submit"
               disabled={status === 'loading' || !isConfigured}
-              className="px-8 py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
+              className="px-8 py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed sm:whitespace-nowrap flex items-center justify-center gap-2"
             >
               {status === 'loading' ? (
                 <>
@@ -290,7 +272,6 @@ export default function EmailSignup() {
             className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in zoom-in-95 duration-200 relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
@@ -299,26 +280,21 @@ export default function EmailSignup() {
               <X size={20} />
             </button>
 
-            {/* Success icon */}
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
                 <Check size={32} className="text-green-400" />
               </div>
             </div>
 
-            {/* Title */}
             <h3 className="text-2xl font-bold text-white text-center mb-2">
               You're Subscribed! 🎉
             </h3>
 
-            {/* Message */}
             <p className="text-slate-300 text-center mb-6">
               Welcome to CandidFindings! We've sent a welcome email to your inbox.
             </p>
 
-            {/* Email tips */}
             <div className="space-y-4 mb-6">
-              {/* Check inbox */}
               <div className="flex items-start gap-3 p-3 bg-violet-600/10 border border-violet-500/20 rounded-lg">
                 <Inbox className="text-violet-400 flex-shrink-0 mt-0.5" size={20} />
                 <div>
@@ -331,7 +307,6 @@ export default function EmailSignup() {
                 </div>
               </div>
 
-              {/* Check spam */}
               <div className="flex items-start gap-3 p-3 bg-amber-600/10 border border-amber-500/20 rounded-lg">
                 <AlertTriangle className="text-amber-400 flex-shrink-0 mt-0.5" size={20} />
                 <div>
@@ -345,7 +320,6 @@ export default function EmailSignup() {
               </div>
             </div>
 
-            {/* Action button */}
             <button
               onClick={closeModal}
               className="w-full py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors"
@@ -353,7 +327,6 @@ export default function EmailSignup() {
               Got It!
             </button>
 
-            {/* Footer note */}
             <p className="text-xs text-slate-500 text-center mt-4">
               You can unsubscribe at any time from any email we send.
             </p>
