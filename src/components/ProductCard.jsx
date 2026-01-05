@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import PreloadLink from './PreloadLink';
+import PriceAlertButton from './PriceAlertButton';
 import StarRating from './review/StarRating';
 import OptimizedImage from './OptimizedImage';
 import QRButton from './QRButton';
@@ -146,6 +147,8 @@ export default function ProductCard({ product, index }) {
               <span>No Review</span>
             </div>
           )}
+
+          <PriceAlertButton product={product} />
           
           {/* Amazon Affiliate Disclosure */}
           <p className="text-[10px] text-slate-600 text-center mt-2 leading-tight">
