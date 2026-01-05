@@ -37,7 +37,7 @@ export default function TermsOfService() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Terms of Service</h1>
-              <p className="text-slate-600 text-sm mt-1">Last updated: January 15, 2025</p>
+              <p className="text-slate-600 text-sm mt-1">Last updated: January 5, 2026</p>
             </div>
           </div>
 
@@ -75,6 +75,24 @@ export default function TermsOfService() {
               <h3 className="text-xl font-semibold text-slate-900 mb-3">Account Responsibility</h3>
               <p className="text-slate-700 mb-4">
                 If you create an account with us, you are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.
+              </p>
+            </section>
+
+            {/* Email Communications - NEW SECTION */}
+            <section className="mb-8 bg-violet-50/50 rounded-lg p-6 border border-violet-100">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Email Communications</h2>
+              <p className="text-slate-700 mb-4">
+                By subscribing to our email newsletter, you agree to receive periodic emails from CandidFindings containing product recommendations, deals, and updates.
+              </p>
+              <p className="text-slate-700 mb-4">
+                You may unsubscribe at any time by:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                <li>Clicking the "Unsubscribe" link in any email</li>
+                <li>Contacting us at hello@candidfindings.com</li>
+              </ul>
+              <p className="text-slate-700 mb-4">
+                We use MailChimp to manage our email list. By subscribing, you also agree to MailChimp's terms of service. See our <Link to="/privacy-policy" className="text-violet-600 hover:text-violet-700 underline">Privacy Policy</Link> for more details on how we handle your email data.
               </p>
             </section>
 
@@ -251,7 +269,7 @@ export default function TermsOfService() {
               </p>
               <ul className="list-none space-y-2 text-slate-700">
                 <li><strong>Website:</strong> candidfindings.com</li>
-                <li><strong>Email:</strong> legal@candidfindings.com</li>
+                <li><strong>Email:</strong> hello@candidfindings.com</li>
               </ul>
             </section>
 
