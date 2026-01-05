@@ -1,11 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
+import EmailSignup from './EmailSignup';
 
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-8">
+          <EmailSignup />
+        </div>
+        
         {/* Amazon Affiliate Disclosure */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-8">
           <h3 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
