@@ -59,7 +59,7 @@ module.exports = {
   
   plugins: [
     new Dotenv({
-      path: './.env'
+      path: './.mailchimp.env'
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

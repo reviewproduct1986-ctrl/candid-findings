@@ -19,7 +19,7 @@ export default function ReviewHero({ product, blog, hasDiscount, savings, discou
       {/* Title */}
       <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-3 leading-tight">
         {product.title} Review
-      </h1> 
+      </h1>
 
       {/* Date */}
       <p className="text-sm text-slate-500 mb-6">
