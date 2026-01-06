@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, X, Check, AlertCircle, Loader2, Percent, Clock, Mail } from 'lucide-react';
+import { Bell, X, Check, AlertCircle, Loader2, Percent, Clock, Phone } from 'lucide-react';
 
 export default function PriceAlertButton({ product, className = '' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
     percentage: 20,
     duration: 2,
-    email: ''
+    phone: ''
   });
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
 
-  // Load saved email from localStorage on mount
+  // Load saved phone from localStorage on mount
   useEffect(() => {
-    const savedEmail = localStorage.getItem('priceAlertEmail');
-    if (savedEmail) {
-      setAlertConfig(prev => ({ ...prev, email: savedEmail }));
+    const savedPhone = localStorage.getItem('priceAlertPhone');
+    if (savedPhone) {
+      setAlertConfig(prev => ({ ...prev, phone: savedPhone }));
     }
   }, []);
 
@@ -43,11 +43,11 @@ export default function PriceAlertButton({ product, className = '' }) {
   const savings = currentPrice - targetPrice;
 
   const percentageOptions = [
-    { value: 10, label: '10%', popular: false },
-    { value: 20, label: '20%', popular: true },
-    { value: 30, label: '30%', popular: true },
-    { value: 40, label: '40%', popular: false },
-    { value: 50, label: '50%', popular: false }
+    { value: 10, label: '10%' },
+    { value: 20, label: '20%' },
+    { value: 30, label: '30%' },
+    { value: 40, label: '40%' },
+    { value: 50, label: '50%' }
   ];
 
   const durationOptions = [
@@ -61,21 +61,27 @@ export default function PriceAlertButton({ product, className = '' }) {
     setStatus('loading');
     setMessage('');
 
-    if (!alertConfig.email) {
+    if (!alertConfig.phone) {
       setStatus('error');
-      setMessage('Please enter your email address');
+      setMessage('Please enter your phone number');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(alertConfig.email)) {
+    // Basic phone validation (10+ digits)
+    const phoneDigits = alertConfig.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
       setStatus('error');
-      setMessage('Please enter a valid email address');
+      setMessage('Please enter a valid phone number');
       return;
     }
 
-    // Save email to localStorage for next time
-    localStorage.setItem('priceAlertEmail', alertConfig.email);
+    // Format phone to E.164 format for backend
+    const formattedPhone = phoneDigits.startsWith('1') 
+      ? `+${phoneDigits}` 
+      : `+1${phoneDigits}`;
+
+    // Save phone to localStorage for next time
+    localStorage.setItem('priceAlertPhone', alertConfig.phone);
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -93,8 +99,8 @@ export default function PriceAlertButton({ product, className = '' }) {
           productImage: product.image,
           currentPrice: currentPrice,
           targetPrice: targetPrice,
-          email: alertConfig.email,
-          notificationMethod: 'email',
+          phone: formattedPhone,
+          notificationMethod: 'sms',
           expiresAt: expiresAt
         })
       });
@@ -103,17 +109,17 @@ export default function PriceAlertButton({ product, className = '' }) {
 
       if (response.ok) {
         setStatus('success');
-        setMessage(`Alert set! We'll email you when the price drops ${alertConfig.percentage}%`);
+        setMessage(`Alert set! We'll text you when the price drops ${alertConfig.percentage}%`);
         
         setTimeout(() => {
           setIsOpen(false);
           setStatus('idle');
           setMessage('');
-          // Reset but keep email
+          // Reset but keep phone
           setAlertConfig(prev => ({
             percentage: 20,
             duration: 2,
-            email: prev.email
+            phone: prev.phone
           }));
         }, 2000);
       } else {
@@ -142,7 +148,7 @@ export default function PriceAlertButton({ product, className = '' }) {
         <span>Price Alert</span>
       </button>
 
-      {/* Modal - Simplified Header */}
+      {/* Modal */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
@@ -177,15 +183,12 @@ export default function PriceAlertButton({ product, className = '' }) {
                         ...prev, 
                         percentage: option.value 
                       }))}
-                      className={`relative px-2 py-2.5 rounded-lg border-2 font-semibold text-sm transition-all ${
+                      className={`px-2 py-2.5 rounded-lg border-2 font-semibold text-sm transition-all ${
                         alertConfig.percentage === option.value
                           ? 'border-violet-600 bg-violet-50 text-violet-700'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-violet-200'
                       }`}
                     >
-                      {option.popular && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></span>
-                      )}
                       <div className="text-base">{option.value}%</div>
                       <div className="text-[10px] text-slate-500 leading-none mt-0.5">
                         ${(currentPrice * (1 - option.value / 100)).toFixed(0)}
@@ -241,23 +244,23 @@ export default function PriceAlertButton({ product, className = '' }) {
                 </div>
               </div>
 
-              {/* Email Input */}
+              {/* Phone Input */}
               <div className="mb-4">
                 <div className="flex items-center gap-1.5 mb-2">
-                  <Mail size={16} className="text-violet-600" />
+                  <Phone size={16} className="text-violet-600" />
                   <label className="text-sm font-bold text-slate-900">
-                    Your Email:
+                    Your Phone:
                   </label>
                 </div>
                 <input
-                  type="email"
-                  value={alertConfig.email}
-                  onChange={(e) => setAlertConfig(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="you@example.com"
+                  type="tel"
+                  value={alertConfig.phone}
+                  onChange={(e) => setAlertConfig(prev => ({ ...prev, phone: e.target.value }))}
+                  placeholder="(555) 123-4567"
                   className="w-full px-3 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
                 <p className="mt-1.5 text-xs text-slate-500">
-                  We'll email you once when the price drops
+                  We'll text you once when the price drops
                 </p>
               </div>
 
