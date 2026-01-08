@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, X, Check, AlertCircle, Loader2, Percent, Clock, Phone } from 'lucide-react';
+import { Bell, Check, AlertCircle, Loader2, Percent, Clock, MessageCircle } from 'lucide-react';
 
 export default function PriceAlertButton({ product, className = '' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
-    percentage: 20,
+    percentage: 0,  // Default to "Any" - most users want any price drop
     duration: 2,
     phone: ''
   });
@@ -44,10 +44,9 @@ export default function PriceAlertButton({ product, className = '' }) {
   const savings = currentPrice - targetPrice;
 
   const percentageOptions = [
+    { value: 0, label: 'Any', subLabel: 'Any drop' },
     { value: 10, label: '10%' },
     { value: 20, label: '20%' },
-    { value: 30, label: '30%' },
-    { value: 40, label: '40%' },
     { value: 50, label: '50%' }
   ];
 
@@ -119,9 +118,17 @@ export default function PriceAlertButton({ product, className = '' }) {
         
         // Check if alert was updated or created
         if (data.updated) {
-          setMessage(`Alert updated! We'll text you when the price drops to $${targetPrice.toFixed(2)}`);
+          if (alertConfig.percentage === 0) {
+            setMessage(`Alert updated! We'll text you when there's any price drop`);
+          } else {
+            setMessage(`Alert updated! We'll text you when the price drops to $${targetPrice.toFixed(2)}`);
+          }
         } else {
-          setMessage(`Alert set! We'll text you when the price drops ${alertConfig.percentage}%`);
+          if (alertConfig.percentage === 0) {
+            setMessage(`Alert set! We'll text you when there's any price drop`);
+          } else {
+            setMessage(`Alert set! We'll text you when the price drops ${alertConfig.percentage}%`);
+          }
         }
         
         // Don't reset form - keep values so user can adjust from current state
@@ -162,7 +169,7 @@ export default function PriceAlertButton({ product, className = '' }) {
             setMessage('');
             setLastSubmitted({ percentage: null, duration: null });
             setAlertConfig(prev => ({
-              percentage: 20,
+              percentage: 0,
               duration: 2,
               phone: prev.phone
             }));
@@ -189,7 +196,7 @@ export default function PriceAlertButton({ product, className = '' }) {
                   </label>
                 </div>
                 
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-4 gap-2">
                   {percentageOptions.map(option => (
                     <button
                       key={option.value}
@@ -203,9 +210,12 @@ export default function PriceAlertButton({ product, className = '' }) {
                           : 'border-slate-200 bg-white text-slate-700 hover:border-violet-200'
                       }`}
                     >
-                      <div className="text-base">{option.value}%</div>
+                      <div className="text-base">{option.label}</div>
                       <div className="text-[10px] text-slate-500 leading-none mt-0.5">
-                        ${(currentPrice * (1 - option.value / 100)).toFixed(0)}
+                        {option.value === 0 
+                          ? option.subLabel
+                          : `$${(currentPrice * (1 - option.value / 100)).toFixed(0)}`
+                        }
                       </div>
                     </button>
                   ))}
@@ -242,26 +252,37 @@ export default function PriceAlertButton({ product, className = '' }) {
 
               {/* Summary */}
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-3 mb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-slate-600">Target price:</p>
-                    <p className="text-xl font-bold text-green-700">
-                      ${targetPrice.toFixed(2)}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-green-600">You save:</p>
+                {alertConfig.percentage === 0 ? (
+                  <div className="text-center">
                     <p className="text-lg font-bold text-green-700">
-                      ${savings.toFixed(2)}
+                      Any price drop 📉
+                    </p>
+                    <p className="text-xs text-green-600 mt-1">
+                      You'll be notified when the price goes down
                     </p>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-slate-600">Target price:</p>
+                      <p className="text-xl font-bold text-green-700">
+                        ${targetPrice.toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-green-600">You save:</p>
+                      <p className="text-lg font-bold text-green-700">
+                        ${savings.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Phone Input */}
               <div className="mb-4">
                 <div className="flex items-center gap-1.5 mb-2">
-                  <Phone size={16} className="text-violet-600" />
+                  <MessageCircle size={16} className="text-violet-600" />
                   <label className="text-sm font-bold text-slate-900">
                     Your Phone:
                   </label>
@@ -324,7 +345,7 @@ export default function PriceAlertButton({ product, className = '' }) {
                         setLastSubmitted({ percentage: null, duration: null });
                         // Reset form to defaults for next time
                         setAlertConfig(prev => ({
-                          percentage: 20,
+                          percentage: 0,
                           duration: 2,
                           phone: prev.phone
                         }));
@@ -345,7 +366,7 @@ export default function PriceAlertButton({ product, className = '' }) {
                         setLastSubmitted({ percentage: null, duration: null });
                         // Reset form to defaults
                         setAlertConfig(prev => ({
-                          percentage: 20,
+                          percentage: 0,
                           duration: 2,
                           phone: prev.phone
                         }));
