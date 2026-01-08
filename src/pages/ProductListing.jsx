@@ -1,15 +1,20 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import FilterPanel from '../components/FilterPanel';
 import ProductCard from '../components/ProductCard';
+import Pagination from '../components/Pagination';
 import Footer from '../components/Footer';
 import { useProductData, useProductFilters } from '../hooks/useProducts';
 import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
 import { getAmazonSearchUrl } from '../utils/affiliateConfig';
 
 export default function ProductListing() {
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12; // 12 products per page (divisible by 2 and 3 for responsive grid)
+
   // Load data
   const { products, loading } = useProductData();
   
@@ -33,6 +38,32 @@ export default function ProductListing() {
     maxPrice
   } = useProductFilters(products);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchTerm, priceRange, minRating, selectedBadges]);
+
+  // Scroll to top of product grid when page changes
+  useEffect(() => {
+    const productGrid = document.querySelector('[data-product-grid]');
+    if (productGrid) {
+      const headerHeight = 140;
+      const yOffset = -headerHeight;
+      const y = productGrid.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentPage]);
+
   // Generate page title and description based on category
   const pageTitle = selectedCategory && selectedCategory !== 'All'
     ? `${selectedCategory} Products | CandidFindings`
@@ -53,16 +84,13 @@ export default function ProductListing() {
     [selectedCategory]
   );
 
-  // Track search terms in Google Analytics (debounced - waits for user to finish typing)
+  // Track search terms in Google Analytics (debounced)
   useEffect(() => {
-    // Only track if there's a search term
     if (!searchTerm || searchTerm.trim() === '') {
       return;
     }
 
-    // Debounce: Wait 1 second after user stops typing
     const timeoutId = setTimeout(() => {
-      // Track the search event
       if (typeof gtag !== 'undefined') {
         gtag('event', 'search', {
           search_term: searchTerm,
@@ -71,9 +99,8 @@ export default function ProductListing() {
           has_results: filteredProducts.length > 0
         });
       }
-    }, 1000); // 1 second delay
+    }, 1000);
 
-    // Cleanup: Cancel previous timeout if user keeps typing
     return () => clearTimeout(timeoutId);
   }, [searchTerm, selectedCategory, filteredProducts.length]);
 
@@ -101,11 +128,9 @@ export default function ProductListing() {
 
   // Scroll to product grid when category changes
   useEffect(() => {
-    // Find the product grid container
     const productGrid = document.querySelector('[data-product-grid]');
     if (productGrid && selectedCategory) {
-      // Smooth scroll to the product grid with offset for sticky header
-      const headerHeight = 140; // Approximate header height
+      const headerHeight = 140;
       const yOffset = -headerHeight;
       const y = productGrid.getBoundingClientRect().top + window.pageYOffset + yOffset;
       
@@ -285,16 +310,31 @@ export default function ProductListing() {
                 <p className="mt-4 text-slate-600">Loading products...</p>
               </div>
             ) : (
-              /* Products Grid */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCard 
-                    key={product.id} 
-                    product={product} 
-                    index={idx} 
-                  />
-                ))}
-              </div>
+              <>
+                {/* Products Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {currentProducts.map((product, idx) => (
+                    <ProductCard 
+                      key={product.id} 
+                      product={product} 
+                      index={startIndex + idx} 
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {filteredProducts.length > 0 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage}
+                      totalItems={filteredProducts.length}
+                      itemsPerPage={itemsPerPage}
+                    />
+                  </div>
+                )}
+              </>
             )}
 
             {/* No Results */}
@@ -310,14 +350,13 @@ export default function ProductListing() {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  {/* Amazon Search Button - Only show if there's a search term */}
+                  {/* Amazon Search Button */}
                   {searchTerm && (
                     <a
                       href={getAmazonSearchUrl(searchTerm)}
                       target="_blank"
                       rel="noopener noreferrer sponsored"
                       onClick={() => {
-                        // Track fallback Amazon search in Google Analytics
                         if (typeof gtag !== 'undefined') {
                           gtag('event', 'amazon_fallback_search', {
                             event_category: 'Affiliate',
