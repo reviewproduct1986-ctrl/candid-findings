@@ -11,7 +11,7 @@ export default function Header({
 }) {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[60px]">
         {/* Logo and Search - Compact on desktop, comfortable on mobile */}
         <div className="flex items-center justify-between py-3 lg:py-2.5 gap-3 lg:gap-4">
           {/* Clickable Logo */}

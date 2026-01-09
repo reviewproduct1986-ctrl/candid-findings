@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import PreloadLink from './PreloadLink';
 import StarRating from './review/StarRating';
+import OptimizedImage from './OptimizedImage';
 import '../css/ProductCard.css';
 
 export default function ProductCard({ product, index }) {
@@ -12,9 +13,11 @@ export default function ProductCard({ product, index }) {
     >
       {/* Product Image */}
       <div className="relative overflow-hidden aspect-square bg-gradient-to-br from-slate-100 to-slate-200">
-        <img
+        <OptimizedImage
           src={product.image}
           alt={`${product.title} - ${product.category} - ${product.rating} Stars - $${product.price}`}
+          width="400"
+          height="400"
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           loading={index < 3 ? "eager" : "lazy"}
           fetchpriority={index < 3 ? "high" : "auto"}
