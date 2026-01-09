@@ -4,6 +4,7 @@ import { TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import FilterPanel from '../components/FilterPanel';
 import ProductCard from '../components/ProductCard';
+import ProductSkeleton from '../components/ProductSkeleton';
 import Pagination from '../components/Pagination';
 import Footer from '../components/Footer';
 import { useProductData, useProductFilters } from '../hooks/useProducts';
@@ -303,11 +304,12 @@ export default function ProductListing() {
               </p>
             </div>
 
-            {/* Loading State */}
+            {/* Loading State - Show skeleton cards instead of spinner for better LCP */}
             {loading ? (
-              <div className="text-center py-20">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600"></div>
-                <p className="mt-4 text-slate-600">Loading products...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(12)].map((_, i) => (
+                  <ProductSkeleton key={i} />
+                ))}
               </div>
             ) : (
               <>
