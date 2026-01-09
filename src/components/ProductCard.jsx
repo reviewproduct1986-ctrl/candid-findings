@@ -65,7 +65,7 @@ export default function ProductCard({ product, index }) {
             // Discount Display
             <>
               <div className="flex items-baseline gap-2 mb-1">
-                <p className="text-base text-slate-400 line-through">
+                <p className="text-base text-slate-500 line-through">
                   ${product.listPrice.toFixed(2)}
                 </p>
                 <p className="text-3xl font-bold text-violet-600">
@@ -125,14 +125,14 @@ export default function ProductCard({ product, index }) {
               <span>Review</span>
             </PreloadLink>
           ) : (
-            <div className="w-full bg-gray-100 text-gray-400 py-2.5 px-3 rounded-xl font-semibold text-sm border-2 border-gray-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <div className="w-full bg-gray-100 text-gray-600 py-2.5 px-3 rounded-xl font-semibold text-sm border-2 border-gray-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
               <Sparkles size={14} className="flex-shrink-0" />
               <span>No Review</span>
             </div>
           )}
           
           {/* Amazon Affiliate Disclosure */}
-          <p className="text-[10px] text-slate-400 text-center mt-2 leading-tight">
+          <p className="text-[10px] text-slate-600 text-center mt-2 leading-tight">
             As an Amazon Associate we earn from qualifying purchases
           </p>
         </div>

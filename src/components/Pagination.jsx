@@ -77,7 +77,7 @@ export default function Pagination({
           className={`
             p-2 rounded-lg border transition-all
             ${currentPage === 1
-              ? 'border-slate-200 text-slate-400 cursor-not-allowed'
+              ? 'border-slate-200 text-slate-500 cursor-not-allowed'
               : 'border-slate-300 text-slate-700 hover:bg-violet-50 hover:border-violet-300'
             }
           `}
@@ -101,6 +101,8 @@ export default function Pagination({
               <button
                 key={page}
                 onClick={() => onPageChange(page)}
+                aria-label={`Go to page ${page}`}
+                aria-current={currentPage === page ? 'page' : undefined}
                 className={`
                   min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all
                   ${currentPage === page
@@ -122,7 +124,7 @@ export default function Pagination({
           className={`
             p-2 rounded-lg border transition-all
             ${currentPage === totalPages
-              ? 'border-slate-200 text-slate-400 cursor-not-allowed'
+              ? 'border-slate-200 text-slate-500 cursor-not-allowed'
               : 'border-slate-300 text-slate-700 hover:bg-violet-50 hover:border-violet-300'
             }
           `}

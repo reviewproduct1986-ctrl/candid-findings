@@ -22,7 +22,7 @@ export default function Footer() {
             advertising fees by advertising and linking to Amazon.com. As an Amazon Associate, 
             we earn from qualifying purchases.
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-300">
             Product prices and availability are accurate as of the date/time indicated and are subject 
             to change. Any price and availability information displayed on Amazon.com at the time of 
             purchase will apply to the purchase of this product.
@@ -39,17 +39,17 @@ export default function Footer() {
               CandidFindings
             </p>
           </div>
-          <p className="text-sm text-slate-400 mb-4">
+          <p className="text-sm text-slate-300 mb-4">
             Honest product reviews and candid findings
           </p>
           <div className="flex gap-6 text-sm">
-            <Link to="/privacy-policy" className="text-slate-400 hover:text-violet-400 transition-colors">
+            <Link to="/privacy-policy" className="text-slate-300 hover:text-violet-400 transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-slate-400 hover:text-violet-400 transition-colors">
+            <Link to="/terms" className="text-slate-300 hover:text-violet-400 transition-colors">
               Terms of Service
             </Link>
-            <Link to="/about" className="text-slate-400 hover:text-violet-400 transition-colors">
+            <Link to="/about" className="text-slate-300 hover:text-violet-400 transition-colors">
               About
             </Link>
           </div>
