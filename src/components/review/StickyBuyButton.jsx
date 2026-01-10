@@ -14,6 +14,7 @@ export default function StickyBuyButton({ product }) {
         event_category: 'Affiliate',
         event_label: product.title,
         value: product.price,
+        page_from: 'review sticky bar',
         product_category: product.category,
         product_id: product.id
       });

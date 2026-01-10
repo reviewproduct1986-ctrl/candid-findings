@@ -106,6 +106,7 @@ export default function ProductCard({ product, index }) {
                   event_category: 'Affiliate',
                   event_label: product.title,
                   value: product.price,
+                  page_from: 'product card',
                   product_category: product.category,
                   product_id: product.id
                 });
