@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { X, DollarSign, Star, Tag, SlidersHorizontal } from 'lucide-react';
+import { gtagClick } from '../utils/googletag';
 
 export default function FilterPanel({
   showFilters,
@@ -69,14 +70,17 @@ export default function FilterPanel({
   const currentPriceRangeId = getCurrentPriceRangeId();
 
   const handlePriceRangeClick = (range) => {
+    gtagClick('filter', { price_min: range.min, price_max: range.max });
     setPriceRange([range.min, range.max]);
   };
 
   const handleRatingClick = (option) => {
+    gtagClick('filter', { rating: option.value });
     setMinRating(option.value);
   };
 
   const handleBadgeToggle = (badge) => {
+    gtagClick('filter', { badge });
     if (selectedBadges.includes(badge)) {
       setSelectedBadges(selectedBadges.filter(b => b !== badge));
     } else {

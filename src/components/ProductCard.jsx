@@ -48,6 +48,9 @@ export default function ProductCard({ product, index }) {
           to={`/?category=${encodeURIComponent(product.category)}`}
           className="category-badge"
           title={`View all ${product.category} products`}
+          onClick={() => {
+            gtagClick('filter', { category: product.category, component_from: 'product card' })
+          }}
         >
           {product.category}
         </PreloadLink>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Sparkles } from 'lucide-react';
+import { gtagClick } from '../utils/googletag';
 
 export default function Header({ 
   searchTerm, 
@@ -60,7 +61,10 @@ export default function Header({
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => {
+                  gtagClick('category', { category, component_from: 'header' });
+                  setSelectedCategory(category);
+                }}
                 className={`
                   px-5 py-2.5 lg:px-4 lg:py-2 rounded-lg font-medium whitespace-nowrap 
                   transition-all text-sm snap-start
