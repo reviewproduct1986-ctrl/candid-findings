@@ -393,6 +393,96 @@
             "lastUpdated": "2026-01-03T11:01:19.179Z",
             "lastChecked": "2026-01-03T11:01:19.179Z",
             "available": true
+        },
+        {
+            "id": "1767050944640-19",
+            "title": "Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones",
+            "category": "Books",
+            "price": 18.80,
+            "listPrice": 27,
+            "rating": 4.8,
+            "reviews": 145373,
+            "image": "https://m.media-amazon.com/images/I/81kg51XRc1L._SL1500_.jpg",
+            "asin": "0735211299",
+            "badge": "Amazon Charts",
+            "affiliate": "https://amazon.com/dp/0735211299?tag=candidfinding-20",
+            "features": [
+                "overcome a lack of motivation and willpower",
+                "make time for new habits",
+                "get back on track when you fall off course"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-20",
+            "title": "People We Meet on Vacation",
+            "category": "Books",
+            "price": 10.54,
+            "listPrice": 16,
+            "rating": 4.2,
+            "reviews": 101798,
+            "image": "https://m.media-amazon.com/images/I/71HADF3dRUL._SL1500_.jpg",
+            "asin": "1984806750",
+            "badge": "Amazon Charts",
+            "affiliate": "https://amazon.com/dp/1984806750?tag=candidfinding-20",
+            "features": [
+                "Two best friends"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-21",
+            "title": "Ninja Mega Kitchen System, 1500W, 72 oz. Full-Size Blender & 8-Cup Food Processor with (2) 16 oz. To-Go Cups, Total Crushing Technology - Smoothies, Ice Crushing, Purees, Dough & More, Black, BL770",
+            "category": "Home & Kitchen",
+            "price": 159.98,
+            "listPrice": 219.99,
+            "rating": 4.6,
+            "reviews": 93748,
+            "image": "https://m.media-amazon.com/images/I/81WPPmP+4mL._AC_SL1500_.jpg",
+            "asin": "B00939I7EK",
+            "badge": "Amazon's Choice",
+            "affiliate": "https://amazon.com/dp/B00939I7EK?tag=candidfinding-20",
+            "features": [
+                "POWERFUL 1500-WATT MOTOR",
+                "TOTAL CRUSHING TECHNOLOGY",
+                "ON-THE-GO CONVENIENCE",
+                "8-CUP FOOD PROCESSING",
+                "NINJA BLADES SYSTEM",
+                "EASY TO CLEAN"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
+        },
+        {
+            "id": "1767050944640-22",
+            "title": "Fullstar The Original Pro Chopper - Vegetable Chopper and Spiralizer, Food Chopper with Container, Fruit Slicer, Kitchen Gadgets & Gifts, Home Essentials (4 in 1, White)",
+            "category": "Home & Kitchen",
+            "price": 25.99,
+            "listPrice": 49.99,
+            "rating": 4.5,
+            "reviews": 124677,
+            "image": "https://m.media-amazon.com/images/I/81GZZyozv-L._AC_SL1500_.jpg",
+            "asin": "B0764HS4SL",
+            "badge": "Amazon's Choice",
+            "affiliate": "https://amazon.com/dp/B0764HS4SL?tag=candidfinding-20",
+            "features": [
+                "The Original Pro Chopper",
+                "Easy Meal Prep with Rust-Resistant Blades",
+                "5-Star Design for Everyday Cooking",
+                "Dishwasher Safe"
+            ],
+            "description": "",
+            "lastUpdated": "2026-01-03T11:01:19.179Z",
+            "lastChecked": "2026-01-03T11:01:19.179Z",
+            "available": true
         }
     ],
     "metadata": {
