@@ -55,8 +55,7 @@ export default function StickyBuyButton({ product }) {
             </div>
           </div>
 
-          {/* Desktop: Amazon Button + QR Button */}
-          <div className="flex gap-3" style={{paddingRight: 20}}>
+          <div className="flex items-center gap-3 flex-shrink-0">
             <a
               href={product.affiliate}
               target="_blank"

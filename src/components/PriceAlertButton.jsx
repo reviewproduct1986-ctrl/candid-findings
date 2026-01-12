@@ -10,6 +10,7 @@ export default function PriceAlertButton({ product, className = '' }) {
   });
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
+  const [lastSubmitted, setLastSubmitted] = useState({ percentage: null, duration: null });
 
   // Load saved phone from localStorage on mount
   useEffect(() => {
@@ -109,19 +110,22 @@ export default function PriceAlertButton({ product, className = '' }) {
 
       if (response.ok) {
         setStatus('success');
-        setMessage(`Alert set! We'll text you when the price drops ${alertConfig.percentage}%`);
         
-        setTimeout(() => {
-          setIsOpen(false);
-          setStatus('idle');
-          setMessage('');
-          // Reset but keep phone
-          setAlertConfig(prev => ({
-            percentage: 20,
-            duration: 2,
-            phone: prev.phone
-          }));
-        }, 2000);
+        // Save what was just submitted
+        setLastSubmitted({
+          percentage: alertConfig.percentage,
+          duration: alertConfig.duration
+        });
+        
+        // Check if alert was updated or created
+        if (data.updated) {
+          setMessage(`Alert updated! We'll text you when the price drops to $${targetPrice.toFixed(2)}`);
+        } else {
+          setMessage(`Alert set! We'll text you when the price drops ${alertConfig.percentage}%`);
+        }
+        
+        // Don't reset form - keep values so user can adjust from current state
+        // Phone is already preserved
       } else {
         setStatus('error');
         setMessage(data.error || 'Failed to create alert');
@@ -142,7 +146,7 @@ export default function PriceAlertButton({ product, className = '' }) {
       {/* Alert Button - Accepts custom className from parent */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`py-3 px-6 bg-white border border-violet-600 text-violet-600 rounded-xl font-semibold hover:bg-violet-50 transition-all flex items-center justify-center gap-2 whitespace-nowrap ${className}`}
+        className={`w-full py-3 px-6 bg-white border border-violet-600 text-violet-600 rounded-xl font-semibold hover:bg-violet-50 transition-all flex items-center justify-center gap-2 whitespace-nowrap ${className}`}
       >
         <Bell size={18} />
         <span>Price Alert</span>
@@ -152,7 +156,17 @@ export default function PriceAlertButton({ product, className = '' }) {
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-          onClick={() => setIsOpen(false)}
+          onClick={() => {
+            setIsOpen(false);
+            setStatus('idle');
+            setMessage('');
+            setLastSubmitted({ percentage: null, duration: null });
+            setAlertConfig(prev => ({
+              percentage: 20,
+              duration: 2,
+              phone: prev.phone
+            }));
+          }}
         >
           <div 
             className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl"
@@ -281,32 +295,86 @@ export default function PriceAlertButton({ product, className = '' }) {
 
               {/* Action Buttons - Submit and Close */}
               <div className="flex gap-3">
-                {/* Cancel/Close Button */}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-lg font-semibold hover:bg-slate-200 transition-colors"
-                >
-                  Cancel
-                </button>
+                {/* After success: Show "Adjust Alert" and "Done" buttons */}
+                {status === 'success' ? (
+                  <>
+                    {/* Adjust Alert Button - Only enabled if values changed */}
+                    <button
+                      onClick={handleSubmit}
+                      disabled={
+                        alertConfig.percentage === lastSubmitted.percentage &&
+                        alertConfig.duration === lastSubmitted.duration
+                      }
+                      className={`flex-1 py-3 rounded-lg font-semibold transition-colors ${
+                        alertConfig.percentage === lastSubmitted.percentage &&
+                        alertConfig.duration === lastSubmitted.duration
+                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                          : 'bg-violet-100 text-violet-700 hover:bg-violet-200'
+                      }`}
+                    >
+                      Adjust Alert
+                    </button>
+                    
+                    {/* Done Button */}
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        setStatus('idle');
+                        setMessage('');
+                        setLastSubmitted({ percentage: null, duration: null });
+                        // Reset form to defaults for next time
+                        setAlertConfig(prev => ({
+                          percentage: 20,
+                          duration: 2,
+                          phone: prev.phone
+                        }));
+                      }}
+                      className="flex-1 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                    >
+                      Done
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Cancel Button */}
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        setStatus('idle');
+                        setMessage('');
+                        setLastSubmitted({ percentage: null, duration: null });
+                        // Reset form to defaults
+                        setAlertConfig(prev => ({
+                          percentage: 20,
+                          duration: 2,
+                          phone: prev.phone
+                        }));
+                      }}
+                      className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-lg font-semibold hover:bg-slate-200 transition-colors"
+                    >
+                      Cancel
+                    </button>
 
-                {/* Submit Button */}
-                <button
-                  onClick={handleSubmit}
-                  disabled={status === 'loading'}
-                  className="flex-[2] py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {status === 'loading' ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      <span className="text-sm">Creating...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Bell size={16} />
-                      <span className="text-sm">Set Alert</span>
-                    </>
-                  )}
-                </button>
+                    {/* Submit Button */}
+                    <button
+                      onClick={handleSubmit}
+                      disabled={status === 'loading'}
+                      className="flex-[2] py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {status === 'loading' ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          <span className="text-sm">Creating...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Bell size={16} />
+                          <span className="text-sm">Set Alert</span>
+                        </>
+                      )}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
