@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Star, ArrowRight, Sparkles, BookOpen, Check } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Footer from '../components/Footer';
+import { gtagClick } from '../utils/googletag';
 
 export default function BuyingGuidePage() {
   const { slug } = useParams();
@@ -216,14 +217,13 @@ export default function BuyingGuidePage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => {
-                              if (typeof gtag !== 'undefined') {
-                                gtag('event', 'affiliate_click', {
-                                  event_category: 'Affiliate',
-                                  event_label: product.title,
-                                  value: product.price,
-                                  product_category: product.category
-                                });
-                              }
+                              gtagClick('affiliate_click', {
+                                event_category: 'Affiliate',
+                                event_label: product.title,
+                                value: product.price,
+                                asin: product.asin,
+                                product_category: product.category
+                              });
                             }}
                             className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 px-6 rounded-xl font-bold hover:shadow-lg transition-all flex items-center gap-2"
                           >

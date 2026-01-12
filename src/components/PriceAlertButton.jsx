@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { gtagClick } from '../utils/googletag';
 import { Bell, Check, AlertCircle, Loader2, Percent, Clock, MessageCircle } from 'lucide-react';
 
 export default function PriceAlertButton({ product, className = '' }) {
@@ -85,7 +86,6 @@ export default function PriceAlertButton({ product, className = '' }) {
 
     try {
       const API_URL = process.env.API_URL || 'http://localhost:3001';
-      console.log('process.env.API_URL: ', process.env.API_URL);
       
       const expiresAt = new Date();
       expiresAt.setMonth(expiresAt.getMonth() + alertConfig.duration);
@@ -108,18 +108,15 @@ export default function PriceAlertButton({ product, className = '' }) {
 
       const data = await response.json();
 
-      console.log('response.ok: ', response.ok);
-      if (typeof gtag !== 'undefined') {
-        console.log('in');
-        gtag('event', 'alert_price', {
-          alert_success: response.ok,
-          alert_percentage: alertConfig.percentage,
-          alert_duration: alertConfig.duration,
-          alert_target_price: targetPrice,
-          alert_product_name: product.name,
-          alert_current_price: currentPrice
-        });
-      }
+      gtagClick('alert_price', {
+        alert_success: response.ok,
+        alert_percentage: alertConfig.percentage,
+        alert_duration: alertConfig.duration,
+        alert_target_price: targetPrice,
+        alert_product_name: product.name,
+        alert_asin: product.asin,
+        alert_current_price: currentPrice
+      });
       
       if (response.ok) {
         setStatus('success');

@@ -1,5 +1,6 @@
 import React from 'react';
 import PriceAlertButton from '../PriceAlertButton';
+import { gtagClick } from '../../utils/googletag';
 import { ShoppingCart } from 'lucide-react';
 import StarRating from './StarRating';
 import QRButton from '../QRButton';
@@ -11,16 +12,15 @@ export default function StickyBuyButton({ product }) {
     : 0;
 
   const handleClick = () => {
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'affiliate_click', {
-        event_category: 'Affiliate',
-        event_label: product.title,
-        value: product.price,
-        page_from: 'review sticky bar',
-        product_category: product.category,
-        product_id: product.id
-      });
-    }
+    gtagClick('affiliate_click', {
+      event_category: 'Affiliate',
+      event_label: product.title,
+      asin: product.asin,
+      value: product.price,
+      page_from: 'review sticky bar',
+      product_category: product.category,
+      product_id: product.id
+    });
   };
 
   return (

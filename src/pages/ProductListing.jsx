@@ -92,14 +92,12 @@ export default function ProductListing() {
     }
 
     const timeoutId = setTimeout(() => {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'search', {
-          search_term: searchTerm,
-          search_category: selectedCategory !== 'All' ? selectedCategory : undefined,
-          results_count: filteredProducts.length,
-          has_results: filteredProducts.length > 0
-        });
-      }
+      gtagClick('search', {
+        search_term: searchTerm,
+        search_category: selectedCategory !== 'All' ? selectedCategory : undefined,
+        results_count: filteredProducts.length,
+        has_results: filteredProducts.length > 0
+      });
     }, 1000);
 
     return () => clearTimeout(timeoutId);
@@ -270,14 +268,12 @@ export default function ProductListing() {
                     target="_blank"
                     rel="noopener noreferrer sponsored"
                     onClick={() => {
-                      if (typeof gtag !== 'undefined') {
-                        gtag('event', 'amazon_search_from_results', {
-                          event_category: 'Affiliate',
-                          event_label: searchTerm,
-                          search_term: searchTerm,
-                          results_count: filteredProducts.length
-                        });
-                      }
+                      gtagClick('amazon_search_from_results', {
+                        event_category: 'Affiliate',
+                        event_label: searchTerm,
+                        search_term: searchTerm,
+                        results_count: filteredProducts.length
+                      });
                     }}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-200 transition-all whitespace-nowrap"
                   >
@@ -359,13 +355,11 @@ export default function ProductListing() {
                       target="_blank"
                       rel="noopener noreferrer sponsored"
                       onClick={() => {
-                        if (typeof gtag !== 'undefined') {
-                          gtag('event', 'amazon_fallback_search', {
-                            event_category: 'Affiliate',
-                            event_label: searchTerm,
-                            search_term: searchTerm
-                          });
-                        }
+                        gtagClick('amazon_fallback_search', {
+                          event_category: 'Affiliate',
+                          event_label: searchTerm,
+                          search_term: searchTerm
+                        });
                       }}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-200 transition-all"
                     >

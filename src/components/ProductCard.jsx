@@ -5,6 +5,7 @@ import PriceAlertButton from './PriceAlertButton';
 import StarRating from './review/StarRating';
 import OptimizedImage from './OptimizedImage';
 import QRButton from './QRButton';
+import { gtagClick } from '../utils/googletag';
 import '../css/ProductCard.css';
 
 export default function ProductCard({ product, index }) {
@@ -104,16 +105,15 @@ export default function ProductCard({ product, index }) {
               rel="noopener noreferrer"
               onClick={() => {
                 // Track affiliate click in Google Analytics
-                if (typeof gtag !== 'undefined') {
-                  gtag('event', 'affiliate_click', {
-                    event_category: 'Affiliate',
-                    event_label: product.title,
-                    value: product.price,
-                    page_from: 'product card',
-                    product_category: product.category,
-                    product_id: product.id
-                  });
-                }
+                gtagClick('affiliate_click', {
+                  event_category: 'Affiliate',
+                  event_label: product.title,
+                  value: product.price,
+                  asin: product.asin,
+                  page_from: 'product card',
+                  product_category: product.category,
+                  product_id: product.id
+                });
               }}
               className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-2.5 px-3 rounded-xl font-semibold text-sm text-center hover:shadow-lg hover:shadow-violet-200 transition-all group/btn flex items-center justify-center gap-1.5 whitespace-nowrap"
             >
