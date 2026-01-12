@@ -1,4 +1,5 @@
 import React from 'react';
+import PriceAlertButton from '../PriceAlertButton';
 import { ShoppingCart } from 'lucide-react';
 import StarRating from './StarRating';
 import QRButton from '../QRButton';
@@ -55,7 +56,7 @@ export default function StickyBuyButton({ product }) {
           </div>
 
           {/* Desktop: Amazon Button + QR Button */}
-          <div className="flex gap-2" style={{paddingRight: 15}}>
+          <div className="flex gap-3" style={{paddingRight: 20}}>
             <a
               href={product.affiliate}
               target="_blank"
@@ -66,15 +67,14 @@ export default function StickyBuyButton({ product }) {
               <ShoppingCart size={20} />
               View on Amazon
             </a>
-
-            {/* QR Button - Desktop Only */}
-              <QRButton
-                productUrl={product.affiliate}
-                productTitle={product.title}
-                productId={product.id}
-                productCategory={product.category}
-                variant="sticky"
-              />
+            <QRButton
+              productUrl={product.affiliate}
+              productTitle={product.title}
+              productId={product.id}
+              productCategory={product.category}
+              variant="sticky"
+            />
+            <PriceAlertButton product={product} className="flex-1" />
           </div>
         </div>
 
@@ -90,7 +90,9 @@ export default function StickyBuyButton({ product }) {
             <ShoppingCart size={20} />
             View on Amazon
           </a>
+          <PriceAlertButton product={product} className="w-full" />
         </div>
+
 
         <p className="text-[10px] text-slate-400 text-center mt-2">
           As an Amazon Associate we earn from qualifying purchases

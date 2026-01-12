@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, X, Check, AlertCircle, Loader2, Percent, Clock, Mail } from 'lucide-react';
 
-export default function PriceAlertButton({ product }) {
+export default function PriceAlertButton({ product, className = '' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
     percentage: 20,
@@ -133,13 +133,13 @@ export default function PriceAlertButton({ product }) {
 
   return (
     <>
-      {/* Alert Button - Centered, matching other buttons */}
+      {/* Alert Button - Accepts custom className from parent */}
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full py-3 px-6 bg-white border-2 border-violet-600 text-violet-600 rounded-lg font-semibold hover:bg-violet-50 transition-all flex items-center justify-center gap-2"
+        className={`py-3 px-6 bg-white border border-violet-600 text-violet-600 rounded-xl font-semibold hover:bg-violet-50 transition-all flex items-center justify-center gap-2 whitespace-nowrap ${className}`}
       >
-        <Bell size={20} />
-        <span>Set Price Alert</span>
+        <Bell size={18} />
+        <span>Price Alert</span>
       </button>
 
       {/* Modal - Simplified Header */}
@@ -152,21 +152,6 @@ export default function PriceAlertButton({ product }) {
             className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Simplified Header - No redundant text */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-200">
-              <div className="flex-1">
-                <h2 className="text-base font-semibold text-slate-900 truncate pr-8">
-                  {product.name}
-                </h2>
-              </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
             {/* Body */}
             <div className="p-4">
               {/* Current Price */}
@@ -291,24 +276,35 @@ export default function PriceAlertButton({ product }) {
                 </div>
               )}
 
-              {/* Submit Button */}
-              <button
-                onClick={handleSubmit}
-                disabled={status === 'loading'}
-                className="w-full py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {status === 'loading' ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span className="text-sm">Creating Alert...</span>
-                  </>
-                ) : (
-                  <>
-                    <Bell size={16} />
-                    <span className="text-sm">Set Price Alert</span>
-                  </>
-                )}
-              </button>
+              {/* Action Buttons - Submit and Close */}
+              <div className="flex gap-3">
+                {/* Cancel/Close Button */}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-lg font-semibold hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+
+                {/* Submit Button */}
+                <button
+                  onClick={handleSubmit}
+                  disabled={status === 'loading'}
+                  className="flex-[2] py-3 bg-violet-600 text-white rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {status === 'loading' ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      <span className="text-sm">Creating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Bell size={16} />
+                      <span className="text-sm">Set Alert</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -148,7 +148,7 @@ export default function ProductCard({ product, index }) {
             </div>
           )}
 
-          <PriceAlertButton product={product} />
+          <PriceAlertButton product={product} className="w-full py-2 px-4 text-sm" />
           
           {/* Amazon Affiliate Disclosure */}
           <p className="text-[10px] text-slate-600 text-center mt-2 leading-tight">
