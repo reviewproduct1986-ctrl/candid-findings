@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/index.js',
@@ -58,9 +57,6 @@ module.exports = {
   },
   
   plugins: [
-    new Dotenv({
-      path: './.mailchimp.env'
-    }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       title: 'CandidFindings - Honest Product Reviews & Candid Findings',

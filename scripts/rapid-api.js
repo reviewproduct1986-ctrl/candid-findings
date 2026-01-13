@@ -13,6 +13,8 @@
  * Usage: node update-products-rapidapi.js
  */
 
+// node --env-file=scripts/.script.env scripts/rapid-api.js
+
 const https = require('https');
 const fs = require('fs');
 const path = require('path');

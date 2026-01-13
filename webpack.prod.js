@@ -1,5 +1,6 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
+const Dotenv = require('dotenv-webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
@@ -125,6 +126,12 @@ module.exports = merge(common, {
     },
   },
   
+  plugins: [
+    new Dotenv({
+      path: './.env.production'
+    })
+  ],
+
   // Stats for production build
   stats: {
     all: false,

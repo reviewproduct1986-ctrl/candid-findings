@@ -35,6 +35,8 @@
 #     node update-products-paapi.js
 */
 
+// node --env-file=scripts/.script.env scripts/paapi-api.js
+
 const fs = require('fs');
 const path = require('path');
 
