@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoCards from './InfoCards';
 
-export default function ReviewHero({ product, blog, hasDiscount, savings, discountPercent, formatDate }) {
+export default function ReviewHero({ product, hasDiscount, savings, discountPercent }) {
   return (
     <div className="mb-8">
       {/* Badges */}
@@ -21,11 +21,6 @@ export default function ReviewHero({ product, blog, hasDiscount, savings, discou
         {product.title} Review
       </h1>
 
-      {/* Date */}
-      <p className="text-sm text-slate-500 mb-6">
-        Last updated {formatDate(blog.publishedDate)}
-      </p>
-      
       {/* Info Cards */}
       <InfoCards 
         product={product}

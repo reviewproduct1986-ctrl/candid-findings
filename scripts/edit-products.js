@@ -137,7 +137,9 @@ async function main() {
     
     if (updated) {
       product.lastUpdated = new Date().toISOString();
+      product.priceUpdated = new Date().toISOString();
       modified++;
+      console.log(`${colors.green}✓ Updated (timestamp added)${colors.reset}`);
     }
     
     // Check for issues

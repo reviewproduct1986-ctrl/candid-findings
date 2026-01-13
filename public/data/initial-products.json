@@ -20,7 +20,7 @@
         "PERSONALIZED SPATIAL AUDIO"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:11:13.612Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:27.524Z",
       "available": false
     },
@@ -39,7 +39,7 @@
         "#1 New York Times"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:07:20.848Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:33.735Z",
       "available": true
     },
@@ -49,7 +49,7 @@
       "category": "Books",
       "price": 15.68,
       "rating": 4.6,
-      "reviews": 35200,
+      "reviews": 35213,
       "image": "https://m.media-amazon.com/images/I/91ZVf3kNrcL._SY466_.jpg",
       "asin": "1401971369",
       "affiliate": "https://amazon.com/dp/1401971369?tag=candidfinding-20",
@@ -58,10 +58,11 @@
         "Over 7 Million Copies Sold!"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:07:37.684Z",
+      "lastUpdated": "2026-01-13T20:11:24.456Z",
       "listPrice": 29.99,
       "lastChecked": "2025-12-30T01:31:40.249Z",
-      "available": true
+      "available": true,
+      "priceUpdated": "2026-01-13T20:11:24.458Z"
     },
     {
       "id": "1766871873268-5",
@@ -83,7 +84,7 @@
         "BPA and phthalate-free"
       ],
       "description": "",
-      "lastUpdated": "2026-01-12T19:01:10.784Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:45.801Z",
       "available": false
     },
@@ -107,7 +108,7 @@
         "QUALITY AND DURABILITY"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:35:54.322Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:50.944Z",
       "available": true
     },
@@ -129,7 +130,7 @@
         "SCREEN AND REMOTE FUNCTIONALITY"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:08:27.044Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:56.561Z",
       "available": true
     },
@@ -150,7 +151,7 @@
         "Raised Protective Bezel"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:08:44.527Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "listPrice": 24.99,
       "lastChecked": "2025-12-30T01:32:02.616Z",
       "available": true
@@ -171,7 +172,7 @@
         "Built-in magnetic strip"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:09:07.802Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "listPrice": 14.99,
       "lastChecked": "2025-12-30T01:32:08.897Z",
       "available": true
@@ -193,7 +194,7 @@
         "Trifold stand design"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:36:54.097Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:32:14.910Z",
       "available": true,
       "badge": "Amazon's Choice"
@@ -215,7 +216,7 @@
         "FSA/HSA eligible"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:14:00.014Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:32:20.848Z",
       "available": true
     },
@@ -236,7 +237,7 @@
         "Ingredients Kids Want"
       ],
       "description": "",
-      "lastUpdated": "2026-01-12T19:01:10.784Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "listPrice": 14.99,
       "lastChecked": "2025-12-30T01:32:26.526Z",
       "available": true
@@ -258,7 +259,7 @@
         "DISHWASHER SAFE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:37:31.846Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "listPrice": 25.99,
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
@@ -281,7 +282,7 @@
         "MEALPREP IN STYLE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:15:09.108Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     },
@@ -302,7 +303,7 @@
         "Customizable Charm and Comfort"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:15:23.923Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     },
@@ -323,7 +324,7 @@
         "With 4 Compartments"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:15:56.655Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice"
@@ -344,7 +345,7 @@
         "High Privacy"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:16:11.817Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice"
@@ -369,7 +370,7 @@
         "BPA and phthalate-free"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:16:34.042Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2025-12-30T01:31:45.801Z",
       "available": true
     },
@@ -390,7 +391,7 @@
         "EXTENDED BATTERY LIFE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:16:51.407Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice"
@@ -413,7 +414,7 @@
         "get back on track when you fall off course"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:17:08.909Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     },
@@ -433,7 +434,7 @@
         "Two best friends"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:39:09.733Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     },
@@ -458,7 +459,7 @@
         "EASY TO CLEAN"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:17:38.505Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     },
@@ -481,7 +482,7 @@
         "Dishwasher Safe"
       ],
       "description": "",
-      "lastUpdated": "2026-01-13T16:18:03.580Z",
+      "lastUpdated": "2026-01-13T16:40:08.689Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true
     }

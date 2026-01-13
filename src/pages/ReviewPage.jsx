@@ -38,7 +38,7 @@ export default function ReviewPage() {
   const savings = hasDiscount ? product.listPrice - product.price : 0;
   
   const formatDate = (dateString) => {
-    if (!dateString) return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    if (!dateString) return null;
     return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
   
@@ -166,6 +166,26 @@ export default function ReviewPage() {
             discountPercent={discountPercent}
             formatDate={formatDate}
           />
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-slate-50 rounded-lg mb-6 border border-slate-200">
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="text-slate-500">📝 Review published:</span>
+            <span className="font-medium text-slate-700">
+              {formatDate(blog.publishedDate)}
+            </span>
+          </div>
+          
+          {
+            product.priceUpdated
+            &&
+            <div className="flex items-center gap-1.5 text-xs">
+              <span className="text-slate-500">💰 Price checked:</span>
+              <span className="font-medium text-slate-700">
+                {formatDate(product.priceUpdated)}
+              </span>
+            </div>
+          }
+        </div>
 
           <div className="mb-10">
             <img 
