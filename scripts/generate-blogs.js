@@ -5,7 +5,7 @@
  * IMPROVED: Better JSON parsing with actual error recovery
  */
 
-// node --env-file=scripts/.script.env scripts/generate-blogs.js
+// node --env-file=secrets/.script.env scripts/generate-blogs.js
 
 const fs = require('fs');
 const path = require('path');
