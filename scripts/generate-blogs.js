@@ -5,8 +5,6 @@
  * Focus: Natural voice, conversational tone, real opinions
  */
 
-// node --env-file=secrets/.script.env scripts/generate-blogs.js
-
 const fs = require('fs');
 const path = require('path');
 
@@ -83,13 +81,13 @@ function validateNoDynamicData(blogData) {
     errors.push('❌ Contains price mentions');
   }
   
-  // Check for ACTUAL review counts (more specific patterns)
+  // Check for ACTUAL review counts (more specific patterns to avoid false positives)
   const reviewPatterns = [
     /\d+,\d+\s*(reviews?|ratings?)/i,      // "10,000 reviews" or "1,234 ratings"
-    /\d{4,}\s*(reviews?|ratings?)/i,       // "5000 reviews" (4+ digits)
+    /\d{4,}\s*(reviews?|ratings?)/i,       // "5000 reviews" (4+ digits only)
     /thousands?\s+of\s+(reviews?|ratings?)/i, // "thousands of reviews"
     /millions?\s+of\s+(reviews?|ratings?)/i,  // "millions of reviews"
-    /\d+k\+?\s*(reviews?|ratings?)/i       // "10k+ reviews"
+    /\d+k\+?\s*(reviews?|ratings?)/i       // "10k+ reviews" or "5k ratings"
   ];
   
   for (const pattern of reviewPatterns) {
@@ -140,13 +138,7 @@ function parseAIResponse(textContent) {
     .replace(/```\s*/g, '')
     .trim();
   
-  // Fix common JSON issues
-  cleanText = cleanText
-    .replace(/,(\s*[}\]])/g, '$1')  // Remove trailing commas
-    .replace(/\\"/g, '"')            // Fix escaped quotes
-    .replace(/\\'/g, "'");
-  
-  // Strategy 1: Direct parse (cleanest response)
+  // Strategy 1: Direct parse (Claude followed instructions perfectly)
   try {
     const result = JSON.parse(cleanText);
     console.log('   ✅ Parsed successfully (direct)');
@@ -155,7 +147,71 @@ function parseAIResponse(textContent) {
     console.log('   ⚠️  Direct parse failed:', e.message);
   }
   
-  // Strategy 2: Extract JSON block and add missing closing brace if needed
+  // Strategy 2: Fix unescaped quotes using targeted regex
+  try {
+    console.log('   🔧 Fixing unescaped quotes in content...');
+    
+    let fixed = cleanText;
+    
+    // Match pattern: ": "content with "quotes" in it"
+    // We need to escape quotes that appear between the opening and closing quotes of a value
+    
+    // This regex finds: "field": "value..."
+    // Then we escape any unescaped quotes in the value part
+    fixed = fixed.replace(/"([^"\\]*(?:\\.[^"\\]*)*)"/g, (match) => {
+      // This is a complete string - check if it contains unescaped quotes
+      // by looking for patterns that would break JSON
+      return match;
+    });
+    
+    // Simpler approach: Replace specific problematic patterns
+    // Pattern 1: word "word" word (quotes used for emphasis)
+    fixed = fixed.replace(/(\w+)\s+"([^"]+)"\s+(\w+)/g, '$1 $2 $3');
+    
+    // Pattern 2: "text "quoted" text" -> "text \\"quoted\\" text"
+    // Find content fields and fix quotes within them
+    fixed = fixed.replace(/"content":\s*"([^"]*)"/g, (match, content) => {
+      // This won't work for multi-line content
+      // Skip this approach
+      return match;
+    });
+    
+    const result = JSON.parse(fixed);
+    console.log('   ✅ Parsed successfully (fixed quotes)');
+    return result;
+  } catch (e) {
+    console.log('   ⚠️  Quote fixing failed:', e.message);
+  }
+  
+  // Strategy 3: Remove quotes entirely from content (aggressive but effective)
+  try {
+    console.log('   🔧 Removing all quotes from string values...');
+    
+    // This is aggressive: find all string values and remove internal quotes
+    let fixed = cleanText.replace(/"(content|title|metaDescription|verdict|targetAudience)":\s*"([^]*?)"/g, (match, field, value) => {
+      // Remove all quotes from the value
+      const cleaned = value.replace(/"/g, '');
+      return `"${field}": "${cleaned}"`;
+    });
+    
+    const result = JSON.parse(fixed);
+    console.log('   ✅ Parsed successfully (removed quotes)');
+    return result;
+  } catch (e) {
+    console.log('   ⚠️  Quote removal failed:', e.message);
+  }
+  
+  // Strategy 4: Fix trailing commas
+  try {
+    let fixed = cleanText.replace(/,(\s*[}\]])/g, '$1');
+    const result = JSON.parse(fixed);
+    console.log('   ✅ Parsed successfully (fixed commas)');
+    return result;
+  } catch (e) {
+    console.log('   ⚠️  Comma fix failed:', e.message);
+  }
+  
+  // Strategy 5: Add missing closing braces
   try {
     const start = cleanText.indexOf('{');
     let end = cleanText.lastIndexOf('}');
@@ -164,65 +220,32 @@ function parseAIResponse(textContent) {
       let jsonStr;
       
       if (end === -1 || end < start) {
-        // Missing closing brace - try to add it
-        console.log('   🔧 Missing closing brace - attempting to fix...');
+        console.log('   🔧 Adding missing closing brace...');
         jsonStr = cleanText.substring(start) + '\n}';
       } else {
         jsonStr = cleanText.substring(start, end + 1);
       }
       
-      // Clean up
       jsonStr = jsonStr.replace(/,(\s*[}\]])/g, '$1');
-      
       const result = JSON.parse(jsonStr);
-      console.log('   ✅ Parsed successfully (extracted & fixed)');
+      console.log('   ✅ Parsed successfully (added brace)');
       return result;
     }
   } catch (e) {
-    console.log('   ⚠️  Extraction + fix failed:', e.message);
+    console.log('   ⚠️  Brace fix failed:', e.message);
   }
   
-  // Strategy 3: Try to intelligently complete the JSON
-  try {
-    const start = cleanText.indexOf('{');
-    if (start !== -1) {
-      let jsonStr = cleanText.substring(start);
-      
-      // Count braces to see how many we're missing
-      const openBraces = (jsonStr.match(/{/g) || []).length;
-      const closeBraces = (jsonStr.match(/}/g) || []).length;
-      const missingBraces = openBraces - closeBraces;
-      
-      if (missingBraces > 0) {
-        console.log(`   🔧 Missing ${missingBraces} closing brace(s) - adding...`);
-        jsonStr = jsonStr + '\n}'.repeat(missingBraces);
-      }
-      
-      // Clean up
-      jsonStr = jsonStr.replace(/,(\s*[}\]])/g, '$1');
-      
-      const result = JSON.parse(jsonStr);
-      console.log('   ✅ Parsed successfully (auto-completed)');
-      return result;
-    }
-  } catch (e) {
-    console.log('   ⚠️  Auto-complete failed:', e.message);
-  }
-  
-  // All strategies failed - save for debugging
+  // All failed - save debug file
   const debugPath = path.join(__dirname, `debug-response-${Date.now()}.txt`);
   fs.writeFileSync(debugPath, textContent);
+  
   console.error('');
-  console.error(`   ❌ All parsing strategies failed!`);
+  console.error(`   ❌ Could not parse JSON!`);
   console.error(`   💾 Saved to: ${debugPath}`);
-  console.error('');
-  console.error('   Common issues:');
-  console.error('   - Missing closing brace }');
-  console.error('   - Trailing comma after last field');
-  console.error('   - Unescaped quotes in strings');
+  console.error('   🔄 Will retry with different prompt...');
   console.error('');
   
-  throw new Error(`JSON parsing failed. Check ${debugPath}`);
+  throw new Error(`JSON parsing failed - see ${debugPath}`);
 }
 
 async function generateBlogPost(product, attempt = 1) {
@@ -260,7 +283,14 @@ ABSOLUTELY AVOID:
 - Predictable headers like "Introduction" and "Conclusion"
 - Overly structured, listy writing
 - Corporate/marketing speak
-- Perfect grammar at expense of naturalness`,
+- Perfect grammar at expense of naturalness
+
+CRITICAL FOR JSON OUTPUT:
+- NEVER use quotation marks (") in your content
+- Use apostrophes freely (it's, don't, they're)
+- Instead of "quoted text" write: quoted text or so-called text
+- Example: Instead of He said "hello" write: He said hello
+- This prevents JSON parsing errors`,
         messages: [
           {
             role: "user",
@@ -335,6 +365,21 @@ Requirements:
 8. 8-10 SEO keywords
 9. URL slug (lowercase-with-hyphens)
 
+CRITICAL OUTPUT FORMAT:
+- Return ONLY valid JSON
+- NO markdown code fences  
+- NO text before or after JSON
+- AVOID using quotation marks in your content (use single quotes or rephrase)
+- If you must use quotes, they will be automatically escaped
+- Use apostrophes freely (they're, don't, can't)
+- NO trailing comma after targetAudience
+
+Example of what to AVOID in content:
+❌ He said "this is great" → Use: He said this is great
+❌ The "best" option → Use: The best option or The so-called best option
+✅ It's amazing → OK!
+✅ Don't miss it → OK!
+
 OUTPUT FORMAT:
 {
   "title": "Natural review title here",
@@ -348,12 +393,19 @@ OUTPUT FORMAT:
   "targetAudience": "Who actually needs this"
 }
 
+CRITICAL JSON RULES:
+✓ Must end with closing brace }
+✓ NO comma after targetAudience (last field)
+✓ Ensure JSON is COMPLETE
+✓ All strings properly closed
+✓ All braces matched
+
 REMEMBER: 
 - Write like a human, not an AI
 - No prices, ratings, reviews, dates
 - Be honest and natural
 - Skip the corporate speak
-- NO trailing comma after targetAudience!`
+- COMPLETE the JSON with closing brace!`
           }
         ],
       })
