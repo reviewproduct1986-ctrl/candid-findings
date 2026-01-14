@@ -106,6 +106,17 @@ export default function ReviewPage() {
     setMeta('meta[property="og:url"]', 'property', 'og:url', `https://candidfindings.com/reviews/${slug}`);
   }, [blog, product, slug]);
 
+  // Calculates read time based on 150 words/minute
+  const calculateReadTime = (content) => {
+    if (!content) return 0;
+    const wordsPerMinute = 150;
+    const wordCount = content.trim().split(/\s+/).length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return minutes;
+  };
+
+  const readTime = useMemo(() => calculateReadTime(blog?.content), [blog?.content]);
+
   // Table of contents
   const tableOfContents = useMemo(() => {
     if (!blog?.content) return [];
@@ -174,17 +185,20 @@ export default function ReviewPage() {
               {formatDate(blog.publishedDate)}
             </span>
           </div>
+
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="text-slate-500">⏱️ Read time:</span>
+            <span className="font-medium text-slate-700">
+              {readTime} min read
+            </span>
+          </div>
           
-          {
-            product.priceUpdated
-            &&
-            <div className="flex items-center gap-1.5 text-xs">
-              <span className="text-slate-500">💰 Price checked:</span>
-              <span className="font-medium text-slate-700">
-                {formatDate(product.priceUpdated)}
-              </span>
-            </div>
-          }
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="text-slate-500">💰 Price checked:</span>
+            <span className="font-medium text-slate-700">
+              {formatDate(product.priceUpdated || blog.publishedDate)}
+            </span>
+          </div>
         </div>
 
           <div className="mb-10">
