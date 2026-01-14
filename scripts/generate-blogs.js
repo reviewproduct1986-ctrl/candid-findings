@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Generate SEO-optimized blog posts for products using Claude AI
- * IMPROVED: Better JSON parsing with actual error recovery
+ * Generate HUMAN-SOUNDING blog posts (not AI-like!)
+ * Focus: Natural voice, conversational tone, real opinions
  */
 
 // node --env-file=secrets/.script.env scripts/generate-blogs.js
@@ -47,10 +47,9 @@ function loadExistingBlogs() {
 }
 
 function getOptimalTokens(product) {
-  if (product.price < 50) return 1500;
-  if (product.price < 100) return 2000;
-  if (product.price < 300) return 2500;
-  if (product.price < 500) return 3000;
+  if (product.price < 50) return 2000;
+  if (product.price < 100) return 2500;
+  if (product.price < 300) return 3000;
   return 3500;
 }
 
@@ -67,17 +66,85 @@ function cleanMarkdown(content) {
     .trim();
 }
 
-/**
- * IMPROVED: Parse JSON with multiple strategies and better error reporting
- */
-function parseAIResponse(textContent) {
-  console.log('   📝 Parsing AI response...');
+function validateNoDynamicData(blogData) {
+  const errors = [];
+  const allText = [
+    blogData.title,
+    blogData.metaDescription,
+    blogData.content,
+    blogData.verdict,
+    blogData.targetAudience,
+    ...(blogData.pros || []),
+    ...(blogData.cons || [])
+  ].join(' ').toLowerCase();
   
-  // Remove markdown code fences first
+  // Check for prices
+  if (/\$\d+/.test(allText)) {
+    errors.push('❌ Contains price mentions');
+  }
+  
+  // Check for ACTUAL review counts (more specific patterns)
+  const reviewPatterns = [
+    /\d+,\d+\s*(reviews?|ratings?)/i,      // "10,000 reviews" or "1,234 ratings"
+    /\d{4,}\s*(reviews?|ratings?)/i,       // "5000 reviews" (4+ digits)
+    /thousands?\s+of\s+(reviews?|ratings?)/i, // "thousands of reviews"
+    /millions?\s+of\s+(reviews?|ratings?)/i,  // "millions of reviews"
+    /\d+k\+?\s*(reviews?|ratings?)/i       // "10k+ reviews"
+  ];
+  
+  for (const pattern of reviewPatterns) {
+    if (pattern.test(allText)) {
+      errors.push('❌ Contains review count mentions');
+      break;
+    }
+  }
+  
+  // Check for star ratings
+  const ratingPatterns = [
+    /\d\.?\d?\s*stars?/i,
+    /\d\.?\d?\s*star rating/i,
+    /\d\.?\d?\/5/i,
+    /rated \d/i,
+    /rating of \d/i
+  ];
+  
+  for (const pattern of ratingPatterns) {
+    if (pattern.test(allText)) {
+      errors.push('❌ Contains rating mentions');
+      break;
+    }
+  }
+  
+  // Check for years
+  if (/\b20\d{2}\b/.test(allText)) {
+    errors.push('❌ Contains year references');
+  }
+  
+  // Check for temporal phrases
+  if (/as of/i.test(allText)) {
+    errors.push('❌ Contains "as of" phrases');
+  }
+  
+  if (/\b(currently|right now|at present)\b/i.test(allText)) {
+    errors.push('❌ Contains temporal words');
+  }
+  
+  return errors;
+}
+
+function parseAIResponse(textContent) {
+  console.log('   📝 Parsing response...');
+  
   let cleanText = textContent
     .replace(/```json\s*/g, '')
     .replace(/```\s*/g, '')
     .trim();
+  
+  // Fix common JSON issues
+  cleanText = cleanText
+    .replace(/,(\s*[}\]])/g, '$1')  // Remove trailing commas
+    .replace(/\\"/g, '"')            // Fix escaped quotes
+    .replace(/\\'/g, "'");
   
   // Strategy 1: Direct parse (cleanest response)
   try {
@@ -85,80 +152,82 @@ function parseAIResponse(textContent) {
     console.log('   ✅ Parsed successfully (direct)');
     return result;
   } catch (e) {
-    console.log('   ⚠️  Direct parse failed');
+    console.log('   ⚠️  Direct parse failed:', e.message);
   }
   
-  // Strategy 2: Extract JSON block
+  // Strategy 2: Extract JSON block and add missing closing brace if needed
   try {
     const start = cleanText.indexOf('{');
-    const end = cleanText.lastIndexOf('}');
+    let end = cleanText.lastIndexOf('}');
     
-    if (start !== -1 && end !== -1 && end > start) {
-      const jsonStr = cleanText.substring(start, end + 1);
+    if (start !== -1) {
+      let jsonStr;
+      
+      if (end === -1 || end < start) {
+        // Missing closing brace - try to add it
+        console.log('   🔧 Missing closing brace - attempting to fix...');
+        jsonStr = cleanText.substring(start) + '\n}';
+      } else {
+        jsonStr = cleanText.substring(start, end + 1);
+      }
+      
+      // Clean up
+      jsonStr = jsonStr.replace(/,(\s*[}\]])/g, '$1');
+      
       const result = JSON.parse(jsonStr);
-      console.log('   ✅ Parsed successfully (extracted)');
+      console.log('   ✅ Parsed successfully (extracted & fixed)');
       return result;
     }
   } catch (e) {
-    console.log('   ⚠️  Extraction failed');
+    console.log('   ⚠️  Extraction + fix failed:', e.message);
   }
   
-  // Strategy 3: Find error and try to fix
+  // Strategy 3: Try to intelligently complete the JSON
   try {
-    let jsonStr = cleanText;
-    const start = jsonStr.indexOf('{');
-    const end = jsonStr.lastIndexOf('}');
-    
-    if (start !== -1 && end !== -1) {
-      jsonStr = jsonStr.substring(start, end + 1);
-    }
-    
-    // Attempt parse to get error position
-    try {
-      return JSON.parse(jsonStr);
-    } catch (parseError) {
-      // Extract error position
-      const posMatch = parseError.message.match(/position (\d+)/);
-      if (posMatch) {
-        const errorPos = parseInt(posMatch[1]);
-        
-        // Show error context
-        const contextStart = Math.max(0, errorPos - 80);
-        const contextEnd = Math.min(jsonStr.length, errorPos + 80);
-        const context = jsonStr.substring(contextStart, contextEnd);
-        
-        console.log('   ⚠️  JSON error at position', errorPos);
-        console.log('   📍 Context:', context);
+    const start = cleanText.indexOf('{');
+    if (start !== -1) {
+      let jsonStr = cleanText.substring(start);
+      
+      // Count braces to see how many we're missing
+      const openBraces = (jsonStr.match(/{/g) || []).length;
+      const closeBraces = (jsonStr.match(/}/g) || []).length;
+      const missingBraces = openBraces - closeBraces;
+      
+      if (missingBraces > 0) {
+        console.log(`   🔧 Missing ${missingBraces} closing brace(s) - adding...`);
+        jsonStr = jsonStr + '\n}'.repeat(missingBraces);
       }
       
-      throw parseError;
+      // Clean up
+      jsonStr = jsonStr.replace(/,(\s*[}\]])/g, '$1');
+      
+      const result = JSON.parse(jsonStr);
+      console.log('   ✅ Parsed successfully (auto-completed)');
+      return result;
     }
   } catch (e) {
-    console.log('   ⚠️  Fix attempt failed');
+    console.log('   ⚠️  Auto-complete failed:', e.message);
   }
   
   // All strategies failed - save for debugging
-  console.error('   ❌ All parsing strategies failed!');
-  
   const debugPath = path.join(__dirname, `debug-response-${Date.now()}.txt`);
   fs.writeFileSync(debugPath, textContent);
-  console.error(`   💾 Saved response to: ${debugPath}`);
   console.error('');
-  console.error('   🔍 Check the debug file to see what Claude returned');
+  console.error(`   ❌ All parsing strategies failed!`);
+  console.error(`   💾 Saved to: ${debugPath}`);
+  console.error('');
+  console.error('   Common issues:');
+  console.error('   - Missing closing brace }');
+  console.error('   - Trailing comma after last field');
+  console.error('   - Unescaped quotes in strings');
   console.error('');
   
   throw new Error(`JSON parsing failed. Check ${debugPath}`);
 }
 
-/**
- * IMPROVED: Generate blog with better prompt to avoid JSON issues
- */
-async function generateBlogPost(product) {
-  console.log('Generating blog for:', product.title);
-  console.log('   Tokens:', getOptimalTokens(product));
-  const currentYear = new Date().getFullYear();
-
-  // Clean product title for prompt (escape special chars)
+async function generateBlogPost(product, attempt = 1) {
+  console.log(`Generating blog: ${product.title} (attempt ${attempt})`);
+  
   const safeTitle = product.title.replace(/'/g, '').replace(/"/g, '');
 
   try {
@@ -172,57 +241,119 @@ async function generateBlogPost(product) {
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: getOptimalTokens(product),
+        system: `You are a real person writing honest product reviews on your blog.
+
+CRITICAL STYLE RULES:
+- Write like a REAL person, not an AI
+- Use conversational, natural language
+- Include personal observations and opinions
+- Vary your sentence structure (some short, some long)
+- Use contractions (it's, don't, can't, you'll)
+- Add occasional first-person perspective (I found, In my experience)
+- Be relatable and friendly
+- Skip overly formal language
+- Natural transitions, not robotic ones
+
+ABSOLUTELY AVOID:
+- Formulaic AI phrases like "standout feature" or "One of the most appealing aspects"
+- Generic intros like "In today's market" or "When it comes to"
+- Predictable headers like "Introduction" and "Conclusion"
+- Overly structured, listy writing
+- Corporate/marketing speak
+- Perfect grammar at expense of naturalness`,
         messages: [
           {
             role: "user",
-            content: `Write a comprehensive, SEO-optimized blog post review.
+            content: `Write an honest, natural product review like a real person would write.
 
 Product: ${safeTitle}
 Category: ${product.category}
-Price: $${product.price}
-Rating: ${product.rating}/5 (${product.reviews.toLocaleString()} reviews)
 Features: ${product.features?.join(', ') || 'N/A'}
-ASIN: ${product.asin || 'N/A'}
-Year: ${currentYear}
+
+WRITING STYLE (CRITICAL):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Write like you're telling a friend about this product!
+
+✅ GOOD EXAMPLES (Natural, Human):
+"Look, I'm just going to say it upfront - this thing actually works."
+"Here's what surprised me most about this..."
+"If you're like me and hate dealing with complicated setups, you'll appreciate this."
+"The build quality? Solid. Not amazing, but definitely good enough."
+"Is it perfect? Nope. But here's why I still recommend it."
+
+❌ BAD EXAMPLES (AI-like, Avoid):
+"The standout feature of this product is its innovative design."
+"In today's competitive market, this offers exceptional value."
+"One of the most appealing aspects is the comprehensive feature set."
+"When it comes to performance, this delivers on multiple fronts."
+"This represents a significant advancement in the category."
+
+STRUCTURE RULES:
+- Skip generic "Introduction" headers
+- Start with something interesting or an opinion
+- Use natural section headers ("What I Liked", "The Not-So-Great Parts", "Who Should Get This")
+- Mix up sentence lengths
+- Include some personal perspective (I noticed, In my testing, From what I can tell)
+- End with honest recommendation, not a sales pitch
+
+TONE RULES:
+- Conversational, not corporate
+- Honest, even about flaws
+- Relatable language
+- Some personality
+- Natural flow
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONTENT PROHIBITIONS (Will Be Validated):
+❌ NO prices or dollar amounts
+❌ NO review counts or numbers of reviews
+❌ NO star ratings or numerical ratings
+❌ NO specific years or dates
+❌ NO "as of", "currently", "right now"
+
+Instead write about:
+✅ Features and how they work
+✅ Real-world use cases
+✅ Build quality and materials
+✅ What works well and what doesn't
+✅ Who this is actually good for
 
 Requirements:
-1. Engaging headline (60-70 chars)
-2. Meta description (150-160 chars)
-3. Review content in MARKDOWN with:
-   - Introduction with key benefits
-   - Multiple h2 sections (use ##)
-   - Real-world use cases
-   - Performance analysis
-4. 7 specific pros
-5. 3-4 specific cons
-6. Final verdict (3-4 sentences)
-7. Target audience paragraph
+1. Natural, engaging title (sound like a real review, not SEO spam)
+2. Meta description (150-160 chars, conversational)
+3. Review content (700-900 words) in MARKDOWN
+   - Use ## for sections (but make them natural, not generic)
+   - Start strong, no boring intro
+   - Mix opinion with facts
+   - Real-world usage examples
+   - Honest pros and cons
+4. 7 specific pros (be specific, not generic)
+5. 3-4 specific cons (real issues, not fake balance)
+6. Honest verdict (2-3 sentences, your real opinion)
+7. Target audience (who will actually benefit)
 8. 8-10 SEO keywords
 9. URL slug (lowercase-with-hyphens)
 
-CRITICAL - OUTPUT FORMAT:
-- Return ONLY valid JSON
-- NO text before or after JSON
-- NO markdown code fences
-- Use ONLY single ## for headings
-- Avoid apostrophes - use "do not" not "dont"
-- Avoid quotes in content where possible
-- If quotes needed, escape them properly
-
-JSON structure:
+OUTPUT FORMAT:
 {
-  "title": "Product Review Title Here",
-  "slug": "product-review-slug",
-  "metaDescription": "Description here",
-  "content": "Markdown content here",
+  "title": "Natural review title here",
+  "slug": "product-slug",
+  "metaDescription": "Conversational description",
+  "content": "Natural markdown content",
   "keywords": ["keyword1", "keyword2"],
-  "pros": ["First pro", "Second pro"],
-  "cons": ["First con", "Second con"],
-  "verdict": "Final verdict text",
-  "targetAudience": "Who should buy"
+  "pros": ["Specific pro 1", "Specific pro 2"],
+  "cons": ["Real con 1", "Real con 2"],
+  "verdict": "Honest 2-3 sentence opinion",
+  "targetAudience": "Who actually needs this"
 }
 
-Write 600-800 words. Be specific with numbers and details.`
+REMEMBER: 
+- Write like a human, not an AI
+- No prices, ratings, reviews, dates
+- Be honest and natural
+- Skip the corporate speak
+- NO trailing comma after targetAudience!`
           }
         ],
       })
@@ -236,15 +367,29 @@ Write 600-800 words. Be specific with numbers and details.`
     const data = await response.json();
     const textContent = data.content.find(c => c.type === "text")?.text || "";
     
-    // Parse with improved error handling
     const blogData = parseAIResponse(textContent);
 
-    // Clean the markdown content
     if (blogData.content) {
       blogData.content = cleanMarkdown(blogData.content);
-      console.log(`   🧹 Cleaned markdown`);
     }
 
+    const validationErrors = validateNoDynamicData(blogData);
+    
+    if (validationErrors.length > 0) {
+      console.log('   ⚠️  VALIDATION FAILED:');
+      validationErrors.forEach(err => console.log(`      ${err}`));
+      
+      if (attempt < 3) {
+        console.log(`   🔄 Retrying (attempt ${attempt + 1}/3)...`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        return await generateBlogPost(product, attempt + 1);
+      } else {
+        console.log('   ❌ Max retries reached. Skipping.');
+        return null;
+      }
+    }
+
+    console.log('   ✅ Validation passed!');
     console.log(`   ✅ Generated ${blogData.content?.length || 0} characters`);
 
     return {
@@ -258,15 +403,6 @@ Write 600-800 words. Be specific with numbers and details.`
 
   } catch (error) {
     console.error(`   ❌ Error: ${error.message}`);
-    
-    if (error.message.includes('JSON')) {
-      console.error('');
-      console.error('   💡 TIP: Claude returned invalid JSON.');
-      console.error('      Check the debug-response-*.txt file.');
-      console.error('      You can retry this product.');
-      console.error('');
-    }
-    
     return null;
   }
 }
@@ -281,7 +417,7 @@ async function generateMissingBlogs(products, existingBlogs) {
   }
 
   console.log('');
-  console.log(`🤖 Generating blogs for ${productsNeedingBlogs.length} products...`);
+  console.log(`🤖 Generating HUMAN-LIKE blogs for ${productsNeedingBlogs.length} products...`);
   console.log('');
   
   const newBlogPosts = [];
@@ -297,14 +433,11 @@ async function generateMissingBlogs(products, existingBlogs) {
     if (blog) {
       newBlogPosts.push(blog);
       successCount++;
-      console.log(`   ✅ Success!`);
     } else {
       failCount++;
       failedProducts.push(product.title);
-      console.log(`   ❌ Failed - will skip`);
     }
     
-    // Delay between requests
     if (i < productsNeedingBlogs.length - 1) {
       const delay = 3000;
       console.log(`   ⏳ Waiting ${delay/1000}s...`);
@@ -325,8 +458,6 @@ async function generateMissingBlogs(products, existingBlogs) {
     failedProducts.forEach((title, i) => {
       console.log(`  ${i + 1}. ${title}`);
     });
-    console.log('');
-    console.log('💡 You can run this script again to retry failed products');
   }
   
   console.log('═══════════════════════════════════════');
@@ -360,18 +491,24 @@ function saveBlogPosts(blogPosts) {
   fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData, null, 2));
   fs.writeFileSync(jsonPath, JSON.stringify(blogsData, null, 2));
   
-  console.log(`✅ Saved ${blogPosts.length} blog posts to blogs.json`);
+  console.log(`✅ Saved ${blogPosts.length} blog posts`);
 }
 
 async function main() {
   try {
-    console.log('╔════════════════════════════════════════╗');
-    console.log('║   Blog Generator (Improved Parsing)   ║');
-    console.log('╚════════════════════════════════════════╝');
+    console.log('╔═══════════════════════════════════════════╗');
+    console.log('║  Human-Like Blog Generator                ║');
+    console.log('╚═══════════════════════════════════════════╝');
+    console.log('');
+    console.log('🎯 Features:');
+    console.log('   - Natural, conversational writing');
+    console.log('   - Personal voice and opinions');
+    console.log('   - NO AI-sounding phrases');
+    console.log('   - Validation for dynamic data');
     console.log('');
     
     if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY === 'YOUR_KEY_HERE') {
-      console.error('❌ Please add your Anthropic API key to this script!');
+      console.error('❌ Please set ANTHROPIC_API_KEY!');
       process.exit(1);
     }
 
@@ -391,6 +528,11 @@ async function main() {
     saveBlogPosts(allBlogs);
     
     console.log('🎉 Generation complete!');
+    console.log('');
+    console.log('✅ Blogs sound human, not AI!');
+    console.log('   - Natural, conversational tone');
+    console.log('   - Personal observations');
+    console.log('   - No corporate speak');
     console.log('');
     
   } catch (error) {
