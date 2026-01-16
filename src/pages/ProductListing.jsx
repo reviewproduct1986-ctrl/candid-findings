@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { TrendingUp, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import FilterPanel from '../components/FilterPanel';
 import ProductCard from '../components/ProductCard';
@@ -291,7 +292,7 @@ export default function ProductListing() {
             )}
             
             {/* Results Count */}
-            <div className="mb-6">
+            <div className="mb-6 flex items-center flex-wrap gap-3">
               <p className="text-slate-600">
                 Showing <span className="font-semibold text-violet-600">{filteredProducts.length}</span>{' '}
                 {filteredProducts.length === 1 ? 'product' : 'products'}
@@ -302,6 +303,22 @@ export default function ProductListing() {
                   <span> in {selectedCategory}</span>
                 )}
               </p>
+              
+              <Link 
+                to="/best"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 hover:bg-blue-100 hover:border-blue-300 transition-colors text-sm font-medium"
+                onClick={() => {
+                  if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click_best_selections', {
+                      event_category: 'Navigation',
+                      event_label: 'Best Selections Link'
+                    });
+                  }
+                }}
+              >
+                <span>🏆</span>
+                <span>Best Selections</span>
+              </Link>
             </div>
 
             {/* Loading State - Show skeleton cards instead of spinner for better LCP */}

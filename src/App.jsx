@@ -5,11 +5,13 @@ import ScrollToTop from './components/ScrollToTop';
 
 // Lazy load pages - only loads when user visits
 const ReviewPage = lazy(() => import('./pages/ReviewPage.jsx'));
+const BestOfBlogList = lazy(() => import('./pages/BestOfBlogList.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService.jsx'));
 const AboutPage = lazy(() => import('./pages/AboutPage.jsx'));
 const BuyingGuidePage = lazy(() => import('./pages/BuyingGuidePage.jsx'));
 const BuyingGuidesList = lazy(() => import('./pages/BuyingGuidesList.jsx'));
+const BestOfPost = lazy(() => import('./pages/BestOfPost.jsx'));
 
 // Loading component for lazy routes
 function RouteLoader() {
@@ -36,10 +38,26 @@ export default function App() {
       <Routes>
         <Route path="/" element={<ProductListing />} />
         <Route 
+          path="/best" 
+          element={
+            <Suspense fallback={<RouteLoader />}>
+              <BestOfBlogList />
+            </Suspense>
+          } 
+        />
+        <Route 
           path="/reviews/:slug" 
           element={
             <Suspense fallback={<RouteLoader />}>
               <ReviewPage />
+            </Suspense>
+          } 
+        />
+        <Route 
+          path="/best/:slug" 
+          element={
+            <Suspense fallback={<RouteLoader />}>
+              <BestOfPost />
             </Suspense>
           } 
         />
