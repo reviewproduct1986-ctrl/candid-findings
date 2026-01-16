@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Apple AirPods Pro 2 Wireless Earbuds",
       "category": "Electronics",
-      "price": 199,
+      "price": 189.05,
       "listPrice": 249,
       "rating": 4.6,
       "reviews": 43982,
@@ -20,10 +20,10 @@
         "PERSONALIZED SPATIAL AUDIO"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:36:08.903Z",
+      "lastUpdated": "2026-01-16T23:06:42.482Z",
       "lastChecked": "2025-12-30T01:31:27.524Z",
       "available": false,
-      "priceUpdated": "2026-01-15T17:36:08.905Z"
+      "priceUpdated": "2026-01-16T23:06:42.483Z"
     },
     {
       "id": 2,
@@ -31,7 +31,7 @@
       "category": "Books",
       "price": 10.78,
       "rating": 4.5,
-      "reviews": 640622,
+      "reviews": 643318,
       "image": "https://m.media-amazon.com/images/I/81G1WltKQGL._SY466_.jpg",
       "asin": "1538742578",
       "affiliate": "https://amazon.com/dp/1538742578?tag=candidfinding-20",
@@ -40,10 +40,10 @@
         "#1 New York Times"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:36:28.181Z",
+      "lastUpdated": "2026-01-16T23:06:56.308Z",
       "lastChecked": "2025-12-30T01:31:33.735Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:36:28.181Z"
+      "priceUpdated": "2026-01-16T23:06:56.308Z"
     },
     {
       "id": 3,
@@ -51,7 +51,7 @@
       "category": "Books",
       "price": 15.68,
       "rating": 4.6,
-      "reviews": 35474,
+      "reviews": 35596,
       "image": "https://m.media-amazon.com/images/I/91ZVf3kNrcL._SY466_.jpg",
       "asin": "1401971369",
       "affiliate": "https://amazon.com/dp/1401971369?tag=candidfinding-20",
@@ -60,20 +60,20 @@
         "Over 7 Million Copies Sold!"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:36:41.877Z",
+      "lastUpdated": "2026-01-16T23:07:08.750Z",
       "listPrice": 29.99,
       "lastChecked": "2025-12-30T01:31:40.249Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:36:41.877Z"
+      "priceUpdated": "2026-01-16T23:07:08.750Z"
     },
     {
       "id": 4,
       "title": "Owala FreeSip Insulated Stainless Steel Water Bottle with Straw, BPA-Free Sports Water Bottle, Great for Travel, 32 Oz, Black Cherry",
       "category": "Sports",
-      "price": 30.4,
+      "price": 29.99,
       "listPrice": 34.99,
       "rating": 4.7,
-      "reviews": 104613,
+      "reviews": 104989,
       "image": "https://m.media-amazon.com/images/I/61cXY4wGQSL._AC_SX679_.jpg",
       "asin": "B0FK1LF5PM",
       "affiliate": "https://amazon.com/dp/B0FK1LF5PM?tag=candidfinding-20",
@@ -86,10 +86,10 @@
         "BPA and phthalate-free"
       ],
       "description": "",
-      "lastUpdated": "2026-01-14T14:29:05.229Z",
+      "lastUpdated": "2026-01-16T23:07:30.329Z",
       "lastChecked": "2025-12-30T01:31:45.801Z",
       "available": false,
-      "priceUpdated": "2026-01-14T14:29:05.229Z"
+      "priceUpdated": "2026-01-16T23:07:30.329Z"
     },
     {
       "id": 5,
@@ -98,7 +98,7 @@
       "price": 29.99,
       "listPrice": 29.99,
       "rating": 4,
-      "reviews": 10171,
+      "reviews": 10185,
       "image": "https://m.media-amazon.com/images/I/6168dfLpdnL._AC_SX679_.jpg",
       "asin": "B0BZ8MB4KM",
       "affiliate": "https://amazon.com/dp/B0BZ8MB4KM?tag=candidfinding-20",
@@ -111,10 +111,10 @@
         "QUALITY AND DURABILITY"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:37:10.036Z",
+      "lastUpdated": "2026-01-16T23:07:51.665Z",
       "lastChecked": "2025-12-30T01:31:50.944Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:37:10.036Z"
+      "priceUpdated": "2026-01-16T23:07:51.665Z"
     },
     {
       "id": 6,
@@ -123,7 +123,7 @@
       "price": 79.99,
       "listPrice": 129.99,
       "rating": 4.2,
-      "reviews": 7930,
+      "reviews": 7933,
       "image": "https://m.media-amazon.com/images/I/81eUUEK-MQL._AC_SX679_.jpg",
       "asin": "B08M6G51XP",
       "affiliate": "https://amazon.com/dp/B08M6G51XP?tag=candidfinding-20",
@@ -134,10 +134,10 @@
         "SCREEN AND REMOTE FUNCTIONALITY"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:37:21.416Z",
+      "lastUpdated": "2026-01-16T23:08:06.496Z",
       "lastChecked": "2025-12-30T01:31:56.561Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:37:21.416Z"
+      "priceUpdated": "2026-01-16T23:08:06.496Z"
     },
     {
       "id": 7,
@@ -145,7 +145,7 @@
       "category": "Cell Phones & Accessories",
       "price": 22.49,
       "rating": 4.6,
-      "reviews": 131431,
+      "reviews": 131460,
       "image": "https://m.media-amazon.com/images/I/71HlmTfU9QL._AC_SX679_.jpg",
       "asin": "B0FJ88517V",
       "affiliate": "https://amazon.com/dp/B0FJ88517V?tag=candidfinding-20",
@@ -156,11 +156,11 @@
         "Raised Protective Bezel"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:37:35.174Z",
+      "lastUpdated": "2026-01-16T23:08:16.084Z",
       "listPrice": 24.99,
       "lastChecked": "2025-12-30T01:32:02.616Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:37:35.174Z"
+      "priceUpdated": "2026-01-16T23:08:16.084Z"
     },
     {
       "id": 8,
@@ -168,7 +168,7 @@
       "category": "Electronics",
       "price": 14.99,
       "rating": 4.6,
-      "reviews": 49285,
+      "reviews": 49290,
       "image": "https://m.media-amazon.com/images/I/71i46di116L._AC_SX679_.jpg",
       "asin": "B06XRVX2ZB",
       "affiliate": "https://amazon.com/dp/B06XRVX2ZB?tag=candidfinding-20",
@@ -178,11 +178,11 @@
         "Built-in magnetic strip"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:37:45.672Z",
+      "lastUpdated": "2026-01-16T23:08:23.557Z",
       "listPrice": 14.99,
       "lastChecked": "2025-12-30T01:32:08.897Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:37:45.672Z"
+      "priceUpdated": "2026-01-16T23:08:23.557Z"
     },
     {
       "id": 9,
@@ -191,7 +191,7 @@
       "price": 15.29,
       "listPrice": 16.99,
       "rating": 4.6,
-      "reviews": 36964,
+      "reviews": 36971,
       "image": "https://m.media-amazon.com/images/I/61CJGMz8+xL._AC_SX679_.jpg",
       "asin": "B0D3QFFNSF",
       "affiliate": "https://amazon.com/dp/B0D3QFFNSF?tag=candidfinding-20",
@@ -201,20 +201,20 @@
         "Trifold stand design"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:37:55.294Z",
+      "lastUpdated": "2026-01-16T23:08:35.502Z",
       "lastChecked": "2025-12-30T01:32:14.910Z",
       "available": true,
       "badge": "Amazon's Choice",
-      "priceUpdated": "2026-01-15T17:37:55.294Z"
+      "priceUpdated": "2026-01-16T23:08:35.502Z"
     },
     {
       "id": 10,
       "title": "Sun Bum Kids SPF 50 Sunscreen Clear Body Spray - Broad Spectrum Water-Resistant with Vitamin E - Wet or Dry Skin Application - Hawaii 104 Act Compliant (Without Octinoxate & Oxybenzone) - 6 oz",
       "category": "Beauty & Personal Care",
-      "price": 17.49,
+      "price": 14.99,
       "listPrice": 18.49,
       "rating": 4.8,
-      "reviews": 1560,
+      "reviews": 1562,
       "image": "https://m.media-amazon.com/images/I/51++nh8DlQL._SX679_.jpg",
       "asin": "B0BSZ5VJMV",
       "affiliate": "https://amazon.com/dp/B0BSZ5VJMV?tag=candidfinding-20",
@@ -224,10 +224,10 @@
         "FSA/HSA eligible"
       ],
       "description": "",
-      "lastUpdated": "2026-01-14T14:36:00.148Z",
+      "lastUpdated": "2026-01-16T23:08:55.872Z",
       "lastChecked": "2025-12-30T01:32:20.848Z",
       "available": true,
-      "priceUpdated": "2026-01-14T14:36:00.148Z"
+      "priceUpdated": "2026-01-16T23:08:55.872Z"
     },
     {
       "id": 11,
@@ -235,7 +235,7 @@
       "category": "Health & Household",
       "price": 14.99,
       "rating": 4.7,
-      "reviews": 6729,
+      "reviews": 6731,
       "image": "https://m.media-amazon.com/images/I/71X7w+OcTiL._AC_SX679_.jpg",
       "asin": "B0CHXSLHQZ",
       "affiliate": "https://amazon.com/dp/B0CHXSLHQZ?tag=candidfinding-20",
@@ -246,11 +246,11 @@
         "Ingredients Kids Want"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:38:12.265Z",
+      "lastUpdated": "2026-01-16T23:09:05.467Z",
       "listPrice": 14.99,
       "lastChecked": "2025-12-30T01:32:26.526Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:38:12.265Z"
+      "priceUpdated": "2026-01-16T23:09:05.468Z"
     },
     {
       "id": 12,
@@ -258,7 +258,7 @@
       "category": "Home & Kitchen",
       "price": 25.99,
       "rating": 4.2,
-      "reviews": 6190,
+      "reviews": 6223,
       "image": "https://m.media-amazon.com/images/I/71n4ODRlQqL._AC_SL1500_.jpg",
       "asin": "B0CPKT4Q41",
       "affiliate": "https://amazon.com/dp/B0CPKT4Q41?tag=candidfinding-20",
@@ -269,11 +269,11 @@
         "DISHWASHER SAFE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:38:22.463Z",
+      "lastUpdated": "2026-01-16T23:09:17.465Z",
       "listPrice": 25.99,
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:38:22.463Z"
+      "priceUpdated": "2026-01-16T23:09:17.465Z"
     },
     {
       "id": 13,
@@ -282,7 +282,7 @@
       "price": 42.99,
       "listPrice": 42.99,
       "rating": 4.7,
-      "reviews": 7020,
+      "reviews": 7024,
       "image": "https://m.media-amazon.com/images/I/71puooYROPL._AC_SL1500_.jpg",
       "asin": "B0FMH4JNRB",
       "affiliate": "https://amazon.com/dp/B0FMH4JNRB?tag=candidfinding-20",
@@ -293,10 +293,10 @@
         "MEALPREP IN STYLE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:38:31.547Z",
+      "lastUpdated": "2026-01-16T23:09:26.529Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:38:31.547Z"
+      "priceUpdated": "2026-01-16T23:09:26.529Z"
     },
     {
       "id": 14,
@@ -305,7 +305,7 @@
       "price": 39.99,
       "listPrice": 39.99,
       "rating": 4.8,
-      "reviews": 11886,
+      "reviews": 11891,
       "image": "https://m.media-amazon.com/images/I/81GmAOPpLbL._AC_SX625_.jpg",
       "asin": "B0DQY8GKPQ",
       "affiliate": "https://amazon.com/dp/B0DQY8GKPQ?tag=candidfinding-20",
@@ -315,10 +315,10 @@
         "Customizable Charm and Comfort"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:38:40.053Z",
+      "lastUpdated": "2026-01-16T23:09:38.565Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:38:40.053Z"
+      "priceUpdated": "2026-01-16T23:09:38.565Z"
     },
     {
       "id": 15,
@@ -327,7 +327,7 @@
       "price": 13.99,
       "listPrice": 13.99,
       "rating": 4.4,
-      "reviews": 5690,
+      "reviews": 5698,
       "image": "https://m.media-amazon.com/images/I/71DPWB7cpdL._AC_SL1500_.jpg",
       "asin": "B0CM6L132Z",
       "affiliate": "https://amazon.com/dp/B0CM6L132Z?tag=candidfinding-20",
@@ -337,11 +337,11 @@
         "With 4 Compartments"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:38:49.176Z",
+      "lastUpdated": "2026-01-16T23:09:46.419Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice",
-      "priceUpdated": "2026-01-15T17:38:49.176Z"
+      "priceUpdated": "2026-01-16T23:09:46.419Z"
     },
     {
       "id": 16,
@@ -349,7 +349,7 @@
       "category": "Cell Phones & Accessories",
       "price": 7.98,
       "rating": 4.4,
-      "reviews": 157827,
+      "reviews": 157925,
       "image": "https://m.media-amazon.com/images/I/71h1ZLa+-7L._AC_SL1500_.jpg",
       "asin": "B0FDQK73N6",
       "affiliate": "https://amazon.com/dp/B0FDQK73N6?tag=candidfinding-20",
@@ -359,11 +359,11 @@
         "High Privacy"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:39:00.277Z",
+      "lastUpdated": "2026-01-16T23:09:55.855Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice",
-      "priceUpdated": "2026-01-15T17:39:00.277Z"
+      "priceUpdated": "2026-01-16T23:09:55.855Z"
     },
     {
       "id": 17,
@@ -372,7 +372,7 @@
       "price": 24.99,
       "listPrice": 24.99,
       "rating": 4.7,
-      "reviews": 104830,
+      "reviews": 104989,
       "image": "https://m.media-amazon.com/images/I/713JGaQf5QL._AC_SL1500_.jpg",
       "asin": "B0CRC73JTS",
       "affiliate": "https://amazon.com/dp/B0CRC73JTS?tag=candidfinding-20",
@@ -385,10 +385,10 @@
         "BPA and phthalate-free"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:39:11.477Z",
+      "lastUpdated": "2026-01-16T23:10:08.897Z",
       "lastChecked": "2025-12-30T01:31:45.801Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:39:11.477Z"
+      "priceUpdated": "2026-01-16T23:10:08.897Z"
     },
     {
       "id": 18,
@@ -397,7 +397,7 @@
       "price": 239.95,
       "listPrice": 239,
       "rating": 4.4,
-      "reviews": 4331,
+      "reviews": 4384,
       "image": "https://m.media-amazon.com/images/I/71dt0UurPZL._AC_SL1500_.jpg",
       "asin": "B0FQFB8FMG",
       "affiliate": "https://amazon.com/dp/B0FQFB8FMG?tag=candidfinding-20",
@@ -407,11 +407,11 @@
         "EXTENDED BATTERY LIFE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:39:27.053Z",
+      "lastUpdated": "2026-01-16T23:10:19.808Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
       "badge": "Amazon's Choice",
-      "priceUpdated": "2026-01-15T17:39:27.053Z"
+      "priceUpdated": "2026-01-16T23:10:19.808Z"
     },
     {
       "id": 19,
@@ -420,7 +420,7 @@
       "price": 18.88,
       "listPrice": 27,
       "rating": 4.8,
-      "reviews": 145552,
+      "reviews": 145582,
       "image": "https://m.media-amazon.com/images/I/81kg51XRc1L._SL1500_.jpg",
       "asin": "0735211299",
       "badge": "Amazon Charts",
@@ -431,10 +431,10 @@
         "get back on track when you fall off course"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:39:49.514Z",
+      "lastUpdated": "2026-01-16T23:10:31.405Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:39:49.514Z"
+      "priceUpdated": "2026-01-16T23:10:31.405Z"
     },
     {
       "id": 20,
@@ -443,7 +443,7 @@
       "price": 10.54,
       "listPrice": 16,
       "rating": 4.2,
-      "reviews": 104277,
+      "reviews": 104881,
       "image": "https://m.media-amazon.com/images/I/71HADF3dRUL._SL1500_.jpg",
       "asin": "1984806750",
       "badge": "Amazon Charts",
@@ -452,19 +452,19 @@
         "Two best friends"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:40:00.183Z",
+      "lastUpdated": "2026-01-16T23:10:41.601Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:40:00.183Z"
+      "priceUpdated": "2026-01-16T23:10:41.601Z"
     },
     {
       "id": 21,
       "title": "Ninja Mega Kitchen System, 1500W, 72 oz. Full-Size Blender & 8-Cup Food Processor with (2) 16 oz. To-Go Cups, Total Crushing Technology - Smoothies, Ice Crushing, Purees, Dough & More, Black, BL770",
       "category": "Home & Kitchen",
-      "price": 171.99,
+      "price": 159.99,
       "listPrice": 219.99,
       "rating": 4.6,
-      "reviews": 91389,
+      "reviews": 91418,
       "image": "https://m.media-amazon.com/images/I/81WPPmP+4mL._AC_SL1500_.jpg",
       "asin": "B00939I7EK",
       "badge": "Amazon's Choice",
@@ -478,10 +478,10 @@
         "EASY TO CLEAN"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:40:27.848Z",
+      "lastUpdated": "2026-01-16T23:11:05.264Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:40:27.848Z"
+      "priceUpdated": "2026-01-16T23:11:05.264Z"
     },
     {
       "id": 22,
@@ -490,7 +490,7 @@
       "price": 25.99,
       "listPrice": 49.99,
       "rating": 4.5,
-      "reviews": 124857,
+      "reviews": 124905,
       "image": "https://m.media-amazon.com/images/I/81GZZyozv-L._AC_SL1500_.jpg",
       "asin": "B0764HS4SL",
       "badge": "Amazon's Choice",
@@ -502,10 +502,10 @@
         "Dishwasher Safe"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:40:44.525Z",
+      "lastUpdated": "2026-01-16T23:11:14.466Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:40:44.525Z"
+      "priceUpdated": "2026-01-16T23:11:14.466Z"
     },
     {
       "id": 23,
@@ -514,7 +514,7 @@
       "price": 179.99,
       "listPrice": 49.99,
       "rating": 4.3,
-      "reviews": 2182,
+      "reviews": 2184,
       "image": "https://m.media-amazon.com/images/I/61Ww8eS2w8L._SL1500_.jpg",
       "asin": "B07Z4HDZGW",
       "affiliate": "https://amazon.com/dp/B07Z4HDZGW?tag=candidfinding-20",
@@ -525,10 +525,10 @@
         "NON-INVASIVE & HANDS-FREE TREATMENT"
       ],
       "description": "",
-      "lastUpdated": "2026-01-14T14:40:02.027Z",
+      "lastUpdated": "2026-01-16T23:11:24.630Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-14T14:40:02.027Z"
+      "priceUpdated": "2026-01-16T23:11:24.630Z"
     },
     {
       "id": 24,
@@ -537,7 +537,7 @@
       "price": 35,
       "listPrice": 40,
       "rating": 4.7,
-      "reviews": 90280,
+      "reviews": 90420,
       "image": "https://m.media-amazon.com/images/I/51-U5dEbEBL._AC_SL1500_.jpg",
       "asin": "B0CP9YB3Q4",
       "affiliate": "https://amazon.com/dp/B0CP9YB3Q4?tag=candidfinding-20",
@@ -548,10 +548,10 @@
         "LIFETIME WARRANTY"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:41:18.860Z",
+      "lastUpdated": "2026-01-16T23:11:36.821Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:41:18.860Z"
+      "priceUpdated": "2026-01-16T23:11:36.821Z"
     },
     {
       "id": 25,
@@ -561,7 +561,7 @@
       "price": 8.99,
       "listPrice": 9.89,
       "rating": 4.7,
-      "reviews": 110782,
+      "reviews": 110828,
       "image": "https://m.media-amazon.com/images/I/71eiII6MS-L._AC_SL1500_.jpg",
       "asin": "B06X9NQ8GX",
       "affiliate": "https://amazon.com/dp/B06X9NQ8GX?tag=candidfinding-20",
@@ -571,10 +571,10 @@
         "Battery operated"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:41:45.868Z",
+      "lastUpdated": "2026-01-16T23:11:45.150Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:41:45.868Z"
+      "priceUpdated": "2026-01-16T23:11:45.150Z"
     },
     {
       "id": 26,
@@ -584,7 +584,7 @@
       "price": 19,
       "listPrice": 19,
       "rating": 4.5,
-      "reviews": 32726,
+      "reviews": 32809,
       "image": "https://m.media-amazon.com/images/I/51Qiwz3ZiaL._SL1000_.jpg",
       "asin": "B0B2RM68G2",
       "affiliate": "https://amazon.com/dp/B0B2RM68G2?tag=candidfinding-20",
@@ -597,10 +597,10 @@
         "BECOMES TRANSPARENT"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:42:19.175Z",
+      "lastUpdated": "2026-01-16T23:11:54.801Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:42:19.175Z"
+      "priceUpdated": "2026-01-16T23:11:54.801Z"
     },
     {
       "id": 27,
@@ -610,7 +610,7 @@
       "price": 7.18,
       "listPrice": 9.99,
       "rating": 4.7,
-      "reviews": 192974,
+      "reviews": 192566,
       "image": "https://m.media-amazon.com/images/I/81jDqbPAOwL._SL1500_.jpg",
       "asin": "B07MFMWFYL",
       "affiliate": "https://amazon.com/dp/B07MFMWFYL?tag=candidfinding-20",
@@ -620,10 +620,10 @@
         "Moisturizing"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:42:33.459Z",
+      "lastUpdated": "2026-01-16T23:12:09.816Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:42:33.459Z"
+      "priceUpdated": "2026-01-16T23:12:09.816Z"
     },
     {
       "id": 28,
@@ -633,7 +633,7 @@
       "price": 18.9,
       "listPrice": 31,
       "rating": 4.6,
-      "reviews": 21745,
+      "reviews": 21870,
       "image": "https://m.media-amazon.com/images/I/71Mcspt-6AL._AC_SL1500_.jpg",
       "asin": "B09V7Z4TJG",
       "affiliate": "https://amazon.com/dp/B09V7Z4TJG?tag=candidfinding-20",
@@ -644,10 +644,10 @@
         "Transformative Results"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:42:48.112Z",
+      "lastUpdated": "2026-01-16T23:12:18.139Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:42:48.112Z"
+      "priceUpdated": "2026-01-16T23:12:18.139Z"
     },
     {
       "id": 29,
@@ -657,7 +657,7 @@
       "price": 9.97,
       "listPrice": 10.99,
       "rating": 4.7,
-      "reviews": 59411,
+      "reviews": 59533,
       "image": "https://m.media-amazon.com/images/I/51lP01--ejL._SL1000_.jpg",
       "asin": "B08KT2Z93D",
       "affiliate": "https://amazon.com/dp/B08KT2Z93D?tag=candidfinding-20",
@@ -668,10 +668,10 @@
         "VANILLA CASHMERE"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:43:00.701Z",
+      "lastUpdated": "2026-01-16T23:12:32.267Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:43:00.701Z"
+      "priceUpdated": "2026-01-16T23:12:32.267Z"
     },
     {
       "id": 30,
@@ -681,7 +681,7 @@
       "price": 15.98,
       "listPrice": 17.99,
       "rating": 4.3,
-      "reviews": 117468,
+      "reviews": 117492,
       "image": "https://m.media-amazon.com/images/I/71wBvSEthGL._AC_SL1500_.jpg",
       "asin": "B016NA9Y4S",
       "affiliate": "https://amazon.com/dp/B016NA9Y4S?tag=candidfinding-20",
@@ -692,10 +692,10 @@
         "Ultimate All-Weather Performance"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:43:12.770Z",
+      "lastUpdated": "2026-01-16T23:12:42.232Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:43:12.770Z"
+      "priceUpdated": "2026-01-16T23:12:42.232Z"
     },
     {
       "id": 31,
@@ -705,7 +705,7 @@
       "price": 9.99,
       "listPrice": 14.99,
       "rating": 4.5,
-      "reviews": 23156,
+      "reviews": 23219,
       "image": "https://m.media-amazon.com/images/I/81Q62aaTOpL._AC_SL1500_.jpg",
       "asin": "B0C1Y8Z6VT",
       "affiliate": "https://amazon.com/dp/B0C1Y8Z6VT?tag=candidfinding-20",
@@ -717,10 +717,10 @@
         "360° FREE ROTATION"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:43:27.810Z",
+      "lastUpdated": "2026-01-16T23:12:54.035Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:43:27.810Z"
+      "priceUpdated": "2026-01-16T23:12:54.035Z"
     },
     {
       "id": 32,
@@ -730,7 +730,7 @@
       "price": 26.99,
       "listPrice": 29.97,
       "rating": 4.8,
-      "reviews": 50977,
+      "reviews": 50997,
       "image": "https://m.media-amazon.com/images/I/71F9UTMf+jL._AC_SL1500_.jpg",
       "asin": "B00J00X5YO",
       "affiliate": "https://amazon.com/dp/B00J00X5YO?tag=candidfinding-20",
@@ -740,10 +740,10 @@
         "Meets ILSAC GF-6 standards"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:43:39.905Z",
+      "lastUpdated": "2026-01-16T23:13:03.416Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:43:39.905Z"
+      "priceUpdated": "2026-01-16T23:13:03.416Z"
     },
     {
       "id": 33,
@@ -753,7 +753,7 @@
       "price": 14.54,
       "listPrice": 14.54,
       "rating": 4.8,
-      "reviews": 122062,
+      "reviews": 122124,
       "image": "https://m.media-amazon.com/images/I/61F-Urx8ohL._AC_SL1500_.jpg",
       "asin": "B01LR5RO5U",
       "affiliate": "https://amazon.com/dp/B01LR5RO5U?tag=candidfinding-20",
@@ -764,10 +764,10 @@
         "Neoprene texture"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:43:51.249Z",
+      "lastUpdated": "2026-01-16T23:13:15.070Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:43:51.249Z"
+      "priceUpdated": "2026-01-16T23:13:15.070Z"
     },
     {
       "id": 34,
@@ -777,7 +777,7 @@
       "price": 18.1,
       "listPrice": 21.58,
       "rating": 4.6,
-      "reviews": 66031,
+      "reviews": 66058,
       "image": "https://m.media-amazon.com/images/I/71FCPWGzv+L._AC_SL1500_.jpg",
       "asin": "B01LP0U5X0",
       "affiliate": "https://amazon.com/dp/B01LP0U5X0?tag=candidfinding-20",
@@ -787,10 +787,10 @@
         "Wipes clean easily"
       ],
       "description": "",
-      "lastUpdated": "2026-01-15T17:44:06.541Z",
+      "lastUpdated": "2026-01-16T23:13:23.568Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:44:06.541Z"
+      "priceUpdated": "2026-01-16T23:13:23.568Z"
     },
     {
       "id": 35,
@@ -800,16 +800,16 @@
       "price": 14.98,
       "listPrice": 20,
       "rating": 4.7,
-      "reviews": 31862,
+      "reviews": 32489,
       "image": "https://m.media-amazon.com/images/I/71gUOhERuDL._SL1500_.jpg",
       "asin": "1668236516",
       "affiliate": "https://amazon.com/dp/1668236516?tag=candidfinding-20",
       "features": [],
       "description": "",
-      "lastUpdated": "2026-01-15T17:44:20.121Z",
+      "lastUpdated": "2026-01-16T23:13:34.823Z",
       "lastChecked": "2026-01-03T11:01:19.179Z",
       "available": true,
-      "priceUpdated": "2026-01-15T17:44:20.121Z"
+      "priceUpdated": "2026-01-16T23:13:34.823Z"
     }
   ],
   "metadata": {
