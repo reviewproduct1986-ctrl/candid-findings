@@ -268,7 +268,10 @@ function ProductSection({ product, index }) {
 
       <div className="mb-6 min-h-[80px]">
         <p className="text-3xl font-bold text-violet-600">
-        <span>Price ${productData.price.toFixed(2)}</span>
+          <span>Price ${productData.price.toFixed(2)}</span>
+          <p className="text-[10px] text-slate-500">
+            Price may vary on Amazon
+          </p>
         </p>
       </div>
 

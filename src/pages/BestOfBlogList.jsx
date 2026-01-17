@@ -120,23 +120,6 @@ export default function BestOfBlogList() {
                 </div>
               </div>
             )}
-
-            {/* No Results */}
-            {filteredPosts.length === 0 && (
-              <div className="text-center py-20">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">No selections found</h3>
-                <p className="text-slate-600 mb-6">
-                  Try selecting a different category
-                </p>
-                <button
-                  onClick={() => setSelectedCategory('All')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-                >
-                  View All Selections
-                </button>
-              </div>
-            )}
           </>
         )}
       </div>
