@@ -9,8 +9,6 @@ const BestOfBlogList = lazy(() => import('./pages/BestOfBlogList.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService.jsx'));
 const AboutPage = lazy(() => import('./pages/AboutPage.jsx'));
-const BuyingGuidePage = lazy(() => import('./pages/BuyingGuidePage.jsx'));
-const BuyingGuidesList = lazy(() => import('./pages/BuyingGuidesList.jsx'));
 const BestOfPost = lazy(() => import('./pages/BestOfPost.jsx'));
 
 // Loading component for lazy routes
@@ -58,22 +56,6 @@ export default function App() {
           element={
             <Suspense fallback={<RouteLoader />}>
               <BestOfPost />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/guides" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BuyingGuidesList />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/guides/:slug" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BuyingGuidePage />
             </Suspense>
           } 
         />

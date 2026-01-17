@@ -5,6 +5,9 @@ import CardCarousel from './CardCarousel';
 import { formatCardDate } from '../utils/dateFormat';
 
 export default function GuideCard({ post, products, offset }) {
+  const asins = post.products.map(item => item.asin);
+  const productCount = Object.keys(products).length;
+
   return (
     <Link
       to={`/best/${post.slug}`}
@@ -12,7 +15,7 @@ export default function GuideCard({ post, products, offset }) {
     >
       {/* Product Carousel */}
       <CardCarousel 
-        productAsins={post.productAsins || []} 
+        asins={asins || []} 
         allProducts={products}
         offset={offset}
       />
@@ -41,11 +44,8 @@ export default function GuideCard({ post, products, offset }) {
                 <Calendar size={10} />
                 <span>{formatCardDate(post.publishedDate)}</span>
               </div>
-              {(post.productCount > 0 || post.estimatedReadTime) && <span>•</span>}
+              {(productCount > 0 || post.estimatedReadTime)}
             </>
-          )}
-          {post.productCount > 0 && (
-            <span>{post.productCount} items</span>
           )}
           {post.estimatedReadTime && (
             <span>• {post.estimatedReadTime}</span>

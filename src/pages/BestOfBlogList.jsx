@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ChevronRight, TrendingUp } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import FeaturedCard from '../components/FeaturedCard';
 import GuideCard from '../components/GuideCard';
-import ComingSoonCard from '../components/ComingSoonCard';
 import { addReadTimesToPosts } from '../utils/readTime';
 
 export default function BestOfBlogList() {
@@ -44,10 +42,6 @@ export default function BestOfBlogList() {
 
   // Separate published and coming soon
   const publishedPosts = filteredPosts.filter(p => !p.comingSoon);
-  const comingSoonPosts = filteredPosts.filter(p => p.comingSoon);
-
-  // Separate featured from regular published posts
-  const featuredPosts = publishedPosts.filter(p => p.featured);
   const regularPosts = publishedPosts.filter(p => !p.featured);
 
   return (
@@ -122,42 +116,15 @@ export default function BestOfBlogList() {
           </div>
         ) : (
           <>
-            {/* Featured Guides */}
-            {featuredPosts.length > 0 && (
-              <div className="mb-12">
-                <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="text-blue-600" size={20} />
-                  <h2 className="text-2xl font-bold text-slate-900">Featured Selections</h2>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {featuredPosts.map((post, index) => (
-                    <FeaturedCard key={post.id} post={post} products={products} offset={index} />
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* All Guides */}
             {regularPosts.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-xl font-bold text-slate-900 mb-4">
-                  {featuredPosts.length > 0 ? 'More Selections' : 'All Selections'}
+                  {selectedCategory == 'All' ? 'All Selecttion' : selectedCategory}
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {regularPosts.map((post, index) => (
-                    <GuideCard key={post.id} post={post} products={products} offset={index + featuredPosts.length} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Coming Soon */}
-            {comingSoonPosts.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold text-slate-900 mb-4">Coming Soon</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {comingSoonPosts.map((post) => (
-                    <ComingSoonCard key={post.id} post={post} />
+                    <GuideCard key={post.slug} post={post} products={products} offset={index + regularPosts.length} />
                   ))}
                 </div>
               </div>

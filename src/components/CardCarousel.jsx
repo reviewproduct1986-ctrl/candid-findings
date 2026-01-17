@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-export default function CardCarousel({ productAsins, allProducts, offset = 0 }) {
+export default function CardCarousel({ asins, allProducts, offset = 0 }) {
   // Start at different index based on offset
-  const [currentIndex, setCurrentIndex] = useState(offset % (productAsins?.length || 1));
+  const [currentIndex, setCurrentIndex] = useState(offset % (asins?.length || 1));
 
   // Get products for this card
-  const cardProducts = productAsins
+  const cardProducts = asins
     .map(asin => allProducts.find(p => p.asin === asin))
     .filter(Boolean); // Remove any not found
 
