@@ -13,6 +13,7 @@ import ProsCons from '../components/review/ProsCons';
 import FAQSection from '../components/review/FAQSection';
 import ProductCard from '../components/ProductCard';
 import { markdownComponents } from '../utils/markdownComponents';
+import { calculateReadTime } from '../utils/readTime';
 import { generateFAQSchema, generateReviewSchema } from '../utils/schemaGenerators';
 
 export default function ReviewPage() {
@@ -105,15 +106,6 @@ export default function ReviewPage() {
     setMeta('meta[property="og:image"]', 'property', 'og:image', product.image);
     setMeta('meta[property="og:url"]', 'property', 'og:url', `https://candidfindings.com/reviews/${slug}`);
   }, [blog, product, slug]);
-
-  // Calculates read time based on 150 words/minute
-  const calculateReadTime = (content) => {
-    if (!content) return 0;
-    const wordsPerMinute = 150;
-    const wordCount = content.trim().split(/\s+/).length;
-    const minutes = Math.ceil(wordCount / wordsPerMinute);
-    return minutes;
-  };
 
   const readTime = useMemo(() => calculateReadTime(blog?.content), [blog?.content]);
 

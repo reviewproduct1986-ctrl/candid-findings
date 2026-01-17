@@ -247,11 +247,21 @@ function ProductSection({ product, index }) {
 
   return (
     <div className="border-t border-slate-200 pt-8">
-      {/* Product Number */}
-      <div className="flex items-center gap-3 mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">
+      {/* Product Title */}
+      <div className="mb-4">
+        <h2 className="text-2xl font-bold text-slate-900 mb-3">
           {`${index + 1}. ${productData.title}`}
         </h2>
+        
+        {/* Price - Right below title for maximum visibility */}
+        <div className="inline-flex items-baseline gap-2">
+          <span className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+            ${productData.price.toFixed(2)}
+          </span>
+        </div>
+        <p className="text-xs text-slate-500 mt-1">
+          Price may vary on Amazon
+        </p>
       </div>
 
       {/* Product Image */}
@@ -264,15 +274,6 @@ function ProductSection({ product, index }) {
             loading="lazy"
           />
         </div>
-      </div>
-
-      <div className="mb-6 min-h-[80px]">
-        <p className="text-3xl font-bold text-violet-600">
-          <span>Price ${productData.price.toFixed(2)}</span>
-          <p className="text-[10px] text-slate-500">
-            Price may vary on Amazon
-          </p>
-        </p>
       </div>
 
       {/* Amazon Buttons */}

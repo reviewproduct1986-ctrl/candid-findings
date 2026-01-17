@@ -44,6 +44,23 @@ export default function BestOfBlogList() {
   const publishedPosts = filteredPosts.filter(p => !p.comingSoon);
   const regularPosts = publishedPosts.filter(p => !p.featured);
 
+  const getHeroText = () => {
+  if (selectedCategory === 'All') {
+    return 'Handpicked product recommendations across all categories';
+  }
+  
+  // Find first post in selected category
+  const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+  
+  // Use metaDescription from post
+  if (categoryPost?.metaDescription) {
+    return categoryPost.metaDescription;
+  }
+  
+  // Fallback for missing metaDescription
+  return `Discover our best ${selectedCategory.toLowerCase()} recommendations`;
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
       <Helmet>
@@ -57,15 +74,35 @@ export default function BestOfBlogList() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 text-white py-8 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* NEW: Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+            backgroundSize: '32px 32px'
+          }}></div>
+        </div>
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold mb-2">
               Best <span className="text-cyan-200">Selections</span>
             </h1>
-            <p className="text-sm sm:text-base text-blue-50 opacity-90">
-              Handpicked product recommendations from experts
+            <p className="text-sm sm:text-base text-blue-50 mb-3">
+              {getHeroText()}
             </p>
           </div>
+        </div>
+        <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-blue-100">
+          <span>
+            <strong className="text-white">{publishedPosts.length}</strong> {selectedCategory === 'All' ? 'Guides' : `${selectedCategory} Guides`}
+          </span>
+          <span>•</span>
+          <span>
+            <strong className="text-white">{publishedPosts.reduce((sum, post) => sum + (post.productCount || post.products?.length || 0), 0)}</strong> Products
+          </span>
+          <span>•</span>
+          <span>
+            <strong className="text-white">100%</strong> Unbiased
+          </span>
         </div>
       </div>
 
