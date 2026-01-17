@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ChevronRight } from 'lucide-react';
-import Header from '../components/Header';
+import ReviewHeader from '../components/review/ReviewHeader';
 import Footer from '../components/Footer';
 import GuideCard from '../components/GuideCard';
 import { addReadTimesToPosts } from '../utils/readTime';
@@ -53,13 +53,7 @@ export default function BestOfBlogList() {
       </Helmet>
 
       {/* Header */}
-      <Header
-        searchTerm=""
-        setSearchTerm={() => {}}
-        categories={[]}
-        selectedCategory=""
-        setSelectedCategory={() => {}}
-      />
+      <ReviewHeader />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 text-white py-8 relative overflow-hidden">
@@ -119,9 +113,6 @@ export default function BestOfBlogList() {
             {/* All Guides */}
             {regularPosts.length > 0 && (
               <div className="mb-12">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">
-                  {selectedCategory == 'All' ? 'All Selecttion' : selectedCategory}
-                </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {regularPosts.map((post, index) => (
                     <GuideCard key={post.slug} post={post} products={products} offset={index + regularPosts.length} />

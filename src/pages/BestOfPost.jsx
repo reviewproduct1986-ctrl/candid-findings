@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Calendar, Tag, ChevronRight, ArrowRight, Clock } from 'lucide-react';
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import ReviewHeader from '../components/review/ReviewHeader';
 import { markdownComponents } from '../utils/markdownComponents';
 import { formatDate } from '../utils/dateFormat';
 import { calculateReadTime } from '../utils/readTime';
@@ -132,13 +132,7 @@ export default function BestOfPost() {
       </Helmet>
 
       {/* Header */}
-      <Header
-        searchTerm=""
-        setSearchTerm={() => {}}
-        categories={[]}
-        selectedCategory=""
-        setSelectedCategory={() => {}}
-      />
+      <ReviewHeader />
 
       {/* Blog Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
