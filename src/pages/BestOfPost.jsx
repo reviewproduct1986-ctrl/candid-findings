@@ -137,12 +137,12 @@ export default function BestOfPost() {
       {/* Blog Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-sm text-slate-600 mb-6">
-          <Link to="/" className="hover:text-blue-600 transition-colors flex items-center">Home</Link>
+        <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-6 overflow-hidden">
+          <Link to="/" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Home</Link>
           <ChevronRight size={14} className="flex-shrink-0" />
-          <Link to="/best" className="hover:text-blue-600 transition-colors flex items-center">Best Selections</Link>
-          <ChevronRight size={14} className="flex-shrink-0" />
-          <span className="text-blue-600 font-medium truncate flex items-center">{blog.title}</span>
+          <Link to="/best" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Best Selections</Link>
+          <ChevronRight size={14} className="flex-shrink-0 hidden sm:block" />
+          <span className="text-blue-600 font-medium truncate flex items-center min-w-0 sm:max-w-none">{blog.title}</span>
         </nav>
 
         {/* Article Header */}
@@ -160,10 +160,10 @@ export default function BestOfPost() {
             {blog.title}
           </h1>
 
-          <div className="flex items-center gap-4 text-slate-600 text-sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 text-slate-600 text-sm">
             {blog.publishedDate && (
               <div className="flex items-center gap-2">
-                <Calendar size={16} />
+                <Calendar size={16} className="flex-shrink-0" />
                 <time dateTime={blog.publishedDate}>
                   {formatDate(blog.publishedDate, 'medium')}
                 </time>
@@ -176,17 +176,19 @@ export default function BestOfPost() {
             )}
             {readTime && (
               <>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-2">
-                  <Clock size={16} />
+                  <Clock size={16} className="flex-shrink-0" />
                   <span>{readTime}</span>
                 </div>
               </>
             )}
             {productsWithDetails.length > 0 && (
               <>
-                <span>•</span>
-                <span>{productsWithDetails.length} products</span>
+                <span className="hidden sm:inline">•</span>
+                <div className="flex items-center gap-2">
+                  <span>{productsWithDetails.length} products</span>
+                </div>
               </>
             )}
           </div>

@@ -44,29 +44,118 @@ export default function BestOfBlogList() {
   const publishedPosts = filteredPosts.filter(p => !p.comingSoon);
   const regularPosts = publishedPosts.filter(p => !p.featured);
 
+  // Get hero text from post metaDescription
   const getHeroText = () => {
-  if (selectedCategory === 'All') {
-    return 'Handpicked product recommendations across all categories';
-  }
-  
-  // Find first post in selected category
-  const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
-  
-  // Use metaDescription from post
-  if (categoryPost?.metaDescription) {
-    return categoryPost.metaDescription;
-  }
-  
-  // Fallback for missing metaDescription
-  return `Discover our best ${selectedCategory.toLowerCase()} recommendations`;
-};
+    if (selectedCategory === 'All') {
+      return 'Handpicked product recommendations across all categories';
+    }
+    
+    // Find first post in selected category
+    const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+    
+    // Use metaDescription from post
+    if (categoryPost?.metaDescription) {
+      return categoryPost.metaDescription;
+    }
+    
+    // Fallback for missing metaDescription
+    return `Discover our best ${selectedCategory.toLowerCase()} recommendations`;
+  };
+
+  // SEO Helper Functions
+  const getMetaDescription = () => {
+    if (selectedCategory === 'All') {
+      return 'Browse our expert product recommendations. Curated selections across all categories to help you find exactly what you need.';
+    }
+    const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+    return categoryPost?.metaDescription || 
+      `Discover the best ${selectedCategory.toLowerCase()} products. Expert recommendations and honest reviews to help you choose wisely.`;
+  };
+
+  const getPageTitle = () => {
+    if (selectedCategory === 'All') {
+      return 'Best Selections - Expert Product Recommendations | CandidFindings';
+    }
+    return `Best ${selectedCategory} Products - Curated Recommendations | CandidFindings`;
+  };
+
+  const getKeywords = () => {
+    const baseKeywords = ['product recommendations', 'best products', 'expert reviews', 'buying guide', 'product comparison'];
+    if (selectedCategory !== 'All') {
+      const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+      if (categoryPost?.keywords) {
+        return [...categoryPost.keywords, ...baseKeywords].join(', ');
+      }
+      return [...baseKeywords, `best ${selectedCategory.toLowerCase()}`].join(', ');
+    }
+    return baseKeywords.join(', ');
+  };
+
+  const getSchemaData = () => ({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: selectedCategory === 'All' ? 'Best Product Selections' : `Best ${selectedCategory} Products`,
+    description: getMetaDescription(),
+    url: 'https://candidfindings.com/best',
+    publisher: {
+      '@type': 'Organization',
+      name: 'CandidFindings',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://candidfindings.com/logo.png'
+      }
+    },
+    numberOfItems: publishedPosts.length,
+    itemListElement: publishedPosts.slice(0, 10).map((post, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `https://candidfindings.com/best/${post.slug}`,
+      name: post.title,
+      description: post.metaDescription
+    }))
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
       <Helmet>
-        <title>Best Selections - Expert Product Recommendations | CandidFindings</title>
-        <meta name="description" content="Browse our expert product recommendations. Curated selections across all categories to help you find exactly what you need." />
+        {/* Basic Meta Tags */}
+        <title>{getPageTitle()}</title>
+        <meta name="description" content={getMetaDescription()} />
         <link rel="canonical" href="https://candidfindings.com/best" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="CandidFindings" />
+        <meta property="og:title" content={
+          selectedCategory === 'All'
+            ? 'Best Selections - Expert Product Recommendations'
+            : `Best ${selectedCategory} Products - Curated Recommendations`
+        } />
+        <meta property="og:description" content={getMetaDescription()} />
+        <meta property="og:url" content="https://candidfindings.com/best" />
+        <meta property="og:image" content="https://candidfindings.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={
+          selectedCategory === 'All'
+            ? 'Best Selections - Expert Product Recommendations'
+            : `Best ${selectedCategory} Products`
+        } />
+        <meta name="twitter:description" content={getMetaDescription()} />
+        <meta name="twitter:image" content="https://candidfindings.com/twitter-card.jpg" />
+        
+        {/* Additional SEO */}
+        <meta name="keywords" content={getKeywords()} />
+        <meta name="author" content="CandidFindings" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify(getSchemaData())}
+        </script>
       </Helmet>
 
       {/* Header */}
@@ -74,14 +163,14 @@ export default function BestOfBlogList() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 text-white py-8 relative overflow-hidden">
-        {/* NEW: Background Pattern */}
+        {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
             backgroundSize: '32px 32px'
           }}></div>
         </div>
-         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold mb-2">
               Best <span className="text-cyan-200">Selections</span>
@@ -108,23 +197,24 @@ export default function BestOfBlogList() {
 
       {/* Breadcrumbs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <nav className="flex items-center gap-2 text-sm text-slate-600">
-          <Link to="/" className="hover:text-violet-600 transition-colors flex items-center">Home</Link>
+        <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+          <Link to="/" className="hover:text-violet-600 transition-colors flex items-center flex-shrink-0">Home</Link>
           <ChevronRight size={14} className="flex-shrink-0" />
-          <span className="text-violet-600 font-medium flex items-center">Best Selections</span>
+          <span className="text-violet-600 font-medium flex items-center flex-shrink-0">Best Selections</span>
         </nav>
       </div>
 
       {/* Category Filter */}
       {categories.length > 1 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-transparent">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-transparent snap-x snap-mandatory -mx-4 px-4">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
+                style={{ minWidth: 'max-content' }}
                 className={`
-                  px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all text-sm
+                  px-3 sm:px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all text-xs sm:text-sm flex-shrink-0 snap-start
                   ${selectedCategory === category
                     ? 'bg-gradient-to-r from-blue-500 to-teal-600 text-white shadow-lg'
                     : 'bg-white text-slate-700 hover:bg-blue-50 border border-slate-200 hover:border-blue-300'

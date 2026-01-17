@@ -37,18 +37,21 @@ export default function GuideCard({ post, products, offset }) {
         </p>
 
         {/* Meta Info */}
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2 text-xs text-slate-500">
           {post.publishedDate && (
             <>
               <div className="flex items-center gap-1">
-                <Calendar size={10} />
+                <Calendar size={10} className="flex-shrink-0" />
                 <span>{formatCardDate(post.publishedDate)}</span>
               </div>
               {(productCount > 0 || post.estimatedReadTime)}
             </>
           )}
           {post.estimatedReadTime && (
-            <span>• {post.estimatedReadTime}</span>
+             <>
+              <span className="hidden sm:inline">•</span>
+              <span>{post.estimatedReadTime}</span>
+            </>
           )}
         </div>
       </div>
