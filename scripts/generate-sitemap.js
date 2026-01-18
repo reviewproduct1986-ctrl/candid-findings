@@ -151,17 +151,6 @@ function generateSitemap(blogs, bestOfBlogs, products) {
     });
   }
 
-  // Add Blog directory
-  xml += `  <!-- Blog Directory -->
-  <url>
-    <loc>${SITE_URL}/reviews</loc>
-    <lastmod>${now}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-`;
-
   // Add blog posts
   const blogPosts = blogs?.posts || [];
   if (blogPosts.length > 0) {
