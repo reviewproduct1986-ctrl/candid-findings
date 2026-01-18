@@ -102,7 +102,7 @@ export default function BestOfBlogList() {
       name: 'CandidFindings',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://candidfindings.com/logo.png'
+        url: 'https://candidfindings.com/favicon.png'
       }
     },
     numberOfItems: publishedPosts.length,
