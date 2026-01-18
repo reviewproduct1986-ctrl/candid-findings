@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import StarRating from './StarRating';
-import QRButton from '../QRButton';
+import CallToAction from '../CallToAction';
 
 export default function StickyBuyButton({ product }) {
   const hasDiscount = product?.listPrice && product.listPrice > product.price;
@@ -54,28 +54,7 @@ export default function StickyBuyButton({ product }) {
             </div>
           </div>
 
-          {/* Desktop: Amazon Button + QR Button */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <a
-              href={product.affiliate}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleClick}
-              className="flex-shrink-0 bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 px-8 rounded-xl font-bold text-base hover:shadow-lg transition-all flex items-center gap-2"
-            >
-              <ShoppingCart size={20} />
-              View on Amazon
-            </a>
-
-            {/* QR Button - Desktop Only */}
-              <QRButton
-                productUrl={product.affiliate}
-                productTitle={product.title}
-                productId={product.id}
-                productCategory={product.category}
-                variant="sticky"
-              />
-          </div>
+          <CallToAction product={product} page='StickyButton' />
         </div>
 
         {/* Mobile */}
@@ -87,8 +66,8 @@ export default function StickyBuyButton({ product }) {
             onClick={handleClick}
             className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 px-6 rounded-xl font-bold text-base hover:shadow-lg transition-all flex items-center justify-center gap-2"
           >
-            <ShoppingCart size={20} />
             View on Amazon
+            <ArrowRight size={16} className="hover:translate-x-1 transition-transform flex-shrink-0" />
           </a>
         </div>
 

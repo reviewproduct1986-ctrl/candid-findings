@@ -1,7 +1,14 @@
 import React from 'react';
 import StarRating from './StarRating';
 
-export default function InfoCards({ product, hasDiscount, savings, discountPercent }) {
+export default function InfoCards({ product }) {
+  // Calculate discount
+  const hasDiscount = product?.listPrice && product.listPrice > product.price;
+  const discountPercent = hasDiscount 
+    ? Math.round(((product.listPrice - product.price) / product.listPrice) * 100)
+    : 0;
+  const savings = hasDiscount ? product.listPrice - product.price : 0;
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
       {/* Rating Card */}

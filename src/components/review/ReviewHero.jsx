@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoCards from './InfoCards';
 
-export default function ReviewHero({ product, hasDiscount, savings, discountPercent }) {
+export default function ReviewHero({ product }) {
   return (
     <div className="mb-8">
       {/* Badges */}
@@ -22,12 +22,7 @@ export default function ReviewHero({ product, hasDiscount, savings, discountPerc
       </h1>
 
       {/* Info Cards */}
-      <InfoCards 
-        product={product}
-        hasDiscount={hasDiscount}
-        savings={savings}
-        discountPercent={discountPercent}
-      />
+      <InfoCards product={product} />
     </div>
   );
 }

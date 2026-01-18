@@ -29,7 +29,20 @@ function loadProducts() {
   }
 
   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  return data.products || data;
+  const allProducts = data.products || data;
+  
+  // Filter out unavailable products
+  const availableProducts = allProducts.filter(product => {
+    // If 'available' field doesn't exist, assume product is available
+    return product.available !== false;
+  });
+  
+  const unavailableCount = allProducts.length - availableProducts.length;
+  if (unavailableCount > 0) {
+    console.log(`⏭️  Filtered out ${unavailableCount} unavailable product(s)`);
+  }
+  
+  return availableProducts;
 }
 
 function loadExistingBestOfBlogs() {
@@ -345,11 +358,12 @@ async function main() {
     console.log('   - Avoids duplicate categories');
     console.log('   - Generates titles, slugs, metadata');
     console.log('   - Leaves content empty for AI generation');
+    console.log('   - Filters out unavailable products');
     console.log('');
 
-    // Load products
+    // Load products (automatically filters out unavailable ones)
     const products = loadProducts();
-    console.log(`📦 Loaded ${products.length} products`);
+    console.log(`📦 Loaded ${products.length} available products`);
 
     // Load existing best-of posts
     const existingBlogs = loadExistingBestOfBlogs();

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Calendar, Tag, ChevronRight, ArrowRight, Clock } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Footer from '../components/Footer';
 import ReviewHeader from '../components/review/ReviewHeader';
-import { markdownComponents } from '../utils/markdownComponents';
 import { formatDate } from '../utils/dateFormat';
 import { calculateReadTime } from '../utils/readTime';
-import QRButton from '../components/QRButton';
+import ProductSection from '../components/ProductSection';
 
 export default function BestOfPost() {
   const { slug } = useParams();
@@ -92,12 +89,10 @@ export default function BestOfPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-slate-600 font-medium">Loading...</p>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -106,7 +101,7 @@ export default function BestOfPost() {
   if (!blog) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pb-24">
       <Helmet>
         <title>{blog.title} | CandidFindings</title>
         <meta name="description" content={blog.metaDescription} />
@@ -134,10 +129,10 @@ export default function BestOfPost() {
       {/* Header */}
       <ReviewHeader />
 
-      {/* Blog Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Main Content */}
+      <main className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Breadcrumbs */}
-        <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-6 overflow-hidden">
+        <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-6">
           <Link to="/" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Home</Link>
           <ChevronRight size={14} className="flex-shrink-0" />
           <Link to="/best" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Best Selections</Link>
@@ -145,182 +140,102 @@ export default function BestOfPost() {
           <span className="text-blue-600 font-medium truncate flex items-center min-w-0 sm:max-w-none">{blog.title}</span>
         </nav>
 
-        {/* Article Header */}
-        <header className="mb-12">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {blog.category && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                <Tag size={14} />
-                {blog.category}
-              </span>
-            )}
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-            {blog.title}
-          </h1>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 text-slate-600 text-sm">
-            {blog.publishedDate && (
-              <div className="flex items-center gap-2">
-                <Calendar size={16} className="flex-shrink-0" />
-                <time dateTime={blog.publishedDate}>
-                  {formatDate(blog.publishedDate, 'medium')}
-                </time>
-              </div>
-            )}
-            {blog.updatedDate && blog.updatedDate !== blog.publishedDate && (
-              <div className="text-slate-500">
-                Updated {formatDate(blog.updatedDate, 'medium')}
-              </div>
-            )}
-            {readTime && (
-              <>
-                <span className="hidden sm:inline">•</span>
-                <div className="flex items-center gap-2">
-                  <Clock size={16} className="flex-shrink-0" />
-                  <span>{readTime}</span>
-                </div>
-              </>
-            )}
-            {productsWithDetails.length > 0 && (
-              <>
-                <span className="hidden sm:inline">•</span>
-                <div className="flex items-center gap-2">
-                  <span>{productsWithDetails.length} products</span>
-                </div>
-              </>
-            )}
-          </div>
-
-          {blog.keywords && blog.keywords.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-6">
-              {blog.keywords.slice(0, 5).map((keyword, idx) => (
-                <span 
-                  key={idx}
-                  className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium"
-                >
-                  {keyword}
+        {/* Article Container - Matching Review Page */}
+        <article className="bg-white rounded-3xl shadow-xl p-6 md:p-12">
+          {/* Article Header */}
+          <header className="mb-8">
+            {/* Category Badge */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {blog.category && (
+                <span className="px-4 py-1.5 bg-violet-100 text-violet-700 text-sm font-bold rounded-full">
+                  {blog.category}
                 </span>
-              ))}
+              )}
+              {blog.featured && (
+                <span className="px-4 py-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold rounded-full">
+                  ⭐ Featured
+                </span>
+              )}
             </div>
-          )}
-        </header>
 
-        {/* Products Section */}
-        <div className="space-y-16 mb-16">
-          {productsWithDetails.map((product, index) => (
-            <ProductSection 
-              key={product.asin} 
-              product={product} 
-              index={index}
-            />
-          ))}
-        </div>
+            {/* Title */}
+            <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-3 leading-tight">
+              {blog.title}
+            </h1>
 
-        {/* Back to Top */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
-          >
-            Back to Top ↑
-          </button>
-        </div>
-      </article>
+            {/* Meta Description */}
+            {blog.metaDescription && (
+              <p className="text-lg text-slate-600 mb-6">
+                {blog.metaDescription}
+              </p>
+            )}
+          </header>
+
+          {/* Info Bar - Matching Review Page */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-slate-50 rounded-lg mb-8 border border-slate-200">
+            {blog.publishedDate && (
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="text-slate-500">📝 Published:</span>
+                <span className="font-medium text-slate-700">
+                  {formatDate(blog.publishedDate, 'medium')}
+                </span>
+              </div>
+            )}
+            
+            {readTime && (
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="text-slate-500">⏱️ Read time:</span>
+                <span className="font-medium text-slate-700">
+                  {readTime}
+                </span>
+              </div>
+            )}
+            
+            {productsWithDetails.length > 0 && (
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="text-slate-500">🛍️ Products:</span>
+                <span className="font-medium text-slate-700">
+                  {productsWithDetails.length} items
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Products Section */}
+          <div className="space-y-12">
+            {productsWithDetails.map((product, index) => (
+              <ProductSection 
+                key={product.asin} 
+                product={product} 
+                index={index}
+              />
+            ))}
+          </div>
+
+          {/* Back to Top */}
+          <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            >
+              Back to Top ↑
+            </button>
+          </div>
+        </article>
+      </main>
 
       {/* Footer */}
       <Footer />
-    </div>
-  );
-}
 
-// Product Section Component
-function ProductSection({ product, index }) {
-  if (!product.productData) {
-    return (
-      <div className="text-center py-8 text-slate-500">
-        Product data not found for ASIN: {product.asin}
-      </div>
-    );
-  }
-
-  const productData = product.productData;
-
-  return (
-    <div className="border-t border-slate-200 pt-8">
-      {/* Product Title */}
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold text-slate-900 mb-3">
-          {`${index + 1}. ${productData.title}`}
-        </h2>
-        
-        {/* Price - Right below title for maximum visibility */}
-        <div className="inline-flex items-baseline gap-2">
-          <span className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-            ${productData.price.toFixed(2)}
-          </span>
-        </div>
-        <p className="text-xs text-slate-500 mt-1">
-          Price may vary on Amazon
-        </p>
-      </div>
-
-      {/* Product Image */}
-      <div className="my-6 flex justify-center">
-        <div className="max-w-sm w-full">
-          <img 
-            src={productData.image} 
-            alt={productData.title}
-            className="w-full h-auto rounded-lg shadow-md"
-            loading="lazy"
-          />
-        </div>
-      </div>
-
-      {/* Amazon Buttons */}
-      <div className="flex justify-center gap-2 my-6">
-        {/* View on Amazon Button */}
-        <a
-          href={productData.affiliate}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => {
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'affiliate_click', {
-                event_category: 'Affiliate',
-                event_label: productData.title,
-                page_from: 'blog post'
-              });
-            }
-          }}
-          className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-2.5 px-4 rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-violet-200 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap"
-        >
-          <span>View on Amazon</span>
-          <ArrowRight size={14} className="hover:translate-x-1 transition-transform flex-shrink-0" />
-        </a>
-
-        {/* QR Code Button */}
-        <QRButton
-          productUrl={productData.affiliate}
-          productTitle={productData.title}
-          productId={productData.id}
-          productCategory={productData.category}
-          variant="icon"
-        />
-      </div>
-
-      {/* Product Content */}
-      {product.content && (
-        <div className="prose prose-lg prose-slate max-w-none">
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]}
-            components={markdownComponents}
-          >
-            {product.content}
-          </ReactMarkdown>
-        </div>
-      )}
+      {/* Custom Styles - Matching Review Page */}
+      <style>{`
+        html { scroll-padding-top: 2rem; }
+        .prose img {
+          margin: 2rem auto;
+          border-radius: 1rem;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+      `}</style>
     </div>
   );
 }

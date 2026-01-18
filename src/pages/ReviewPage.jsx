@@ -15,6 +15,7 @@ import ProductCard from '../components/ProductCard';
 import { markdownComponents } from '../utils/markdownComponents';
 import { calculateReadTime } from '../utils/readTime';
 import { generateFAQSchema, generateReviewSchema } from '../utils/schemaGenerators';
+import { formatDate } from '../utils/dateFormat';
 
 export default function ReviewPage() {
   const { slug } = useParams();
@@ -30,18 +31,6 @@ export default function ReviewPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
-
-  // Calculate discount
-  const hasDiscount = product?.listPrice && product.listPrice > product.price;
-  const discountPercent = hasDiscount 
-    ? Math.round(((product.listPrice - product.price) / product.listPrice) * 100)
-    : 0;
-  const savings = hasDiscount ? product.listPrice - product.price : 0;
-  
-  const formatDate = (dateString) => {
-    if (!dateString) return null;
-    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  };
   
   // Load data
   useEffect(() => {
@@ -161,14 +150,7 @@ export default function ReviewPage() {
         <Breadcrumbs product={product} />
 
         <article className="bg-white rounded-3xl shadow-xl p-6 md:p-12">
-          <ReviewHero 
-            product={product}
-            blog={blog}
-            hasDiscount={hasDiscount}
-            savings={savings}
-            discountPercent={discountPercent}
-            formatDate={formatDate}
-          />
+          <ReviewHero product={product} />
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-slate-50 rounded-lg mb-6 border border-slate-200">
           <div className="flex items-center gap-1.5 text-xs">

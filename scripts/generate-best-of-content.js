@@ -327,7 +327,7 @@ REMEMBER:
         return await generateProductContent(product, postContext, position, totalProducts, attempt + 1);
       } else {
         console.log('   ❌ Max retries reached. Using placeholder.');
-        return '## Product Information\n\nContent generation failed. Please add content manually.';
+        return '';
       }
     }
 
@@ -338,7 +338,7 @@ REMEMBER:
 
   } catch (error) {
     console.error(`   ❌ Error: ${error.message}`);
-    return '## Product Information\n\nContent generation failed. Please add content manually.';
+    return '';
   }
 }
 
