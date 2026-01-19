@@ -6,6 +6,7 @@ import ReviewHeader from '../components/review/ReviewHeader';
 import Footer from '../components/Footer';
 import GuideCard from '../components/GuideCard';
 import { addReadTimesToPosts } from '../utils/readTime';
+import { generateBestOfListSchema, generateBestOfWebPageSchema, generateBestOfBreadcrumbSchema, generateOrganizationSchema } from '../utils/schemaGenerators';
 
 export default function BestOfBlogList() {
   const [posts, setPosts] = useState([]);
@@ -91,29 +92,12 @@ export default function BestOfBlogList() {
     return baseKeywords.join(', ');
   };
 
-  const getSchemaData = () => ({
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: selectedCategory === 'All' ? 'Best Product Selections' : `Best ${selectedCategory} Products`,
-    description: getMetaDescription(),
-    url: 'https://candidfindings.com/best',
-    publisher: {
-      '@type': 'Organization',
-      name: 'CandidFindings',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://candidfindings.com/favicon.png'
-      }
-    },
-    numberOfItems: publishedPosts.length,
-    itemListElement: publishedPosts.slice(0, 10).map((post, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      url: `https://candidfindings.com/best/${post.slug}`,
-      name: post.title,
-      description: post.metaDescription
-    }))
-  });
+  const schemas = [
+    generateBestOfListSchema(publishedPosts, selectedCategory),
+    generateBestOfWebPageSchema(selectedCategory),
+    generateBestOfBreadcrumbSchema(null, selectedCategory),
+    generateOrganizationSchema()
+  ].filter(Boolean);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
@@ -131,11 +115,12 @@ export default function BestOfBlogList() {
             ? 'Best Selections - Expert Product Recommendations'
             : `Best ${selectedCategory} Products - Curated Recommendations`
         } />
-        <meta property="og:description" content={getMetaDescription()} />
-        <meta property="og:url" content="https://candidfindings.com/best" />
         <meta property="og:image" content="https://candidfindings.com/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="CandidFindings" />
+
+        <meta name="twitter:image" content="https://candidfindings.com/twitter-card.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -152,10 +137,11 @@ export default function BestOfBlogList() {
         <meta name="author" content="CandidFindings" />
         <meta name="robots" content="index, follow" />
         
-        {/* Schema.org structured data */}
-        <script type="application/ld+json">
-          {JSON.stringify(getSchemaData())}
-        </script>
+        {schemas.map((schema, index) => (
+          <script key={index} type="application/ld+json">
+            {JSON.stringify(schema)}
+          </script>
+        ))}
       </Helmet>
 
       {/* Header */}

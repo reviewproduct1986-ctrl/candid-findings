@@ -7,6 +7,7 @@ import ReviewHeader from '../components/review/ReviewHeader';
 import { formatDate } from '../utils/dateFormat';
 import { calculateReadTime } from '../utils/readTime';
 import ProductSection from '../components/ProductSection';
+import { generateBestOfCollectionSchema, generateBestOfBreadcrumbSchema, generateOrganizationSchema } from '../utils/schemaGenerators';
 
 export default function BestOfPost() {
   const { slug } = useParams();
@@ -100,6 +101,18 @@ export default function BestOfPost() {
 
   if (!blog) return null;
 
+  const getOGImage = () => {
+    // Use first product image or default
+    return productsWithDetails[0]?.productData?.image || 
+          'https://candidfindings.com/og-image.jpg';
+  };
+  
+  const schemas = [
+    generateBestOfCollectionSchema(blog, productsWithDetails.map(p => p.productData).filter(Boolean)),
+    generateBestOfBreadcrumbSchema(blog),
+    generateOrganizationSchema()
+  ].filter(Boolean);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pb-24">
       <Helmet>
@@ -107,23 +120,32 @@ export default function BestOfPost() {
         <meta name="description" content={blog.metaDescription} />
         <link rel="canonical" href={`https://candidfindings.com/best/${blog.slug}`} />
         
-        {/* Open Graph */}
+        {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="CandidFindings" />
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.metaDescription} />
         <meta property="og:url" content={`https://candidfindings.com/best/${blog.slug}`} />
+        <meta property="og:image" content={getOGImage()} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={blog.title} />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blog.title} />
         <meta name="twitter:description" content={blog.metaDescription} />
+        <meta name="twitter:image" content={getOGImage()} />
         
-        {/* Schema */}
-        {blogSchema && (
-          <script type="application/ld+json">
-            {JSON.stringify(blogSchema)}
+        {/* Additional Meta */}
+        {blog.keywords && <meta name="keywords" content={blog.keywords.join(', ')} />}
+        
+        {/* Schemas */}
+        {schemas.map((schema, index) => (
+          <script key={index} type="application/ld+json">
+            {JSON.stringify(schema)}
           </script>
-        )}
+        ))}
       </Helmet>
 
       {/* Header */}
