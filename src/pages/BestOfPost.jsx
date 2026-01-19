@@ -8,87 +8,53 @@ import { formatDate } from '../utils/dateFormat';
 import { calculateReadTime } from '../utils/readTime';
 import ProductSection from '../components/ProductSection';
 import { generateBestOfCollectionSchema, generateBestOfBreadcrumbSchema, generateOrganizationSchema } from '../utils/schemaGenerators';
+import { useData } from '../context/DataContext';
 
 export default function BestOfPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { products, bestOfBlogs, loading: dataLoading } = useData();
   
   const [blog, setBlog] = useState(null);
   const [productsWithDetails, setProductsWithDetails] = useState([]);
   const [readTime, setReadTime] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   // Scroll to top when navigating to a new blog
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
   
-  // Load data
+  // Find blog and match products from context data
   useEffect(() => {
-    Promise.all([
-      fetch('/data/best-of-blogs.json').then(res => res.json()),
-      fetch('/data/products.json').then(res => res.json())
-    ])
-      .then(([blogsData, productsData]) => {
-        const blogsList = blogsData.posts || [];
-        const allProducts = productsData.products || [];
-        
-        const foundBlog = blogsList.find(b => b.slug === slug);
-        if (!foundBlog) {
-          navigate('/best', { replace: true });
-          return;
-        }
-        
-        // Match products by ASIN
-        const productsWithData = (foundBlog.products || []).map(blogProduct => {
-          const productData = allProducts.find(p => p.asin === blogProduct.asin);
-          return {
-            ...blogProduct,
-            productData: productData || null
-          };
-        });
-        
-        // Calculate total read time from all product content
-        const allContent = productsWithData
-          .map(p => p.content || '')
-          .join('\n\n');
-        const calculatedReadTime = calculateReadTime(allContent);
-        
-        setBlog(foundBlog);
-        setProductsWithDetails(productsWithData);
-        setReadTime(calculatedReadTime);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error loading blog data:', error);
-        navigate('/best', { replace: true });
-      });
-  }, [slug, navigate]);
+    if (dataLoading || !products.length || !bestOfBlogs.length) return;
 
-  // Generate schema for SEO
-  const blogSchema = blog ? {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: blog.title,
-    description: blog.metaDescription,
-    author: {
-      '@type': 'Organization',
-      name: 'CandidFindings'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'CandidFindings',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://candidfindings.com/favicon.png'
-      }
-    },
-    datePublished: blog.publishedDate,
-    dateModified: blog.updatedDate || blog.publishedDate,
-    keywords: blog.keywords?.join(', ')
-  } : null;
+    const foundBlog = bestOfBlogs.find(b => b.slug === slug);
+    if (!foundBlog) {
+      navigate('/best', { replace: true });
+      return;
+    }
+    
+    // Match products by ASIN
+    const productsWithData = (foundBlog.products || []).map(blogProduct => {
+      const productData = products.find(p => p.asin === blogProduct.asin);
+      return {
+        ...blogProduct,
+        productData: productData || null
+      };
+    });
+    
+    // Calculate total read time from all product content
+    const allContent = productsWithData
+      .map(p => p.content || '')
+      .join('\n\n');
+    const calculatedReadTime = calculateReadTime(allContent);
+    
+    setBlog(foundBlog);
+    setProductsWithDetails(productsWithData);
+    setReadTime(calculatedReadTime);
+  }, [slug, products, bestOfBlogs, dataLoading, navigate]);
 
-  if (loading) {
+  if (dataLoading || !blog) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -98,8 +64,6 @@ export default function BestOfPost() {
       </div>
     );
   }
-
-  if (!blog) return null;
 
   const getOGImage = () => {
     // Use first product image or default
@@ -230,6 +194,7 @@ export default function BestOfPost() {
                 key={product.asin} 
                 product={product} 
                 index={index}
+                totalProducts={productsWithDetails.length}
               />
             ))}
           </div>

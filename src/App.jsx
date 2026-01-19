@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProductListing from './pages/ProductListing';
 import ScrollToTop from './components/ScrollToTop';
+import { DataProvider } from './context/DataContext.jsx';
 
 // Lazy load pages - only loads when user visits
 const ReviewPage = lazy(() => import('./pages/ReviewPage.jsx'));
@@ -26,66 +27,68 @@ function RouteLoader() {
 // Main App component with Router
 export default function App() {
   return (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true
-      }}
-    >
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<ProductListing />} />
-        <Route 
-          path="/best" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BestOfBlogList />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/reviews/:slug" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <ReviewPage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/best/:slug" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <BestOfPost />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/about" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <AboutPage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/privacy-policy" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <PrivacyPolicy />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/terms" 
-          element={
-            <Suspense fallback={<RouteLoader />}>
-              <TermsOfService />
-            </Suspense>
-          } 
-        />
-        {/* Catch-all route - redirect 404s to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <DataProvider>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<ProductListing />} />
+          <Route 
+            path="/best" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <BestOfBlogList />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/reviews/:slug" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <ReviewPage />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/best/:slug" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <BestOfPost />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/about" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <AboutPage />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/privacy-policy" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <PrivacyPolicy />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/terms" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <TermsOfService />
+              </Suspense>
+            } 
+          />
+          {/* Catch-all route - redirect 404s to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </DataProvider>
   );
 }

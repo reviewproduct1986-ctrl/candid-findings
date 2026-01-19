@@ -326,8 +326,8 @@ function saveBestOfBlogs(posts) {
   }
   
   // Save to both locations
-  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData, null, 2));
-  fs.writeFileSync(jsonPath, JSON.stringify(blogsData, null, 2));
+  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData));
+  fs.writeFileSync(jsonPath, JSON.stringify(blogsData));
   
   console.log('✅ Saved to:');
   console.log(`   - ${jsonPathPublic}`);

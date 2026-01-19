@@ -323,7 +323,7 @@ ${colors.reset}`);
     }
   };
 
-  fs.writeFileSync(productsPath, JSON.stringify(outputData, null, 2), 'utf8');
+  fs.writeFileSync(productsPath, JSON.stringify(outputData), 'utf8');
 
   // Summary
   console.log(`\n${colors.bright}${colors.cyan}

@@ -16,15 +16,16 @@ import { markdownComponents } from '../utils/markdownComponents';
 import { calculateReadTime } from '../utils/readTime';
 import { generateFAQSchema, generateReviewSchema } from '../utils/schemaGenerators';
 import { formatDate } from '../utils/dateFormat';
+import { useData } from '../context/DataContext';
 
 export default function ReviewPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { products, blogs, loading: dataLoading } = useData();
   
   const [product, setProduct] = useState(null);
   const [blog, setBlog] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [tocExpanded, setTocExpanded] = useState(false);
 
   // Scroll to top when navigating to a new review
@@ -32,46 +33,35 @@ export default function ReviewPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
   
-  // Load data
+  // Find blog and product from context data
   useEffect(() => {
-    Promise.all([
-      fetch('/data/products.json').then(res => res.json()),
-      fetch('/data/blogs.json').then(res => res.json())
-    ])
-      .then(([productsData, blogsData]) => {
-        const productsList = productsData.products || [];
-        const blogsList = blogsData.posts || [];
-        
-        const foundBlog = blogsList.find(b => b.slug === slug);
-        if (!foundBlog) {
-          navigate('/', { replace: true });
-          return;
-        }
-        
-        const foundProduct = productsList.find(p => p.id === foundBlog.productId);
-        if (!foundProduct) {
-          navigate('/', { replace: true });
-          return;
-        }
-        
-        const related = productsList
-          .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
-          .slice(0, 3)
-          .map(p => {
-            const relatedBlog = blogsList.find(b => b.productId === p.id);
-            return { ...p, reviewUrl: relatedBlog ? `/reviews/${relatedBlog.slug}` : null };
-          });
-        
-        setProduct(foundProduct);
-        setBlog(foundBlog);
-        setRelatedProducts(related);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error loading data:', error);
-        navigate('/', { replace: true });
+    if (dataLoading || !products.length || !blogs.length) return;
+
+    const foundBlog = blogs.find(b => b.slug === slug);
+    if (!foundBlog) {
+      navigate('/', { replace: true });
+      return;
+    }
+    
+    const foundProduct = products.find(p => p.id === foundBlog.productId);
+    if (!foundProduct) {
+      navigate('/', { replace: true });
+      return;
+    }
+    
+    // Find related products
+    const related = products
+      .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
+      .slice(0, 3)
+      .map(p => {
+        const relatedBlog = blogs.find(b => b.productId === p.id);
+        return { ...p, reviewUrl: relatedBlog ? `/reviews/${relatedBlog.slug}` : null };
       });
-  }, [slug, navigate]);
+    
+    setProduct(foundProduct);
+    setBlog(foundBlog);
+    setRelatedProducts(related);
+  }, [slug, products, blogs, dataLoading, navigate]);
 
   // Update meta tags
   useEffect(() => {
@@ -123,7 +113,7 @@ export default function ReviewPage() {
     (blog?.targetAudience ? 1 : 0) + 
     (blog?.verdict ? 1 : 0);
 
-  if (loading || !product || !blog) {
+  if (dataLoading || !product || !blog) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-slate-600">Loading...</div>

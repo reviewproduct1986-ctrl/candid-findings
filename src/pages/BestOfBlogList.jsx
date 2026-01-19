@@ -7,31 +7,21 @@ import Footer from '../components/Footer';
 import GuideCard from '../components/GuideCard';
 import { addReadTimesToPosts } from '../utils/readTime';
 import { generateBestOfListSchema, generateBestOfWebPageSchema, generateBestOfBreadcrumbSchema, generateOrganizationSchema } from '../utils/schemaGenerators';
+import { useData } from '../context/DataContext';
 
 export default function BestOfBlogList() {
+  const { products, bestOfBlogs, loading: dataLoading } = useData();
   const [posts, setPosts] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  // Process posts when data is loaded
   useEffect(() => {
-    // Load both blog posts and products
-    Promise.all([
-      fetch('/data/best-of-blogs.json').then(res => res.json()),
-      fetch('/data/products.json').then(res => res.json())
-    ])
-      .then(([blogsData, productsData]) => {
-        // Calculate read times from content if available
-        const postsWithReadTime = addReadTimesToPosts(blogsData.posts || []);
-        setPosts(postsWithReadTime);
-        setProducts(productsData.products || []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading data:', err);
-        setLoading(false);
-      });
-  }, []);
+    if (!dataLoading && bestOfBlogs.length > 0) {
+      // Calculate read times from content if available
+      const postsWithReadTime = addReadTimesToPosts(bestOfBlogs);
+      setPosts(postsWithReadTime);
+    }
+  }, [bestOfBlogs, dataLoading]);
 
   // Get unique categories
   const categories = ['All', ...new Set(posts.map(p => p.category).filter(Boolean))];
@@ -115,12 +105,11 @@ export default function BestOfBlogList() {
             ? 'Best Selections - Expert Product Recommendations'
             : `Best ${selectedCategory} Products - Curated Recommendations`
         } />
+        <meta property="og:description" content={getMetaDescription()} />
+        <meta property="og:url" content="https://candidfindings.com/best" />
         <meta property="og:image" content="https://candidfindings.com/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content="CandidFindings" />
-
-        <meta name="twitter:image" content="https://candidfindings.com/twitter-card.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -216,7 +205,7 @@ export default function BestOfBlogList() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {loading ? (
+        {dataLoading ? (
           <div className="text-center py-20">
             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-slate-600 font-medium">Loading selections...</p>

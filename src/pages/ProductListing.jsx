@@ -8,17 +8,28 @@ import ProductCard from '../components/ProductCard';
 import ProductSkeleton from '../components/ProductSkeleton';
 import Pagination from '../components/Pagination';
 import Footer from '../components/Footer';
-import { useProductData, useProductFilters } from '../hooks/useProducts';
+import { useProductFilters } from '../hooks/useProducts';
 import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
 import { getAmazonSearchUrl } from '../utils/affiliateConfig';
+import { useData } from '../context/DataContext';
 
 export default function ProductListing() {
+  const { products, blogs, loading } = useData();
+  
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // 12 products per page (divisible by 2 and 3 for responsive grid)
 
-  // Load data
-  const { products, loading } = useProductData();
+  // Add review URLs to products
+  const productsWithReviews = useMemo(() => {
+    return products.map(product => {
+      const blog = blogs.find(b => b.productId === product.id);
+      return {
+        ...product,
+        reviewUrl: blog ? `/reviews/${blog.slug}` : null
+      };
+    });
+  }, [products, blogs]);
   
   // Filter logic
   const {
@@ -38,7 +49,7 @@ export default function ProductListing() {
     availableBadges,
     filteredProducts,
     maxPrice
-  } = useProductFilters(products);
+  } = useProductFilters(productsWithReviews);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);

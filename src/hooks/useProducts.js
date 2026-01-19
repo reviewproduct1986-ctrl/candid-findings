@@ -2,47 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 /**
- * Hook to load products and blogs from JSON files
- */
-export function useProductData() {
-  const [products, setProducts] = useState([]);
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetch('/data/products.json').then(res => res.json()),
-      fetch('/data/blogs.json').then(res => res.json())
-    ])
-      .then(([productsData, blogsData]) => {
-        // Extract arrays from response
-        const productsList = productsData.products?.filter(({available}) => available)|| [];
-        const blogsList = blogsData.posts || [];
-        
-        // Add review URLs to products based on blog slugs
-        const productsWithReviews = productsList.map(product => {
-          const blog = blogsList.find(b => b.productId === product.id);
-          return {
-            ...product,
-            reviewUrl: blog ? `/reviews/${blog.slug}` : null
-          };
-        });
-        
-        setProducts(productsWithReviews);
-        setBlogs(blogsList);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error loading data:', error);
-        setLoading(false);
-      });
-  }, []);
-
-  return { products, blogs, loading };
-}
-
-/**
  * Hook to filter and search products
+ * Now receives products from DataContext instead of fetching
  */
 export function useProductFilters(products) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,12 +26,21 @@ export function useProductFilters(products) {
     setSearchParams(searchParams);
   };
 
+  // Calculate max price from all products
+  const maxPrice = useMemo(() => {
+    if (products.length === 0) return 500;
+    const prices = products
+      .filter(p => p && typeof p.price === 'number')
+      .map(p => p.price);
+    return prices.length > 0 ? Math.ceil(Math.max(...prices)) : 500;
+  }, [products]);
+
   // Update price range max when products load
   useEffect(() => {
     if (maxPrice > 0 && priceRange[1] === 500) {
       setPriceRange([0, maxPrice]);
     }
-  }, [maxPrice]);
+  }, [maxPrice, priceRange]);
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -84,15 +54,6 @@ export function useProductFilters(products) {
       .filter(p => p.badge)
       .map(p => p.badge);
     return [...new Set(badges)];
-  }, [products]);
-
-  // Calculate max price from all products
-  const maxPrice = useMemo(() => {
-    if (products.length === 0) return 500;
-    const prices = products
-      .filter(p => p && typeof p.price === 'number')
-      .map(p => p.price);
-    return prices.length > 0 ? Math.ceil(Math.max(...prices)) : 500;
   }, [products]);
 
   // Fuzzy search function

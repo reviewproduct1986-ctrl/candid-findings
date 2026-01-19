@@ -540,8 +540,8 @@ function saveBlogPosts(blogPosts) {
   const jsonPathPublic = path.join(dataDirPublic, 'blogs.json');
   const jsonPath = path.join(dataDir, 'blogs.json');
   
-  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData, null, 2));
-  fs.writeFileSync(jsonPath, JSON.stringify(blogsData, null, 2));
+  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData));
+  fs.writeFileSync(jsonPath, JSON.stringify(blogsData));
   
   console.log(`✅ Saved ${blogPosts.length} blog posts`);
 }
