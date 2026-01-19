@@ -3,7 +3,7 @@ name: Update Amazon Products Info
 on:
   schedule:
     # Runs at 2:48 AM PST / 10:48AM AM UTC daily
-    - cron: '48 10 * * *'
+    - cron: '48 10,19 * * *'
   
   # Allow manual trigger from Actions tab
   workflow_dispatch:
@@ -45,13 +45,13 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
       
-      # Choose ONE option below - comment out the other
-      
-      # OPTION 1: RapidAPI (faster, easier)
-      # - name: Update products with RapidAPI
-      #   env:
-      #     RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-      #   run: node scripts/rapid-api.js >> public/data/cron.txt
+      # PAAPI
+      - name: Update products with PAAPI
+        env:
+          AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
+          PAAPI_ACCESS_KEY: ${{ secrets.PAAPI_ACCESS_KEY }}
+          PAAPI_SECRET_KEY: ${{ secrets.PAAPI_SECRET_KEY }}
+        run: node scripts/paapi-api.js > public/data/paapi-cron.txt
       
       - name: 🗺️ Generate sitemap
         run: node scripts/generate-sitemap.js
