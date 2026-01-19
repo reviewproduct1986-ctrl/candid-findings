@@ -152,7 +152,7 @@ async function main() {
   
   // Save both files
   console.log(`\n${colors.green}Saving...${colors.reset}`);
-  fs.writeFileSync(productsPath, JSON.stringify(data, null, 2));
+  fs.writeFileSync(productsPath, JSON.stringify(data));
   console.log(`${colors.green}✓ Saved products.json${colors.reset}`);
   
   if (hasInitial && initialData) {
