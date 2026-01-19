@@ -1,0 +1,123 @@
+name: Update Product Data
+
+on:
+  # Run twice daily (2:48 AM & 11:48 AM PST / 10:48 AM & 7:48 PM UTC)
+  schedule:
+    - cron: '48 10,19 * * *'
+  
+  # Manual trigger
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: candid-findings
+
+permissions:
+  contents: write
+
+jobs:
+  update-products:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      - name: 📦 Install PA-API SDK
+        run: npm install paapi5-nodejs-sdk
+      
+      - name: 🔄 Update products with PA-API
+        env:
+          AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
+          PAAPI_ACCESS_KEY: ${{ secrets.PAAPI_ACCESS_KEY }}
+          PAAPI_SECRET_KEY: ${{ secrets.PAAPI_SECRET_KEY }}
+        run: |
+          echo "📊 Fetching latest product data from Amazon..."
+          node scripts/paapi-api.js > public/data/paapi-cron.txt
+          echo "✅ Product data updated"
+      
+      - name: 🔍 Check for changes
+        id: verify_diff
+        run: |
+          if git diff --quiet public/data/products*.json public/data/paapi-cron.txt; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected"
+          fi
+      
+      - name: 💾 Commit changes
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/products*.json public/data/paapi-cron.txt
+          git commit -m "🤖 Update product data - $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+      
+      - name: 🔑 Configure AWS credentials
+        if: steps.verify_diff.outputs.changed == 'true'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: 📤 Sync data files to S3
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          echo "📤 Uploading updated data files to S3..."
+          
+          # Only sync data directory with short cache
+          aws s3 sync public/data/ s3://${{ env.S3_BUCKET }}/data/ \
+            --cache-control "public, max-age=300" \
+            --exclude "*" \
+            --include "products*.json" \
+            --include "paapi-cron.txt"
+          
+          echo "✅ Data files synced to S3"
+      
+      - name: ⚡ Invalidate CloudFront cache
+        if: steps.verify_diff.outputs.changed == 'true'
+        env:
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            echo "🔄 Invalidating CloudFront cache for data files..."
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/data/products*.json" "/data/paapi-cron.txt"
+            echo "✅ CloudFront cache invalidated"
+          else
+            echo "⚠️ CloudFront not configured"
+          fi
+      
+      - name: 📊 Update Summary
+        if: always()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 PRODUCT UPDATE SUMMARY"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Status: ${{ job.status }}"
+          echo "Changes: ${{ steps.verify_diff.outputs.changed }}"
+          echo "Time: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          echo ""
+          if [ "${{ steps.verify_diff.outputs.changed }}" == "true" ]; then
+            echo "✅ Product data updated and deployed"
+          else
+            echo "ℹ️ No changes - data already up to date"
+          fi
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

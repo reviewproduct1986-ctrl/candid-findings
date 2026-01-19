@@ -1,0 +1,108 @@
+name: Build & Deploy Site
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Auto-deploy when code changes
+  push:
+    branches:
+      - production
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'webpack.config.js'
+      - 'webpack.*.js'
+      - '.github/workflows/build-deploy.yml'
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: candid-findings
+
+permissions:
+  contents: read
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      - name: 🗺️ Generate sitemap
+        run: node scripts/generate-sitemap.js
+        continue-on-error: true
+      
+      - name: 🏗️ Build production site
+        run: npm run build
+      
+      - name: 🔑 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: 📤 Deploy to S3
+        run: |
+          echo "🚀 Deploying to S3..."
+          
+          # Upload all files except index.html and data files
+          aws s3 sync dist/ s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "index.html" \
+            --exclude "data/*"
+          
+          # Upload index.html with no cache
+          aws s3 cp dist/index.html s3://${{ env.S3_BUCKET }}/index.html \
+            --cache-control "no-cache, no-store, must-revalidate"
+          
+          # Upload data files with short cache
+          aws s3 sync dist/data/ s3://${{ env.S3_BUCKET }}/data/ \
+            --cache-control "public, max-age=300"
+          
+          echo "✅ S3 upload complete"
+      
+      - name: ⚡ Invalidate CloudFront cache
+        env:
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            echo "🔄 Invalidating CloudFront cache..."
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/*"
+            echo "✅ CloudFront invalidation complete"
+          else
+            echo "⚠️ CloudFront not configured"
+          fi
+      
+      - name: 📊 Deployment Summary
+        if: always()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚀 BUILD & DEPLOY SUMMARY"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Status: ${{ job.status }}"
+          echo "Bucket: ${{ env.S3_BUCKET }}"
+          echo "Region: ${{ env.AWS_REGION }}"
+          echo "Time: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          echo ""
+          echo "🌐 Live Site: https://candidfindings.com"
+          echo "🗺️ Sitemap: https://candidfindings.com/sitemap.xml"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
