@@ -35,7 +35,7 @@
 #     node update-products-paapi.js
 */
 
-// node --env-file=scripts/.script.env scripts/paapi-api.js
+// node --env-file=scripts/.env scripts/paapi-api.js 
 
 const fs = require('fs');
 const path = require('path');
@@ -52,9 +52,9 @@ try {
 
 // ⚠️ CONFIGURATION - ADD YOUR CREDENTIALS HERE
 const CONFIG = {
-  accessKey: 'YOUR_ACCESS_KEY_HERE',
-  secretKey: 'YOUR_SECRET_KEY_HERE',
-  partnerTag: 'YOUR_ASSOCIATE_TAG_HERE', // e.g., "yoursite-20"
+  accessKey: process.env.PAAPI_ACCESS_KEY,
+  secretKey: process.env.PAAPI_SECRET_KEY,
+  partnerTag: process.env.AMAZON_PARTNER_TAG,
   region: 'us-east-1', // US marketplace
   productsFile: './public/data/products.json',
   backupFile: './public/data/products.backup.json',
@@ -68,16 +68,6 @@ const stats = {
   unavailable: 0,
   errors: 0,
   skipped: 0
-};
-
-// Colors
-const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  cyan: '\x1b[36m'
 };
 
 /**
@@ -114,6 +104,7 @@ async function fetchProductData(api, asin) {
       if (error) {
         reject(error);
       } else {
+        console.log('data: ', data);
         resolve(data);
       }
     });
@@ -176,12 +167,12 @@ function parseApiResponse(apiData) {
  * Update a single product
  */
 async function updateProduct(api, product, index, total) {
-  console.log(`\n${colors.cyan}[${index + 1}/${total}] ${product.title}${colors.reset}`);
+  console.log(`\n[${index + 1}/${total}] ${product.title}`);
   
   const asin = product.asin;
   
   if (!asin) {
-    console.log(`  ${colors.yellow}⚠ Skipped: No ASIN found${colors.reset}`);
+    console.log(`  ⚠ Skipped: No ASIN found`);
     stats.skipped++;
     return product;
   }
@@ -189,13 +180,13 @@ async function updateProduct(api, product, index, total) {
   console.log(`  ASIN: ${asin}`);
 
   try {
-    console.log(`  ${colors.cyan}Fetching from PA-API...${colors.reset}`);
+    console.log(`  Fetching from PA-API...`);
     const apiData = await fetchProductData(api, asin);
     
     const newData = parseApiResponse(apiData);
 
     if (!newData.available) {
-      console.log(`  ${colors.red}✗ Product unavailable${colors.reset}`);
+      console.log(`  ✗ Product unavailable`);
       stats.unavailable++;
       return {
         ...product,
@@ -227,10 +218,10 @@ async function updateProduct(api, product, index, total) {
 
     if (hasChanges) {
       updated.lastUpdated = new Date().toISOString();
-      console.log(`  ${colors.green}✓ Updated${colors.reset}`);
+      console.log(`  ✓ Updated`);
       stats.updated++;
     } else {
-      console.log(`  ${colors.green}✓ No changes${colors.reset}`);
+      console.log(`  ✓ No changes`);
     }
 
     updated.lastChecked = new Date().toISOString();
@@ -238,7 +229,7 @@ async function updateProduct(api, product, index, total) {
     return updated;
 
   } catch (error) {
-    console.log(`  ${colors.red}✗ Error: ${error.message}${colors.reset}`);
+    console.log(`  ✗ Error: ${error.message}`);
     stats.errors++;
     return {
       ...product,
@@ -259,17 +250,17 @@ function sleep(ms) {
  * Main function
  */
 async function main() {
-  console.log(`${colors.bright}${colors.cyan}
+  console.log(`
 ╔═══════════════════════════════════════╗
-║   Amazon Product Updater (PA-API)    ║
+║   Amazon Product Updater (PA-API)     ║
 ╚═══════════════════════════════════════╝
-${colors.reset}`);
+`);
 
   // Check credentials
   if (CONFIG.accessKey === 'YOUR_ACCESS_KEY_HERE' ||
       CONFIG.secretKey === 'YOUR_SECRET_KEY_HERE' ||
       CONFIG.partnerTag === 'YOUR_ASSOCIATE_TAG_HERE') {
-    console.error(`${colors.red}Error: Please add your PA-API credentials${colors.reset}\n`);
+    console.error(`Error: Please add your PA-API credentials\n`);
     console.log('1. Sign up: https://affiliate-program.amazon.com/');
     console.log('2. Apply for PA-API: https://webservices.amazon.com/paapi5/documentation/');
     console.log('3. Add your credentials to CONFIG in this script\n');
@@ -280,7 +271,7 @@ ${colors.reset}`);
   const backupPath = path.resolve(CONFIG.backupFile);
 
   if (!fs.existsSync(productsPath)) {
-    console.error(`${colors.red}Error: products.json not found${colors.reset}`);
+    console.error(`Error: products.json not found`);
     process.exit(1);
   }
 
@@ -298,9 +289,9 @@ ${colors.reset}`);
   // Create backup
   try {
     fs.copyFileSync(productsPath, backupPath);
-    console.log(`${colors.green}✓ Backup created${colors.reset}\n`);
+    console.log(`✓ Backup created\n`);
   } catch (error) {
-    console.log(`${colors.yellow}⚠ Could not create backup${colors.reset}\n`);
+    console.log(`⚠ Could not create backup\n`);
   }
 
   // Update each product
@@ -326,20 +317,20 @@ ${colors.reset}`);
   fs.writeFileSync(productsPath, JSON.stringify(outputData), 'utf8');
 
   // Summary
-  console.log(`\n${colors.bright}${colors.cyan}
+  console.log(`\n
 ╔═══════════════════════════════════════╗
 ║            Summary                    ║
 ╚═══════════════════════════════════════╝
-${colors.reset}`);
+`);
   console.log(`Total products:    ${stats.total}`);
-  console.log(`${colors.green}Updated:           ${stats.updated}${colors.reset}`);
-  console.log(`${colors.red}Unavailable:       ${stats.unavailable}${colors.reset}`);
-  console.log(`${colors.yellow}Errors:            ${stats.errors}${colors.reset}`);
-  console.log(`${colors.yellow}Skipped:           ${stats.skipped}${colors.reset}`);
-  console.log(`\n${colors.green}✓ Done!${colors.reset}\n`);
+  console.log(`Updated:           ${stats.updated}`);
+  console.log(`Unavailable:       ${stats.unavailable}`);
+  console.log(`Errors:            ${stats.errors}`);
+  console.log(`Skipped:           ${stats.skipped}`);
+  console.log(`\n✓ Done!\n`);
 }
 
 main().catch(error => {
-  console.error(`${colors.red}\nFatal error: ${error.message}${colors.reset}`);
+  console.error(`$\nFatal error: ${error.message}$`);
   process.exit(1);
 });
