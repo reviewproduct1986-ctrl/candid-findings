@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProductListing from './pages/ProductListing';
 import ScrollToTop from './components/ScrollToTop';
-import { DataProvider } from './context/DataContext.jsx';
+import { DataProvider } from './context/DataContext';
 
 // Lazy load pages - only loads when user visits
 const ReviewPage = lazy(() => import('./pages/ReviewPage.jsx'));
