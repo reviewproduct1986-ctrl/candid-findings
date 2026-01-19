@@ -45,6 +45,9 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
       
+      - name: Install PA-API SDK
+        run: npm install paapi5-nodejs-sdk
+
       # PAAPI
       - name: Update products with PAAPI
         env:
