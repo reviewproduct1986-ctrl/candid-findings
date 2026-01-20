@@ -234,6 +234,7 @@ async function main() {
     process.exit(1);
   }
 
+  console.log('CONFIG', CONFIG);
   const productsPath = path.resolve(CONFIG.productsFile);
   const backupPath = path.resolve(CONFIG.backupFile);
 
