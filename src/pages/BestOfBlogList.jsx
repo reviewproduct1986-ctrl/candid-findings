@@ -20,6 +20,24 @@ export default function BestOfBlogList() {
       // Calculate read times from content if available
       const postsWithReadTime = addReadTimesToPosts(bestOfBlogs);
       setPosts(postsWithReadTime);
+
+      document.title = `${getPageTitle()} | CandidFindings`;
+      
+      const setMeta = (selector, attr, attrName, content) => {
+        let meta = document.querySelector(selector);
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute(attr, attrName);
+          document.head.appendChild(meta);
+        }
+        meta.content = content;
+      };
+      
+      setMeta('meta[name="description"]', 'name', 'description', getMetaDescription());
+      setMeta('meta[property="og:title"]', 'property', 'og:title', getPageTitle());
+      setMeta('meta[property="og:description"]', 'property', 'og:description', getMetaDescription());
+      setMeta('meta[property="og:image"]', 'property', 'og:image', 'https://candidfindings.com/og-image.jpg');
+      setMeta('meta[property="og:url"]', 'property', 'og:url', 'https://candidfindings.com/best');
     }
   }, [bestOfBlogs, dataLoading]);
 

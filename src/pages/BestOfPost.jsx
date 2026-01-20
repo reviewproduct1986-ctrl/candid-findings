@@ -23,6 +23,30 @@ export default function BestOfPost() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
+
+
+  // Update meta tags
+  useEffect(() => {
+    if (!blog) return;
+    
+    document.title = `${blog.title} | CandidFindings`;
+    
+    const setMeta = (selector, attr, attrName, content) => {
+      let meta = document.querySelector(selector);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attr, attrName);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+    
+    setMeta('meta[name="description"]', 'name', 'description', blog.metaDescription);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', blog.title);
+    setMeta('meta[property="og:description"]', 'property', 'og:description', blog.metaDescription);
+    setMeta('meta[property="og:image"]', 'property', 'og:image', getOGImage());
+    setMeta('meta[property="og:url"]', 'property', 'og:url', `https://candidfindings.com/best/${blog.slug}`);
+  }, [blog]);
   
   // Find blog and match products from context data
   useEffect(() => {
@@ -88,11 +112,10 @@ export default function BestOfPost() {
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="CandidFindings" />
         <meta property="og:title" content={blog.title} />
+        
         <meta property="og:description" content={blog.metaDescription} />
         <meta property="og:url" content={`https://candidfindings.com/best/${blog.slug}`} />
         <meta property="og:image" content={getOGImage()} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={blog.title} />
         
         {/* Twitter Card */}
