@@ -15,6 +15,7 @@ on:
     paths:
       - 'src/**'
       - 'public/**'
+      - 'scripts/**'
       - 'package.json'
       - 'webpack.config.js'
       - 'webpack.*.js'
