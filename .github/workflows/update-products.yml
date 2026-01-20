@@ -55,6 +55,7 @@ jobs:
           PAAPI_SECRET_KEY: ${{ secrets.PAAPI_SECRET_KEY }}
         run: |
           echo "📊 Fetching latest product data from Amazon..."
+          node scripts/test-paapi.js
           node scripts/paapi-api.js
           echo "✅ Product data updated"
       
