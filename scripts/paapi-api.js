@@ -233,6 +233,7 @@ async function main() {
     console.log('3. Add your credentials to CONFIG in this script\n');
     process.exit(1);
   }
+
   
   const productsPath = path.resolve(CONFIG.productsFile);
   const backupPath = path.resolve(CONFIG.backupFile);
