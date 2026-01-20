@@ -1,4 +1,4 @@
-1/20/2026, 5:20:15 PM
+1/20/2026, 8:56:57 PM
 
 ╔═══════════════════════════════════════╗
 ║   Amazon Product Updater (PA-API)     ║
@@ -17,7 +17,8 @@ Found 35 products
   ASIN: B0D1XD1ZV3
   Fetching from PA-API...
 data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
-  ✓ No changes
+  Price: $200.22 → $183.08
+  ✓ Updated
 
 [2/35] The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist 
   ASIN: 1538742578
@@ -236,7 +237,7 @@ data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
 ╚═══════════════════════════════════════╝
 
 Total products:    35
-Updated:           0
+Updated:           1
 Unavailable:       1
 Errors:            0
 Skipped:           0
