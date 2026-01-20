@@ -1,40 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * Amazon Product Updater - Official PA-API Version
- * 
- * Uses Amazon's official Product Advertising API
- * 
- * Setup:
- * 1. Sign up: https://affiliate-program.amazon.com/
- * 2. Apply for PA-API: https://webservices.amazon.com/paapi5/documentation/
- * 3. Get your Access Key, Secret Key, and Associate Tag
- * 4. Install: npm install paapi5-nodejs-sdk
- * 
- * Usage: node update-products-paapi.js
- */
-
-/* yml
-
-# OPTION 2: Amazon PA-API (official, free)
-# Uncomment this block and comment out the RapidAPI block above
-# - name: Install PA-API SDK
-#   run: npm install paapi5-nodejs-sdk
-# 
-# - name: Update products with PA-API
-#   env:
-#     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-#     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-#     AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
-#   run: |
-#     # Add credentials to script
-#     sed -i "s/YOUR_ACCESS_KEY_HERE/$AWS_ACCESS_KEY/" update-products-paapi.js
-#     sed -i "s/YOUR_SECRET_KEY_HERE/$AWS_SECRET_KEY/" update-products-paapi.js
-#     sed -i "s/YOUR_ASSOCIATE_TAG_HERE/$AMAZON_PARTNER_TAG/" update-products-paapi.js
-#     # Run updater
-#     node update-products-paapi.js
-*/
-
 // node --env-file=scripts/.env scripts/paapi-api.js 
 
 const fs = require('fs');
@@ -250,6 +215,8 @@ function sleep(ms) {
  * Main function
  */
 async function main() {
+  const currentTime = new Date();
+  console.log(currentTime.toLocaleString());
   console.log(`
 ╔═══════════════════════════════════════╗
 ║   Amazon Product Updater (PA-API)     ║
