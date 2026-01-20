@@ -8,6 +8,18 @@ on:
   # Manual trigger
   workflow_dispatch:
 
+  # Auto-deploy when code changes
+  push:
+    branches:
+      - production
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'webpack.config.js'
+      - 'webpack.*.js'
+      - '.github/workflows/update-products.yml'
+
 env:
   AWS_REGION: us-east-1
   S3_BUCKET: candid-findings
