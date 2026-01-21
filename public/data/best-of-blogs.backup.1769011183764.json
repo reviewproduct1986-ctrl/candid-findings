@@ -1,0 +1,188 @@
+{
+    "posts": [
+        {
+            "title": "3 Best Electronics Products",
+            "slug": "3-best-electronics-products",
+            "metaDescription": "Discover 3 top-rated electronics products handpicked for quality and value.",
+            "keywords": [
+                "best electronics",
+                "electronics essentials",
+                "top electronics products"
+            ],
+            "category": "Electronics",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B0D1XD1ZV3",
+                    "content": ""
+                },
+                {
+                    "asin": "B06XRVX2ZB",
+                    "content": ""
+                },
+                {
+                    "asin": "B0D3QFFNSF",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.530Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        },
+        {
+            "title": "3 Best Cell Phones & Accessories Products",
+            "slug": "3-best-cell-phones-accessories-products",
+            "metaDescription": "Discover 3 top-rated cell phones & accessories products handpicked for quality and value.",
+            "keywords": [
+                "best cell phones & accessories",
+                "cell phones & accessories essentials",
+                "top cell phones & accessories products"
+            ],
+            "category": "Cell Phones & Accessories",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B0FJ88517V",
+                    "content": ""
+                },
+                {
+                    "asin": "B0FDQK73N6",
+                    "content": ""
+                },
+                {
+                    "asin": "B0FQFB8FMG",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.531Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        },
+        {
+            "title": "5 Best Beauty & Personal Care Products",
+            "slug": "5-best-beauty-personal-care-products",
+            "metaDescription": "Discover 5 top-rated beauty & personal care products handpicked for quality and value.",
+            "keywords": [
+                "best beauty & personal care",
+                "beauty & personal care essentials",
+                "top beauty & personal care products"
+            ],
+            "category": "Beauty & Personal Care",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B0BSZ5VJMV",
+                    "content": ""
+                },
+                {
+                    "asin": "B0B2RM68G2",
+                    "content": ""
+                },
+                {
+                    "asin": "B07MFMWFYL",
+                    "content": ""
+                },
+                {
+                    "asin": "B09V7Z4TJG",
+                    "content": ""
+                },
+                {
+                    "asin": "B08KT2Z93D",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.531Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        },
+        {
+            "title": "5 Best Home & Kitchen Products",
+            "slug": "5-best-home-kitchen-products",
+            "metaDescription": "Discover 5 top-rated home & kitchen products handpicked for quality and value.",
+            "keywords": [
+                "best home & kitchen",
+                "home & kitchen essentials",
+                "top home & kitchen products"
+            ],
+            "category": "Home & Kitchen",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B0CPKT4Q41",
+                    "content": ""
+                },
+                {
+                    "asin": "B0FMH4JNRB",
+                    "content": ""
+                },
+                {
+                    "asin": "B0CM6L132Z",
+                    "content": ""
+                },
+                {
+                    "asin": "B00939I7EK",
+                    "content": ""
+                },
+                {
+                    "asin": "B0764HS4SL",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.531Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        },
+        {
+            "title": "3 Best Sports & Outdoors Products",
+            "slug": "3-best-sports-outdoors-products",
+            "metaDescription": "Discover 3 top-rated sports & outdoors products handpicked for quality and value.",
+            "keywords": [
+                "best sports & outdoors",
+                "sports & outdoors essentials",
+                "top sports & outdoors products"
+            ],
+            "category": "Sports & Outdoors",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B0CRC73JTS",
+                    "content": ""
+                },
+                {
+                    "asin": "B01LR5RO5U",
+                    "content": ""
+                },
+                {
+                    "asin": "B01LP0U5X0",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.531Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        },
+        {
+            "title": "3 Best Automotive Products",
+            "slug": "3-best-automotive-products",
+            "metaDescription": "Discover 3 top-rated automotive products handpicked for quality and value.",
+            "keywords": [
+                "best automotive",
+                "automotive essentials",
+                "top automotive products"
+            ],
+            "category": "Automotive",
+            "featured": false,
+            "products": [
+                {
+                    "asin": "B016NA9Y4S",
+                    "content": ""
+                },
+                {
+                    "asin": "B0C1Y8Z6VT",
+                    "content": ""
+                },
+                {
+                    "asin": "B00J00X5YO",
+                    "content": ""
+                }
+            ],
+            "publishedDate": "2026-01-20T18:46:26.531Z",
+            "updatedDate": "2026-01-20T18:46:26.531Z"
+        }
+    ]
+}

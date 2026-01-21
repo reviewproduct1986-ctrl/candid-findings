@@ -4,14 +4,23 @@
  * Generate HUMAN-SOUNDING content for Best-Of blog posts
  * Focus: Natural recommendations, conversational tone, real opinions
  * Saves each blog as separate file: blog.<slug>.json
+ * 
+ * Usage:
+ *   node scripts/generate-best-of-content.js              # Generate missing content for all blogs
+ *   node scripts/generate-best-of-content.js <slug>       # Regenerate all content for specific blog
  */
 
 // node --env-file=secrets/.script.env scripts/generate-best-of-content.js
+// node --env-file=secrets/.script.env scripts/generate-best-of-content.js 5-books-you-wont-be-able-to-put-down
 
 const fs = require('fs');
 const path = require('path');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const targetSlug = args[0]; // Optional: slug to regenerate
 
 function loadProducts() {
   const publicPath = path.join(__dirname, '../public/data/products.json');
@@ -32,63 +41,52 @@ function loadProducts() {
 }
 
 function loadBestOfBlogs() {
-  const blogsDirPublic = path.join(__dirname, '../public/data/blogs');
-  const blogsDir = path.join(__dirname, '../data/blogs');
+  const bestOfPublicPath = path.join(__dirname, '../public/data/best-of-blogs.json');
+  const bestOfDataPath = path.join(__dirname, '../data/best-of-blogs.json');
   
-  // Check both possible blog directories
-  let blogsDirectory = blogsDirPublic;
-  if (!fs.existsSync(blogsDirPublic) && fs.existsSync(blogsDir)) {
-    blogsDirectory = blogsDir;
+  let bestOfFilePath = bestOfPublicPath;
+  if (!fs.existsSync(bestOfPublicPath) && fs.existsSync(bestOfDataPath)) {
+    bestOfFilePath = bestOfDataPath;
   }
   
-  if (!fs.existsSync(blogsDirectory)) {
-    console.error('❌ blogs directory not found!');
+  if (!fs.existsSync(bestOfFilePath)) {
+    console.error('❌ best-of-blogs.json not found!');
     console.log('');
-    console.log('Create blogs with structure:');
-    console.log('  /data/blogs/blog.<slug>.json');
-    console.log('');
-    console.log('Example blog structure:');
+    console.log('Create best-of-blogs.json with structure:');
     console.log(JSON.stringify({
-      id: "blog-best-tech",
-      slug: "best-tech-gadgets",
-      title: "Best Tech Gadgets",
-      category: "Technology",
-      metaDescription: "Our top tech picks",
-      keywords: ["tech", "gadgets"],
-      products: [
-        { asin: "ASIN123", content: "" }
-      ],
-      publishedDate: new Date().toISOString(),
-      updatedDate: new Date().toISOString()
+      posts: [
+        {
+          title: "5 Best Products",
+          slug: "5-best-products",
+          metaDescription: "Top 5 products",
+          keywords: ["best", "products"],
+          category: "General",
+          featured: false,
+          products: [
+            { asin: "B0D1XD1ZV3", content: "" }
+          ],
+          publishedDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString()
+        }
+      ]
     }, null, 2));
     process.exit(1);
   }
 
-  // Read all blog.*.json files
-  const files = fs.readdirSync(blogsDirectory);
-  const blogFiles = files.filter(f => f.startsWith('blog.') && f.endsWith('.json'));
+  const data = JSON.parse(fs.readFileSync(bestOfFilePath, 'utf-8'));
+  const posts = data.posts || [];
   
-  if (blogFiles.length === 0) {
-    console.error('❌ No blog files found!');
-    console.log('');
-    console.log('Create blog files in: ' + blogsDirectory);
+  if (posts.length === 0) {
+    console.error('❌ No posts found in best-of-blogs.json!');
     process.exit(1);
   }
 
-  const posts = blogFiles.map(filename => {
-    const filePath = path.join(blogsDirectory, filename);
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  });
-  
-  // Filter for best-of posts (those with products array)
+  // Filter for posts with products array (best-of requirement)
   const bestOfPosts = posts.filter(post => post.products && Array.isArray(post.products));
 
   return { 
     posts: bestOfPosts,
-    metadata: {
-      total: bestOfPosts.length,
-      source: blogsDirectory
-    }
+    slugs: bestOfPosts.map(p => p.slug)
   };
 }
 
@@ -372,9 +370,13 @@ REMEMBER:
   }
 }
 
-async function generateMissingContent(posts, products) {
+async function generateMissingContent(posts, products, forceRegenerate = false) {
   console.log('');
-  console.log('🔍 Checking for missing content...');
+  if (forceRegenerate) {
+    console.log('🔄 REGENERATING all content for specified blog...');
+  } else {
+    console.log('🔍 Checking for missing content...');
+  }
   console.log('');
   
   let totalProducts = 0;
@@ -385,18 +387,18 @@ async function generateMissingContent(posts, products) {
   for (const post of posts) {
     for (const productRef of post.products) {
       totalProducts++;
-      if (!productRef.content || productRef.content.trim() === '' || productRef.content === 'Markdown content 1') {
+      if (forceRegenerate || !productRef.content || productRef.content.trim() === '' || productRef.content === 'Markdown content 1') {
         missingCount++;
       }
     }
   }
   
-  if (missingCount === 0) {
+  if (!forceRegenerate && missingCount === 0) {
     console.log('✅ All products already have content!');
     return posts;
   }
 
-  console.log(`📊 Found ${missingCount} products needing content out of ${totalProducts} total`);
+  console.log(`📊 ${forceRegenerate ? 'Regenerating' : 'Found'} ${missingCount} products ${forceRegenerate ? 'for regeneration' : 'needing content'} out of ${totalProducts} total`);
   console.log('');
   console.log(`🤖 Generating HUMAN-LIKE content for Best-Of posts...`);
   console.log('');
@@ -412,8 +414,9 @@ async function generateMissingContent(posts, products) {
     for (let prodIdx = 0; prodIdx < post.products.length; prodIdx++) {
       const productRef = post.products[prodIdx];
       
-      // Skip if content already exists
-      if (productRef.content && 
+      // Skip if content already exists (unless forcing regeneration)
+      if (!forceRegenerate && 
+          productRef.content && 
           productRef.content.trim() !== '' && 
           !productRef.content.includes('Markdown content')) {
         console.log(`   ⏭️  Skipping ${productRef.asin} (has content)`);
@@ -475,9 +478,6 @@ function saveBestOfBlogs(posts, products) {
   console.log('');
   console.log('💾 Saving individual blog files...');
   
-  // Create a map of productId to slug for products.json update
-  const productSlugMap = {};
-  
   // Save each blog as separate file
   posts.forEach((post, index) => {
     // Update timestamp
@@ -490,64 +490,11 @@ function saveBestOfBlogs(posts, products) {
     fs.writeFileSync(filePathPublic, JSON.stringify(post, null, 2));
     fs.writeFileSync(filePath, JSON.stringify(post, null, 2));
     
-    // Track slug for product updates (for best-of posts, we still track the main slug)
-    if (post.productId) {
-      productSlugMap[post.productId] = post.slug;
-    }
-    
     console.log(`   ✓ ${index + 1}/${posts.length} ${filename}`);
   });
 
   console.log('');
-  console.log('📝 Updating products files with blog slugs...');
-  
-  // Update products with blog slugs (if any best-of posts are tied to specific products)
-  const updatedProducts = products.map(product => {
-    if (productSlugMap[product.id]) {
-      return {
-        ...product,
-        slug: productSlugMap[product.id]
-      };
-    }
-    return product;
-  });
-  
-  // Save updated products to all relevant files
-  const productsData = {
-    products: updatedProducts,
-    metadata: {
-      total: updatedProducts.length,
-      updated: new Date().toISOString()
-    }
-  };
-  
-  // List of possible product files to update
-  const productFiles = [
-    path.join(__dirname, '../public/data/products.json'),
-    path.join(__dirname, '../data/products.json'),
-    path.join(__dirname, '../public/data/initial-products.json'),
-    path.join(__dirname, '../data/initial-products.json')
-  ];
-  
-  // Update all existing product files
-  let updatedCount = 0;
-  productFiles.forEach(filePath => {
-    if (fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify(productsData, null, 2));
-      console.log(`   ✓ Updated ${filePath}`);
-      updatedCount++;
-    }
-  });
-  
-  if (updatedCount === 0) {
-    console.log('   ℹ️  No product files updated (best-of posts don\'t require it)');
-  }
-  
-  console.log('');
   console.log(`✅ Saved ${posts.length} individual blog files`);
-  if (updatedCount > 0) {
-    console.log(`✅ Updated ${updatedCount} product file(s) with blog slugs`);
-  }
   
   // Count total products with content
   let productsWithContent = 0;
@@ -567,16 +514,29 @@ async function main() {
   try {
     console.log('╔═══════════════════════════════════════════╗');
     console.log('║  Best-Of Content Generator                ║');
-    console.log('║  (Saves each blog separately)             ║');
+    console.log('║  (Loads from best-of-blogs.json)          ║');
     console.log('╚═══════════════════════════════════════════╝');
     console.log('');
+    
+    if (targetSlug) {
+      console.log('🎯 MODE: Regenerate specific blog');
+      console.log(`   Target slug: ${targetSlug}`);
+      console.log('');
+    } else {
+      console.log('🎯 MODE: Generate missing content');
+      console.log('');
+    }
+    
     console.log('🎯 Features:');
     console.log('   - Natural, enthusiastic recommendations');
     console.log('   - Personal voice and opinions');
     console.log('   - NO AI-sounding phrases');
     console.log('   - Validation for dynamic data');
-    console.log('   - Generates only missing content');
-    console.log('   - Each blog saved as blog.<slug>.json');
+    if (!targetSlug) {
+      console.log('   - Generates only missing content');
+    }
+    console.log('   - Loads from best-of-blogs.json');
+    console.log('   - Saves to individual blog files only');
     console.log('');
     
     if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY === 'YOUR_KEY_HERE') {
@@ -591,10 +551,37 @@ async function main() {
     const products = loadProducts();
     console.log(`📦 Loaded ${products.length} products`);
 
-    const bestOfBlogs = loadBestOfBlogs();
-    console.log(`📄 Found ${bestOfBlogs.posts.length} best-of posts`);
+    let bestOfBlogs = loadBestOfBlogs();
+    console.log(`📄 Loaded ${bestOfBlogs.posts.length} best-of posts from best-of-blogs.json`);
+    
+    // Filter to specific slug if provided
+    if (targetSlug) {
+      if (!bestOfBlogs.slugs.includes(targetSlug)) {
+        console.error(`❌ Slug "${targetSlug}" not found in best-of-blogs.json!`);
+        console.log('');
+        console.log('Available slugs:');
+        bestOfBlogs.slugs.forEach(slug => console.log(`   - ${slug}`));
+        console.log('');
+        process.exit(1);
+      }
+      
+      const targetPost = bestOfBlogs.posts.find(p => p.slug === targetSlug);
+      if (!targetPost) {
+        console.error(`❌ Post with slug "${targetSlug}" not found!`);
+        console.log('');
+        process.exit(1);
+      }
+      
+      bestOfBlogs.posts = [targetPost];
+      console.log(`✅ Found target blog: "${targetPost.title}"`);
+      console.log(`   Products to regenerate: ${targetPost.products.length}`);
+    }
 
-    const updatedPosts = await generateMissingContent(bestOfBlogs.posts, products);
+    const updatedPosts = await generateMissingContent(
+      bestOfBlogs.posts, 
+      products,
+      !!targetSlug  // Force regeneration if slug is provided
+    );
     
     saveBestOfBlogs(updatedPosts, products);
     
@@ -607,10 +594,22 @@ async function main() {
     console.log('   - No corporate speak');
     console.log('   - Each saved as separate file');
     console.log('');
-    console.log('📂 Files location:');
+    console.log('📂 Files saved:');
     console.log('   - /data/blogs/blog.<slug>.json');
     console.log('   - /public/data/blogs/blog.<slug>.json');
     console.log('');
+    console.log('ℹ️  Note: best-of-blogs.json remains unchanged');
+    console.log('');
+    
+    if (targetSlug) {
+      console.log('💡 TIP: Run without slug to generate missing content for all blogs');
+      console.log('   node scripts/generate-best-of-content.js');
+      console.log('');
+    } else {
+      console.log('💡 TIP: Regenerate specific blog with:');
+      console.log('   node scripts/generate-best-of-content.js <slug>');
+      console.log('');
+    }
     
   } catch (error) {
     console.error('❌ Fatal error:', error.message);
