@@ -119,10 +119,10 @@ export default function FilterPanel({
         
         {/* Header with Clear All */}
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
             <SlidersHorizontal className="w-5 h-5" />
             Filters
-          </h3>
+          </h2>
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}

@@ -24,9 +24,13 @@ export default function ResultsCountAndSort({
       {/* Sort Dropdown */}
       {resultsCount > 0 && (
         <div className="flex items-center gap-2">
-          <ArrowUpDown size={16} className="text-slate-500" />
+          <ArrowUpDown size={16} className="text-slate-500" aria-hidden="true" />
           <div className="relative">
+            <label htmlFor="sort-select" className="sr-only">
+              Sort products by
+            </label>
             <select
+              id="sort-select"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
               className="pl-3 pr-12 py-2 bg-white border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all cursor-pointer hover:border-slate-300 appearance-none"
@@ -43,6 +47,7 @@ export default function ResultsCountAndSort({
             <ChevronRight 
               size={16} 
               className="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-slate-500 pointer-events-none" 
+              aria-hidden="true"
             />
           </div>
         </div>
