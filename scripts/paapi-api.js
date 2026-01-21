@@ -69,7 +69,6 @@ async function fetchProductData(api, asin) {
       if (error) {
         reject(error);
       } else {
-        console.log('data: ', data);
         resolve(data);
       }
     });
