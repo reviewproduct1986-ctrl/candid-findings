@@ -1,4 +1,4 @@
-1/20/2026, 8:56:57 PM
+1/21/2026, 11:42:20 AM
 
 ╔═══════════════════════════════════════╗
 ║   Amazon Product Updater (PA-API)     ║
@@ -17,7 +17,7 @@ Found 35 products
   ASIN: B0D1XD1ZV3
   Fetching from PA-API...
 data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
-  Price: $200.22 → $183.08
+  Price: $183.08 → $189.05
   ✓ Updated
 
 [2/35] The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist 
@@ -66,13 +66,15 @@ data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
   ASIN: B0D3QFFNSF
   Fetching from PA-API...
 data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
-  ✓ No changes
+  Price: $15.29 → $12.99
+  ✓ Updated
 
 [10/35] Sun Bum Kids SPF 50 Sunscreen Clear Body Spray - Broad Spectrum Water-Resistant with Vitamin E - Wet or Dry Skin Application - Hawaii 104 Act Compliant (Without Octinoxate & Oxybenzone) - 6 oz
   ASIN: B0BSZ5VJMV
   Fetching from PA-API...
 data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
-  ✓ No changes
+  Price: $17.49 → $18.48
+  ✓ Updated
 
 [11/35] Genexa Children's Clean Acetaminophen | Pediatrician Preferred Ingredients | Pain & Fever Reducer for Kids | Dye Free, 0% Artificial Additives | Ages 2-11, Delicious Organic Blueberry Liquid, 4 fl oz
   ASIN: B0CHXSLHQZ
@@ -181,7 +183,8 @@ data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
   ASIN: B07MFMWFYL
   Fetching from PA-API...
 data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
-  ✓ No changes
+  Price: $7.18 → $6.66
+  ✓ Updated
 
 [28/35] medicube Toner Pads Zero Pore Pad 2.0 | Dual-Textured Facial Pad for Exfoliation and Pore Care with 4.5% AHA Lactic Acid, 0.45% BHA Salicylic Acid | Ideal for All, Korean Skin Care, 70 Pads (1 Pack)
   ASIN: B09V7Z4TJG
@@ -237,7 +240,7 @@ data:  exports { ItemsResult: exports { Items: [ [exports] ] } }
 ╚═══════════════════════════════════════╝
 
 Total products:    35
-Updated:           1
+Updated:           4
 Unavailable:       1
 Errors:            0
 Skipped:           0
