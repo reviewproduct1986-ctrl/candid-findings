@@ -1,9 +1,9 @@
 name: Update Product Data
 
 on:
-  # Run twice daily (2:48 AM & 11:48 AM PST / 10:48 AM & 7:48 PM UTC)
+  # Run every two hours
   schedule:
-    - cron: '48 10,19 * * *'
+    - cron: '48 */2 * * *'
   
   # Manual trigger
   workflow_dispatch:
