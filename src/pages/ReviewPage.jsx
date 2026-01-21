@@ -61,8 +61,12 @@ export default function ReviewPage() {
         // Find related products in the same category
         const related = products
           .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
-          .slice(0, 3);
-        
+          .slice(0, 3).map(product => {
+              return {
+                ...product,
+                reviewUrl: `/reviews/${product.slug}`
+              };
+          });
         setRelatedProducts(related);
       })
       .catch(error => {

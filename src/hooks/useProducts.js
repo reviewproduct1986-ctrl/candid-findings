@@ -132,7 +132,10 @@ export function useProductFilters(products) {
           return new Date(b.lastUpdated) - new Date(a.lastUpdated);
         }
         // Fallback to ID comparison if no dates
-        return b.id.localeCompare(a.id);
+        // Handle both string and number IDs
+        const idA = String(a.id);
+        const idB = String(b.id);
+        return idB.localeCompare(idA);
       });
     }
     

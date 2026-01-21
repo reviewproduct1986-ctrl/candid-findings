@@ -6,6 +6,8 @@
  * Saves each blog as separate file: blog.<slug>.json
  */
 
+// node --env-file=./secrets/.script.env scripts/generate-blog.js --asin=<ASIN>
+
 const fs = require('fs');
 const path = require('path');
 
@@ -528,15 +530,26 @@ async function generateMissingBlogs(products, existingBlogs, targetAsin = null) 
   
   // Original behavior: generate for all missing blogs
   const existingProductIds = new Set(existingBlogs.posts.map(b => b.productId));
-  const productsNeedingBlogs = products.filter(p => !existingProductIds.has(p.id));
+  
+  // Filter products that need blogs:
+  // 1. No existing blog file (productId not in existingProductIds)
+  // 2. OR product doesn't have a slug field
+  const productsNeedingBlogs = products.filter(p => 
+    !existingProductIds.has(p.id) || !p.slug
+  );
   
   if (productsNeedingBlogs.length === 0) {
     console.log('✅ All products already have blog posts!');
+    console.log(`   📊 Total products: ${products.length}`);
+    console.log(`   📝 Total blogs: ${existingBlogs.posts.length}`);
     return existingBlogs.posts;
   }
 
   console.log('');
   console.log(`🤖 Generating HUMAN-LIKE blogs for ${productsNeedingBlogs.length} products...`);
+  console.log(`   📊 Total products: ${products.length}`);
+  console.log(`   📝 Existing blogs: ${existingBlogs.posts.length}`);
+  console.log(`   🆕 Need blogs: ${productsNeedingBlogs.length}`);
   console.log('');
   
   const newBlogPosts = [];
@@ -609,8 +622,8 @@ function saveBlogPosts(blogPosts, products) {
     const filePathPublic = path.join(blogsDirPublic, filename);
     const filePath = path.join(blogsDir, filename);
     
-    fs.writeFileSync(filePathPublic, JSON.stringify(blog, null, 2));
-    fs.writeFileSync(filePath, JSON.stringify(blog, null, 2));
+    fs.writeFileSync(filePathPublic, JSON.stringify(blog));
+    fs.writeFileSync(filePath, JSON.stringify(blog));
     
     // Track slug for this product
     productSlugMap[blog.productId] = blog.slug;
@@ -652,10 +665,14 @@ function saveBlogPosts(blogPosts, products) {
   // Update all existing product files
   let updatedCount = 0;
   productFiles.forEach(filePath => {
-    if (fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify(productsData, null, 2));
-      console.log(`   ✓ Updated ${filePath}`);
-      updatedCount++;
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, JSON.stringify(productsData));
+        console.log(`   ✓ Updated ${path.basename(filePath)}`);
+        updatedCount++;
+      }
+    } catch (error) {
+      console.log(`   ⚠️  Failed to update ${path.basename(filePath)}: ${error.message}`);
     }
   });
   
