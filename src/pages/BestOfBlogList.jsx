@@ -200,17 +200,18 @@ export default function BestOfBlogList() {
       {/* Category Filter */}
       {categories.length > 1 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-transparent snap-x snap-mandatory -mx-4 px-4">
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-thin scrollbar-thumb-violet-300 scrollbar-track-transparent hover:scrollbar-thumb-violet-400 lg:scrollbar-none lg:pb-0 lg:gap-2.5">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                style={{ minWidth: 'max-content' }}
                 className={`
-                  px-3 sm:px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all text-xs sm:text-sm flex-shrink-0 snap-start
+                  px-5 py-2.5 lg:px-4 lg:py-2 rounded-lg font-medium whitespace-nowrap 
+                  transition-all text-sm snap-start
+                  min-w-fit touch-manipulation
                   ${selectedCategory === category
-                    ? 'bg-gradient-to-r from-blue-500 to-teal-600 text-white shadow-lg'
-                    : 'bg-white text-slate-700 hover:bg-blue-50 border border-slate-200 hover:border-blue-300'
+                    ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300'
                   }
                 `}
               >

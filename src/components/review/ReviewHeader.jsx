@@ -20,6 +20,7 @@ export default function ReviewHeader() {
           </Link>
           <Link
             to="/"
+            style={{alignContent: 'center'}}
             className="px-4 py-2 text-violet-600 hover:text-violet-700 transition-colors text-sm font-semibold bg-white border-2 border-violet-200 rounded-lg"
           >
             View More Products

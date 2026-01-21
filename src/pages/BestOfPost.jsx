@@ -164,11 +164,6 @@ export default function BestOfPost() {
                   {blog.category}
                 </span>
               )}
-              {blog.featured && (
-                <span className="px-4 py-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold rounded-full">
-                  ⭐ Featured
-                </span>
-              )}
             </div>
 
             {/* Title */}
