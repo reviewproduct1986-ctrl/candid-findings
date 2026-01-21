@@ -23,7 +23,7 @@ const CONFIG = {
   region: 'us-east-1', // US marketplace
   productsFile: './public/data/products.json',
   backupFile: './public/data/products.backup.json',
-  delayBetweenRequests: 1000, // 1 second (PA-API allows more requests)
+  delayBetweenRequests: 3000, // 1 second (PA-API allows more requests)
 };
 
 // Statistics
