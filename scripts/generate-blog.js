@@ -3,12 +3,18 @@
 /**
  * Generate HUMAN-SOUNDING blog posts (not AI-like!)
  * Focus: Natural voice, conversational tone, real opinions
+ * Saves each blog as separate file: blog.<slug>.json
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const asinArg = args.find(arg => arg.startsWith('--asin='));
+const TARGET_ASIN = asinArg ? asinArg.split('=')[1] : null;
 
 function loadProducts() {
   const publicPath = path.join(__dirname, '../public/data/products.json');
@@ -29,19 +35,35 @@ function loadProducts() {
 }
 
 function loadExistingBlogs() {
-  const publicPath = path.join(__dirname, '../public/data/blogs.json');
-  const dataPath = path.join(__dirname, '../data/blogs.json');
+  const blogsDirPublic = path.join(__dirname, '../public/data/blogs');
+  const blogsDir = path.join(__dirname, '../data/blogs');
   
-  let filePath = publicPath;
-  if (!fs.existsSync(publicPath) && fs.existsSync(dataPath)) {
-    filePath = dataPath;
+  // Check both possible blog directories
+  let blogsDirectory = blogsDirPublic;
+  if (!fs.existsSync(blogsDirPublic) && fs.existsSync(blogsDir)) {
+    blogsDirectory = blogsDir;
   }
   
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(blogsDirectory)) {
     return { posts: [], metadata: {} };
   }
 
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  // Read all blog.*.json files
+  const files = fs.readdirSync(blogsDirectory);
+  const blogFiles = files.filter(f => f.startsWith('blog.') && f.endsWith('.json'));
+  
+  const posts = blogFiles.map(filename => {
+    const filePath = path.join(blogsDirectory, filename);
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  });
+
+  return { 
+    posts, 
+    metadata: {
+      total: posts.length,
+      source: blogsDirectory
+    }
+  };
 }
 
 function getOptimalTokens(product) {
@@ -459,7 +481,52 @@ REMEMBER:
   }
 }
 
-async function generateMissingBlogs(products, existingBlogs) {
+async function generateMissingBlogs(products, existingBlogs, targetAsin = null) {
+  // If targeting specific ASIN, find that product
+  if (targetAsin) {
+    const targetProduct = products.find(p => p.asin === targetAsin);
+    
+    if (!targetProduct) {
+      console.error(`❌ Product with ASIN ${targetAsin} not found!`);
+      return existingBlogs.posts;
+    }
+    
+    console.log('');
+    console.log(`🎯 Generating blog for specific product: ${targetProduct.title}`);
+    console.log(`   ASIN: ${targetAsin}`);
+    console.log('');
+    
+    const blog = await generateBlogPost(targetProduct);
+    
+    if (blog) {
+      // Replace existing blog if it exists, otherwise add new
+      const existingIndex = existingBlogs.posts.findIndex(b => b.productId === targetProduct.id);
+      if (existingIndex >= 0) {
+        console.log('   ℹ️  Replacing existing blog');
+        existingBlogs.posts[existingIndex] = blog;
+      } else {
+        existingBlogs.posts.push(blog);
+      }
+      
+      console.log('');
+      console.log('═══════════════════════════════════════');
+      console.log('✅ Blog generation successful!');
+      console.log('═══════════════════════════════════════');
+      console.log('');
+      
+      return existingBlogs.posts;
+    } else {
+      console.log('');
+      console.log('═══════════════════════════════════════');
+      console.log('❌ Blog generation failed!');
+      console.log('═══════════════════════════════════════');
+      console.log('');
+      
+      return existingBlogs.posts;
+    }
+  }
+  
+  // Original behavior: generate for all missing blogs
   const existingProductIds = new Set(existingBlogs.posts.map(b => b.productId));
   const productsNeedingBlogs = products.filter(p => !existingProductIds.has(p.id));
   
@@ -518,45 +585,116 @@ async function generateMissingBlogs(products, existingBlogs) {
   return [...existingBlogs.posts, ...newBlogPosts];
 }
 
-function saveBlogPosts(blogPosts) {
-  const dataDirPublic = path.join(__dirname, '../public/data');
-  const dataDir = path.join(__dirname, '../data');
+function saveBlogPosts(blogPosts, products) {
+  const blogsDirPublic = path.join(__dirname, '../public/data/blogs');
+  const blogsDir = path.join(__dirname, '../data/blogs');
   
-  if (!fs.existsSync(dataDirPublic)) {
-    fs.mkdirSync(dataDirPublic, { recursive: true });
+  // Create blogs directories
+  if (!fs.existsSync(blogsDirPublic)) {
+    fs.mkdirSync(blogsDirPublic, { recursive: true });
   }
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  if (!fs.existsSync(blogsDir)) {
+    fs.mkdirSync(blogsDir, { recursive: true });
   }
 
-  const blogsData = {
-    posts: blogPosts,
+  console.log('');
+  console.log('💾 Saving individual blog files...');
+  
+  // Create a map of productId to slug
+  const productSlugMap = {};
+  
+  // Save each blog as separate file
+  blogPosts.forEach((blog, index) => {
+    const filename = `blog.${blog.slug}.json`;
+    const filePathPublic = path.join(blogsDirPublic, filename);
+    const filePath = path.join(blogsDir, filename);
+    
+    fs.writeFileSync(filePathPublic, JSON.stringify(blog, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(blog, null, 2));
+    
+    // Track slug for this product
+    productSlugMap[blog.productId] = blog.slug;
+    
+    console.log(`   ✓ ${index + 1}/${blogPosts.length} ${filename}`);
+  });
+
+  console.log('');
+  console.log('📝 Updating products files with blog slugs...');
+  
+  // Update products with blog slugs
+  const updatedProducts = products.map(product => {
+    if (productSlugMap[product.id]) {
+      return {
+        ...product,
+        slug: productSlugMap[product.id]
+      };
+    }
+    return product;
+  });
+  
+  // Save updated products to all relevant files
+  const productsData = {
+    products: updatedProducts,
     metadata: {
-      total: blogPosts.length,
+      total: updatedProducts.length,
       updated: new Date().toISOString()
     }
   };
   
-  const jsonPathPublic = path.join(dataDirPublic, 'blogs.json');
-  const jsonPath = path.join(dataDir, 'blogs.json');
+  // List of possible product files to update
+  const productFiles = [
+    path.join(__dirname, '../public/data/products.json'),
+    path.join(__dirname, '../data/products.json'),
+    path.join(__dirname, '../public/data/initial-products.json'),
+    path.join(__dirname, '../data/initial-products.json')
+  ];
   
-  fs.writeFileSync(jsonPathPublic, JSON.stringify(blogsData));
-  fs.writeFileSync(jsonPath, JSON.stringify(blogsData));
+  // Update all existing product files
+  let updatedCount = 0;
+  productFiles.forEach(filePath => {
+    if (fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, JSON.stringify(productsData, null, 2));
+      console.log(`   ✓ Updated ${filePath}`);
+      updatedCount++;
+    }
+  });
   
-  console.log(`✅ Saved ${blogPosts.length} blog posts`);
+  if (updatedCount === 0) {
+    console.log('   ⚠️  No product files found to update');
+  }
+  
+  console.log('');
+  console.log(`✅ Saved ${blogPosts.length} individual blog files`);
+  console.log(`✅ Updated ${updatedCount} product file(s) with blog slugs`);
 }
 
 async function main() {
   try {
     console.log('╔═══════════════════════════════════════════╗');
     console.log('║  Human-Like Blog Generator                ║');
+    console.log('║  (Saves each blog separately)             ║');
     console.log('╚═══════════════════════════════════════════╝');
     console.log('');
+    
+    if (TARGET_ASIN) {
+      console.log('🎯 Mode: Generate blog for specific ASIN');
+      console.log(`   ASIN: ${TARGET_ASIN}`);
+      console.log('');
+    } else {
+      console.log('🤖 Mode: Generate blogs for all products without blogs');
+      console.log('');
+      console.log('💡 Tip: Generate for specific product:');
+      console.log('   node generate-blogs.js --asin=B0D1XD1ZV3');
+      console.log('');
+    }
+    
     console.log('🎯 Features:');
     console.log('   - Natural, conversational writing');
     console.log('   - Personal voice and opinions');
     console.log('   - NO AI-sounding phrases');
     console.log('   - Validation for dynamic data');
+    console.log('   - Each blog saved as blog.<slug>.json');
+    console.log('   - Updates products.json & initial-products.json');
     console.log('');
     
     if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY === 'YOUR_KEY_HERE') {
@@ -570,14 +708,14 @@ async function main() {
     const existingBlogs = loadExistingBlogs();
     console.log(`📄 Found ${existingBlogs.posts.length} existing blogs`);
 
-    const allBlogs = await generateMissingBlogs(products, existingBlogs);
+    const allBlogs = await generateMissingBlogs(products, existingBlogs, TARGET_ASIN);
     
     if (allBlogs.length === 0) {
       console.warn('⚠️  No blog posts to save!');
       return;
     }
 
-    saveBlogPosts(allBlogs);
+    saveBlogPosts(allBlogs, products);
     
     console.log('🎉 Generation complete!');
     console.log('');
@@ -585,6 +723,8 @@ async function main() {
     console.log('   - Natural, conversational tone');
     console.log('   - Personal observations');
     console.log('   - No corporate speak');
+    console.log('   - Each saved as separate file');
+    console.log('   - Product files updated with slugs');
     console.log('');
     
   } catch (error) {

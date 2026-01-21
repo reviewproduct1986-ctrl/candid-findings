@@ -92,8 +92,6 @@ export default function EmailSignup() {
 
       const data = await jsonpRequest;
 
-      console.log('MailChimp response:', data);
-
       if (data.result === 'success') {
         const msg = data.msg || '';
         const cleanMsg = msg

@@ -14,7 +14,7 @@ import { getAmazonSearchUrl } from '../utils/affiliateConfig';
 import { useData } from '../context/DataContext';
 
 export default function ProductListing() {
-  const { products, blogs, loading } = useData();
+  const { products, loading } = useData();
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,13 +23,12 @@ export default function ProductListing() {
   // Add review URLs to products
   const productsWithReviews = useMemo(() => {
     return products.map(product => {
-      const blog = blogs.find(b => b.productId === product.id);
       return {
         ...product,
-        reviewUrl: blog ? `/reviews/${blog.slug}` : null
+        reviewUrl: `/reviews/${product.slug}`
       };
     });
-  }, [products, blogs]);
+  }, [products]);
   
   // Filter logic
   const {

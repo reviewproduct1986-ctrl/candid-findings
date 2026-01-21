@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { ChevronRight } from 'lucide-react';
 import Footer from '../components/Footer';
 import ReviewHeader from '../components/review/ReviewHeader';
+import Breadcrumbs from '../components/review/Breadcrumbs';
 import { formatDate } from '../utils/dateFormat';
 import { calculateReadTime } from '../utils/readTime';
 import ProductSection from '../components/ProductSection';
@@ -13,7 +14,7 @@ import { useData } from '../context/DataContext';
 export default function BestOfPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { products, bestOfBlogs, loading: dataLoading } = useData();
+  const { products, bestOfBlogs, getBlog, loading: dataLoading } = useData();
   
   const [blog, setBlog] = useState(null);
   const [productsWithDetails, setProductsWithDetails] = useState([]);
@@ -21,6 +22,22 @@ export default function BestOfPost() {
 
   // Scroll to top when navigating to a new blog
   useEffect(() => {
+    // Fetch the blog by slug
+    getBlog(slug)
+      .then(foundBlog => {
+        // Find the product for this blog
+        if (foundBlog.slug !== slug) {
+          navigate('/', { replace: true });
+          return;
+        }
+
+        setBlog(foundBlog);
+      })
+      .catch(error => {
+        console.error('Blog not found:', error);
+        navigate('/', { replace: true });
+      });
+  
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
 
@@ -50,16 +67,10 @@ export default function BestOfPost() {
   
   // Find blog and match products from context data
   useEffect(() => {
-    if (dataLoading || !products.length || !bestOfBlogs.length) return;
-
-    const foundBlog = bestOfBlogs.find(b => b.slug === slug);
-    if (!foundBlog) {
-      navigate('/best', { replace: true });
-      return;
-    }
+    if (dataLoading || !products.length || !blog || !bestOfBlogs.length) return;
     
     // Match products by ASIN
-    const productsWithData = (foundBlog.products || []).map(blogProduct => {
+    const productsWithData = (blog.products || []).map(blogProduct => {
       const productData = products.find(p => p.asin === blogProduct.asin);
       return {
         ...blogProduct,
@@ -73,10 +84,9 @@ export default function BestOfPost() {
       .join('\n\n');
     const calculatedReadTime = calculateReadTime(allContent);
     
-    setBlog(foundBlog);
     setProductsWithDetails(productsWithData);
     setReadTime(calculatedReadTime);
-  }, [slug, products, bestOfBlogs, dataLoading, navigate]);
+  }, [slug, products, blog, bestOfBlogs, dataLoading, navigate]);
 
   if (dataLoading || !blog) {
     return (
@@ -141,13 +151,7 @@ export default function BestOfPost() {
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Breadcrumbs */}
-        <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-6">
-          <Link to="/" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Home</Link>
-          <ChevronRight size={14} className="flex-shrink-0" />
-          <Link to="/best" className="hover:text-blue-600 transition-colors flex items-center flex-shrink-0 whitespace-nowrap">Best Selections</Link>
-          <ChevronRight size={14} className="flex-shrink-0 hidden sm:block" />
-          <span className="text-blue-600 font-medium truncate flex items-center min-w-0 sm:max-w-none">{blog.title}</span>
-        </nav>
+        <Breadcrumbs category={'Best Selections'} back={'/best'} title={blog.title} />
 
         {/* Article Container - Matching Review Page */}
         <article className="bg-white rounded-3xl shadow-xl p-6 md:p-12">

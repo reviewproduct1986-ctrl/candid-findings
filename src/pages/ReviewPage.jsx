@@ -21,47 +21,58 @@ import { useData } from '../context/DataContext';
 export default function ReviewPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { products, blogs, loading: dataLoading } = useData();
+  const { products, getBlog, loading: dataLoading } = useData();
   
   const [product, setProduct] = useState(null);
   const [blog, setBlog] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [tocExpanded, setTocExpanded] = useState(false);
+  const [blogLoading, setBlogLoading] = useState(true);
 
   // Scroll to top when navigating to a new review
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
   
-  // Find blog and product from context data
+  // Fetch blog and find product
   useEffect(() => {
-    if (dataLoading || !products.length || !blogs.length) return;
+    if (dataLoading || !products.length) return;
 
-    const foundBlog = blogs.find(b => b.slug === slug);
-    if (!foundBlog) {
-      navigate('/', { replace: true });
-      return;
-    }
-    
-    const foundProduct = products.find(p => p.id === foundBlog.productId);
-    if (!foundProduct) {
-      navigate('/', { replace: true });
-      return;
-    }
-    
-    // Find related products
-    const related = products
-      .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
-      .slice(0, 3)
-      .map(p => {
-        const relatedBlog = blogs.find(b => b.productId === p.id);
-        return { ...p, reviewUrl: relatedBlog ? `/reviews/${relatedBlog.slug}` : null };
+    // Reset state when slug changes
+    setBlogLoading(true);
+    setBlog(null);
+    setProduct(null);
+    setRelatedProducts([]);
+
+    // Fetch the blog by slug
+    getBlog(slug)
+      .then(foundBlog => {
+        setBlog(foundBlog);
+        
+        // Find the product for this blog
+        const foundProduct = products.find(p => p.id === foundBlog.productId);
+        if (!foundProduct) {
+          navigate('/', { replace: true });
+          return;
+        }
+        
+        setProduct(foundProduct);
+        
+        // Find related products in the same category
+        const related = products
+          .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
+          .slice(0, 3);
+        
+        setRelatedProducts(related);
+      })
+      .catch(error => {
+        console.error('Blog not found:', error);
+        navigate('/', { replace: true });
+      })
+      .finally(() => {
+        setBlogLoading(false);
       });
-    
-    setProduct(foundProduct);
-    setBlog(foundBlog);
-    setRelatedProducts(related);
-  }, [slug, products, blogs, dataLoading, navigate]);
+  }, [slug, products, dataLoading, navigate, getBlog]);
 
   // Update meta tags
   useEffect(() => {
@@ -113,7 +124,7 @@ export default function ReviewPage() {
     (blog?.targetAudience ? 1 : 0) + 
     (blog?.verdict ? 1 : 0);
 
-  if (dataLoading || !product || !blog) {
+  if (dataLoading || blogLoading || !product || !blog) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-slate-600">Loading...</div>
@@ -137,7 +148,11 @@ export default function ReviewPage() {
       <StickyBuyButton product={product} />
 
       <main className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12">
-        <Breadcrumbs product={product} />
+        <Breadcrumbs
+          category={product.category}
+          title={product.title}
+          back={`/?category=${encodeURIComponent(product.category)}`}
+        />
 
         <article className="bg-white rounded-3xl shadow-xl p-6 md:p-12">
           <ReviewHero product={product} />
@@ -221,7 +236,6 @@ export default function ReviewPage() {
               You May Also Like
             </h2>
             
-            {/* ✅ Use ProductCard component */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {relatedProducts.map(product => (
                 <ProductCard 

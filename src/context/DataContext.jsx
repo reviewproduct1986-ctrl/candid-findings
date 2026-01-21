@@ -1,23 +1,20 @@
-// src/contexts/DataContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const DataContext = createContext();
 
 export function DataProvider({ children }) {
   const [products, setProducts] = useState([]);
-  const [blogs, setBlogs] = useState([]);
   const [bestOfBlogs, setBestOfBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [blogCache, setBlogCache] = useState({});
 
   useEffect(() => {
     Promise.all([
       fetch('/data/products.json').then(res => res.json()),
-      fetch('/data/blogs.json').then(res => res.json()),
       fetch('/data/best-of-blogs.json').then(res => res.json())
     ])
-      .then(([productsData, blogsData, bestOfBlogsData]) => {
+      .then(([productsData, bestOfBlogsData]) => {
         setProducts(productsData.products || []);
-        setBlogs(blogsData.posts || []);
         setBestOfBlogs(bestOfBlogsData.posts || []);
         setLoading(false);
       })
@@ -27,8 +24,33 @@ export function DataProvider({ children }) {
       });
   }, []);
 
+  const getBlog = async (slug) => {
+    // Check cache first
+    if (blogCache[slug]) {
+      return blogCache[slug];
+    }
+
+    try {
+      const response = await fetch(`/data/blogs/blog.${slug}.json`);
+      
+      if (!response.ok) {
+        throw new Error(`Blog not found: ${slug}`);
+      }
+      
+      const blogData = await response.json();
+      
+      // Cache the result
+      setBlogCache(prev => ({ ...prev, [slug]: blogData }));
+      
+      return blogData;
+    } catch (error) {
+      console.error(`Error loading blog ${slug}:`, error);
+      throw error;
+    }
+  };
+
   return (
-    <DataContext.Provider value={{ products, blogs, bestOfBlogs, loading }}>
+    <DataContext.Provider value={{ products, getBlog, bestOfBlogs, loading }}>
       {children}
     </DataContext.Provider>
   );
