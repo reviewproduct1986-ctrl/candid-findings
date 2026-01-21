@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// node --env-file=scripts/.env scripts/paapi-api.js 
+// node --env-file=secrets/.script.env scripts/paapi-api.js
 
 const fs = require('fs');
 const path = require('path');
@@ -216,7 +216,10 @@ function sleep(ms) {
  */
 async function main() {
   const currentTime = new Date();
-  console.log(currentTime.toLocaleString());
+  const ptTime = currentTime.toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles"
+  });
+  console.log('TIME:', ptTime);
   console.log(`
 ╔═══════════════════════════════════════╗
 ║   Amazon Product Updater (PA-API)     ║
