@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// node --env-file=scripts/.env scripts/paapi-api.js 
+// node --env-file=secrets/.script.env scripts/paapi-api.js
 
 const fs = require('fs');
 const path = require('path');
@@ -69,7 +69,6 @@ async function fetchProductData(api, asin) {
       if (error) {
         reject(error);
       } else {
-        console.log('data: ', data);
         resolve(data);
       }
     });
@@ -189,6 +188,7 @@ async function updateProduct(api, product, index, total) {
       console.log(`  ✓ No changes`);
     }
 
+    updated.priceUpdated = new Date().toISOString();
     updated.lastChecked = new Date().toISOString();
     updated.available = true;
     return updated;
