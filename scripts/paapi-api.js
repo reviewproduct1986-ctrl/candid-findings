@@ -216,7 +216,11 @@ function sleep(ms) {
  */
 async function main() {
   const currentTime = new Date();
-  console.log(currentTime.toLocaleString());
+  const losAngelesTime = currentTime.toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
+  });
+  console.log('TIME:', losAngelesTime);
+
   console.log(`
 ╔═══════════════════════════════════════╗
 ║   Amazon Product Updater (PA-API)     ║
