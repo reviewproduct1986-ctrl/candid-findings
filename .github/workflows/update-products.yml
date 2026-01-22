@@ -3,7 +3,7 @@ name: Update Product Data
 on:
   # Run every two hours
   schedule:
-    - cron: '48 */2 * * *'
+    - cron: '48 */4 * * *'
   
   # Manual trigger
   workflow_dispatch:
