@@ -254,6 +254,7 @@ function generateSitemap(reviews, bestOf, bestOfBlogs, products) {
     xml += `  <!-- Review Posts -->\n`;
     
     reviews.forEach(post => {
+      console.log('post: ', post.slug);
       if (!post || !post.slug) return;
       
       const lastmod = post.updatedDate || post.publishedDate ? 
