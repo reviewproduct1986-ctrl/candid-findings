@@ -7,6 +7,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const { exec } = require('child_process');
+const { affiliateLink } = require('../src/utils/urlHelper');
 
 const colors = {
   reset: '\x1b[0m',
@@ -79,7 +80,7 @@ async function main() {
     
     // Open browser automatically
     console.log(`\n${colors.green}Opening in browser...${colors.reset}`);
-    openBrowser(product.affiliate);
+    openBrowser(affiliateLink(product));
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // Ask for input
@@ -140,11 +141,6 @@ async function main() {
       product.priceUpdated = new Date().toISOString();
       modified++;
       console.log(`${colors.green}✓ Updated (timestamp added)${colors.reset}`);
-    }
-    
-    // Check for issues
-    if (!product.affiliate || !product.affiliate.includes('amazon.com')) {
-      failed.push(product.affiliate);
     }
     
     console.log('');

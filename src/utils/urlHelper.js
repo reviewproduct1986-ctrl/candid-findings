@@ -14,3 +14,7 @@ export function slugToCategory(slug) {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
+export function affiliateLink(product) {
+  return `https://amazon.com/dp/${product.asin}?tag=${process.env.AMAZON_TAG}`;
+}

@@ -1,6 +1,6 @@
 // Schema generators for SEO
 
-import { categoryToSlug } from '../utils/urlHelper';
+import { affiliateLink, categoryToSlug } from '../utils/urlHelper';
 
 function CleanAndShort(title) {
   const newTitle = title.replace(/®/g, '')
@@ -62,7 +62,7 @@ export function generateReviewSchema(product, blog) {
         "priceCurrency": "USD",
         "priceValidUntil": new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
         "availability": "https://schema.org/InStock",
-        "url": product.affiliate,
+        "url": affiliateLink(product),
         "itemCondition": "https://schema.org/NewCondition",
         "seller": {
           "@type": "Organization",
@@ -151,13 +151,13 @@ export function generateItemListSchema(category, products) {
         "image": product.image,
         "url": product.reviewUrl 
           ? `https://candidfindings.com${product.reviewUrl}`
-          : product.affiliate,
+          : affiliateLink(product),
         "offers": {
           "@type": "Offer",
           "price": product.price.toFixed(2),
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": product.affiliate
+          "url": affiliateLink(product)
         },
         "aggregateRating": product.reviews ? {
           "@type": "AggregateRating",
@@ -235,14 +235,14 @@ export function generateBestOfCollectionSchema(blog, products) {
           "name": CleanAndShort(product.title),
           "description": product.description || `${product.title} featured in ${blog.category}`,
           "image": product.image,
-          "url": product.affiliate,
+          "url": affiliateLink(product),
           "offers": {
             "@type": "Offer",
             "price": product.price.toFixed(2),
             "priceCurrency": "USD",
             "priceValidUntil": new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
             "availability": "https://schema.org/InStock",
-            "url": product.affiliate,
+            "url": affiliateLink(product),
             "seller": {
               "@type": "Organization",
               "name": "Amazon"

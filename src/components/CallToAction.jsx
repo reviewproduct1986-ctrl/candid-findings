@@ -1,13 +1,14 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import QRButton from './QRButton';
+import { affiliateLink } from '../utils/urlHelper';
 
 export default function CallToAction({product, page}) {
   return (
     <div className="flex gap-2">
       {/* View on Amazon Button */}
       <a
-        href={product.affiliate}
+        href={affiliateLink(product)}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => {
@@ -31,7 +32,7 @@ export default function CallToAction({product, page}) {
 
       {/* Compact QR Button - Desktop Only */}
       <QRButton
-        productUrl={product.affiliate}
+        productUrl={affiliateLink(product)}
         productTitle={product.title}
         productId={product.id}
         productCategory={product.category}

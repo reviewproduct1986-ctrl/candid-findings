@@ -8,25 +8,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// Amazon Product Advertising API configuration
-const config = {
-  accessKey: process.env.AMAZON_ACCESS_KEY,
-  secretKey: process.env.AMAZON_SECRET_KEY,
-  partnerTag: 'candidfinding-20',
-  region: 'us-east-1',
-  host: 'webservices.amazon.com'
-};
-
-// Categories and search terms to fetch
-const SEARCH_QUERIES = [
-  { category: 'Electronics', keywords: 'wireless headphones', maxResults: 5 },
-  { category: 'Health & Fitness', keywords: 'fitness tracker', maxResults: 5 },
-  { category: 'Home & Office', keywords: 'ergonomic chair', maxResults: 5 },
-  { category: 'Kitchen', keywords: 'coffee maker', maxResults: 5 },
-  { category: 'Electronics', keywords: 'action camera', maxResults: 5 },
-  { category: 'Home & Office', keywords: 'laptop stand', maxResults: 5 }
-];
-
 /**
  * Mock function - Replace with actual Amazon Product Advertising API
  * Install: npm install amazon-paapi
@@ -55,64 +36,6 @@ async function fetchAmazonProducts() {
       console.warn(`${filePath} does not exist`);      
     }
   }
-
-  /*
-  // Example with actual Amazon PAAPI (uncomment when ready)
-  const amazonPaapi = require('amazon-paapi');
-  
-  const commonParameters = {
-    AccessKey: config.accessKey,
-    SecretKey: config.secretKey,
-    PartnerTag: config.partnerTag,
-    PartnerType: 'Associates',
-    Marketplace: 'www.amazon.com'
-  };
-
-  const allProducts = [];
-
-  for (const query of SEARCH_QUERIES) {
-    const requestParameters = {
-      Keywords: query.keywords,
-      SearchIndex: 'All',
-      ItemCount: query.maxResults,
-      Resources: [
-        'Images.Primary.Large',
-        'ItemInfo.Title',
-        'ItemInfo.Features',
-        'Offers.Listings.Price',
-        'CustomerReviews.StarRating',
-        'CustomerReviews.Count'
-      ]
-    };
-
-    try {
-      const data = await amazonPaapi.SearchItems(commonParameters, requestParameters);
-      
-      if (data.SearchResult && data.SearchResult.Items) {
-        const items = data.SearchResult.Items.map(item => ({
-          id: item.ASIN,
-          title: item.ItemInfo.Title.DisplayValue,
-          category: query.category,
-          price: item.Offers?.Listings?.[0]?.Price?.Amount || 0,
-          rating: item.CustomerReviews?.StarRating?.Value || 0,
-          reviews: item.CustomerReviews?.Count || 0,
-          image: item.Images?.Primary?.Large?.URL || '',
-          asin: item.ASIN,
-          affiliate: item.DetailPageURL,
-          features: item.ItemInfo?.Features?.DisplayValues || [],
-          description: item.ItemInfo?.Features?.DisplayValues?.[0] || '',
-          lastUpdated: new Date().toISOString()
-        }));
-        
-        allProducts.push(...items);
-      }
-    } catch (error) {
-      console.error(`Error fetching ${query.keywords}:`, error.message);
-    }
-  }
-
-  return allProducts;
-  */
 
   return products;
 }
@@ -207,8 +130,7 @@ async function main() {
     console.log('🚀 Starting product fetch...');
     
     // Validate environment variables
-    console.log('config.partnerTag: ', config.partnerTag);
-    if (!config.partnerTag) {
+    if (!process.env.AMAZON_TAG) {
       console.warn('⚠️  AMAZON_PARTNER_TAG not set. Using placeholder.');
     }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import StarRating from './StarRating';
 import CallToAction from '../CallToAction';
+import { affiliateLink } from '../../utils/urlHelper';
 
 export default function StickyBuyButton({ product }) {
   const hasDiscount = product?.listPrice && product.listPrice > product.price;
@@ -60,7 +61,7 @@ export default function StickyBuyButton({ product }) {
         {/* Mobile */}
         <div className="md:hidden flex flex-col items-center gap-2">
           <a
-            href={product.affiliate}
+            href={affiliateLink(product)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClick}
