@@ -29,7 +29,7 @@ export default function ProductListing() {
   const productsWithReviews = useMemo(() => {
     return products.map(product => ({
       ...product,
-      reviewUrl: `/reviews/${product.slug}`
+      reviewUrl: product.slug ? `/reviews/${product.slug}` : null
     }));
   }, [products]);
   
