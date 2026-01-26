@@ -1,16 +1,12 @@
 import { useState, useMemo } from 'react';
 
 export function useSorting(products) {
-  const [sortBy, setSortBy] = useState('default');
+  const [sortBy, setSortBy] = useState('latest');
 
   const sortedProducts = useMemo(() => {
     const sorted = [...products];
 
     switch (sortBy) {
-      case 'latest':
-        // Sort by ID descending (higher ID = newer product)
-        return sorted.sort((a, b) => b.id - a.id);
-      
       case 'price-low':
         return sorted.sort((a, b) => a.price - b.price);
       
@@ -43,14 +39,18 @@ export function useSorting(products) {
           return savingsB - savingsA;
         });
       
-      case 'default':
-      default:
-        // Default: Sort by rating * log(reviews) for quality + popularity balance
+      case 'featured':
         return sorted.sort((a, b) => {
           const scoreA = (a.rating || 0) * Math.log10((a.reviews || 0) + 10);
           const scoreB = (b.rating || 0) * Math.log10((b.reviews || 0) + 10);
           return scoreB - scoreA;
         });
+      
+      case 'latest':
+      default:
+        case 'latest':
+          // Sort by ID descending (higher ID = newer product)
+          return sorted.sort((a, b) => b.id - a.id);
     }
   }, [products, sortBy]);
 

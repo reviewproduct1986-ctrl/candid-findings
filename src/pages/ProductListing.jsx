@@ -142,7 +142,7 @@ export default function ProductListing() {
     setPriceRange([0, maxPrice]);
     setMinRating(0);
     setSelectedBadges([]);
-    setSortBy('default');
+    setSortBy('latest');
   };
 
   return (

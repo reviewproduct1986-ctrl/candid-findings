@@ -36,8 +36,7 @@ export default function ResultsCountAndSort({
               onChange={(e) => onSortChange(e.target.value)}
               className="pl-3 pr-12 py-2 bg-white border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all cursor-pointer hover:border-slate-300 appearance-none"
             >
-              <option value="default">Default</option>
-              <option value="latest">Latest Added</option>
+              <option value="latest">Recently Added</option>
               <option value="rating">Highest Rated</option>
               <option value="reviews">Most Reviews</option>
               <option value="price-low">Price: Low to High</option>
