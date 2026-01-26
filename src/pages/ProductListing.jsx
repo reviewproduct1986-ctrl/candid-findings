@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router-dom';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import FilterPanel from '../components/FilterPanel';
@@ -17,8 +18,11 @@ import { usePagination } from '../hooks/usePagination';
 import { useScrollToGrid } from '../hooks/useScrollToGrid';
 import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
 import { useData } from '../context/DataContext';
+import { categoryToSlug } from '../utils/urlHelper';
 
 export default function ProductListing() {
+  const { selectedCategory = 'All' } = useParams();
+  
   const { products, loading } = useData();
 
   // Add review URLs to products
@@ -31,7 +35,6 @@ export default function ProductListing() {
   
   // Filter logic
   const {
-    selectedCategory,
     searchTerm,
     priceRange,
     minRating,
@@ -47,7 +50,7 @@ export default function ProductListing() {
     availableBadges,
     filteredProducts,
     maxPrice
-  } = useProductFilters(productsWithReviews);
+  } = useProductFilters(productsWithReviews, selectedCategory);
 
   // Sorting
   const { sortBy, setSortBy, sortedProducts } = useSorting(filteredProducts);
@@ -127,7 +130,7 @@ export default function ProductListing() {
     setMeta('meta[property="og:description"]', 'property', 'og:description', pageDescription);
     
     const categoryUrl = selectedCategory && selectedCategory !== 'All'
-      ? `https://candidfindings.com/?category=${encodeURIComponent(selectedCategory)}`
+      ? `https://candidfindings.com/category/${categoryToSlug(selectedCategory)}`
       : 'https://candidfindings.com/';
     setMeta('meta[property="og:url"]', 'property', 'og:url', categoryUrl);
   }, [selectedCategory, pageTitle, pageDescription]);
@@ -150,7 +153,7 @@ export default function ProductListing() {
         <link 
           rel="canonical" 
           href={selectedCategory && selectedCategory !== 'All'
-            ? `https://candidfindings.com/?category=${encodeURIComponent(selectedCategory)}`
+            ? `https://candidfindings.com/category/${categoryToSlug(selectedCategory)}`
             : 'https://candidfindings.com/'
           } 
         />

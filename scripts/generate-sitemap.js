@@ -2,73 +2,58 @@
 
 /**
  * Generate sitemap.xml from products and blog posts
- * Includes homepage, category pages, and all review pages
+ * Uses products.json as source of truth and verifies blog files exist
  */
 
 const fs = require('fs');
 const path = require('path');
+const { categoryToSlug } = require('../src/utils/urlHelper');
 
 const SITE_URL = 'https://candidfindings.com'; // Update with your actual domain
 
 /**
- * Load blogs from JSON
+ * Check if a blog file exists for a given slug
  */
-function loadBlogs() {
-  // Try both locations
-  const publicPath = path.join(__dirname, '../public/data/blogs.json');
-  const dataPath = path.join(__dirname, '../data/blogs.json');
+function blogFileExists(slug) {
+  const blogPaths = [
+    path.join(__dirname, `../public/data/blogs/blog.${slug}.json`),
+    path.join(__dirname, `../data/blogs/blog.${slug}.json`)
+  ];
   
-  let filePath = publicPath;
-  if (!fs.existsSync(publicPath) && fs.existsSync(dataPath)) {
-    filePath = dataPath;
-  }
-  
-  if (!fs.existsSync(filePath)) {
-    console.warn('⚠️  blogs.json not found - sitemap will only include homepage');
-    return { posts: [] };
-  }
-
-  try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    return data || { posts: [] };
-  } catch (error) {
-    console.warn('⚠️  Error reading blogs.json:', error.message);
-    return { posts: [] };
-  }
+  return blogPaths.some(p => fs.existsSync(p));
 }
 
 /**
- * Load best-of blogs from JSON
+ * Load blog metadata from individual file
  */
-function loadBestOfBlogs() {
-  // Try both locations
-  const publicPath = path.join(__dirname, '../public/data/best-of-blogs.json');
-  const dataPath = path.join(__dirname, '../data/best-of-blogs.json');
+function loadBlogMetadata(slug) {
+  const blogPaths = [
+    path.join(__dirname, `../public/data/blogs/blog.${slug}.json`),
+    path.join(__dirname, `../data/blogs/blog.${slug}.json`)
+  ];
   
-  let filePath = publicPath;
-  if (!fs.existsSync(publicPath) && fs.existsSync(dataPath)) {
-    filePath = dataPath;
+  for (const filePath of blogPaths) {
+    if (fs.existsSync(filePath)) {
+      try {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        return {
+          publishedDate: data.publishedDate,
+          updatedDate: data.updatedDate
+        };
+      } catch (error) {
+        console.warn(`⚠️  Error reading ${slug}:`, error.message);
+        return {};
+      }
+    }
   }
   
-  if (!fs.existsSync(filePath)) {
-    console.warn('⚠️  best-of-blogs.json not found');
-    return { posts: [] };
-  }
-
-  try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    return data || { posts: [] };
-  } catch (error) {
-    console.warn('⚠️  Error reading best-of-blogs.json:', error.message);
-    return { posts: [] };
-  }
+  return {};
 }
 
 /**
  * Load products from JSON
  */
 function loadProducts() {
-  // Try both locations
   const publicPath = path.join(__dirname, '../public/data/products.json');
   const dataPath = path.join(__dirname, '../data/products.json');
   
@@ -92,9 +77,73 @@ function loadProducts() {
 }
 
 /**
+ * Load best-of blogs from JSON
+ */
+function loadBestOfBlogs() {
+  const publicPath = path.join(__dirname, '../public/data/best-of-blogs.json');
+  const dataPath = path.join(__dirname, '../data/best-of-blogs.json');
+  
+  let filePath = publicPath;
+  if (!fs.existsSync(publicPath) && fs.existsSync(dataPath)) {
+    filePath = dataPath;
+  }
+  
+  if (!fs.existsSync(filePath)) {
+    console.warn('⚠️  best-of-blogs.json not found');
+    return { posts: [] };
+  }
+
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    return data || { posts: [] };
+  } catch (error) {
+    console.warn('⚠️  Error reading best-of-blogs.json:', error.message);
+    return { posts: [] };
+  }
+}
+
+/**
+ * Categorize products into reviews and best-of based on category and blog existence
+ */
+function categorizeProducts(products) {
+  const reviews = [];
+  const bestOf = [];
+  const missingBlogs = [];
+  
+  products.forEach(product => {
+    if (!product || !product.slug) return;
+    
+    // Check if blog file exists
+    if (!blogFileExists(product.slug)) {
+      missingBlogs.push(product.slug);
+      return;
+    }
+    
+    // Load blog metadata
+    const metadata = loadBlogMetadata(product.slug);
+    
+    const entry = {
+      slug: product.slug,
+      title: product.name || product.slug,
+      category: product.category,
+      ...metadata
+    };
+    
+    // Categorize based on category field
+    if (product.category && product.category.toLowerCase().includes('best')) {
+      bestOf.push(entry);
+    } else {
+      reviews.push(entry);
+    }
+  });
+  
+  return { reviews, bestOf, missingBlogs };
+}
+
+/**
  * Generate sitemap XML
  */
-function generateSitemap(blogs, bestOfBlogs, products) {
+function generateSitemap(reviews, bestOf, bestOfBlogs, products) {
   const now = new Date().toISOString().split('T')[0];
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -116,7 +165,8 @@ function generateSitemap(blogs, bestOfBlogs, products) {
 `;
 
   // Add Best Selections directory
-  xml += `  <!-- Best Selections Directory -->
+  if (bestOf.length > 0 || (bestOfBlogs?.posts || []).length > 0) {
+    xml += `  <!-- Best Selections Directory -->
   <url>
     <loc>${SITE_URL}/best</loc>
     <lastmod>${now}</lastmod>
@@ -125,13 +175,14 @@ function generateSitemap(blogs, bestOfBlogs, products) {
   </url>
 
 `;
+  }
 
-  // Add Best Of blog posts
+  // Add Best-Of posts from best-of-blogs.json
   const bestOfPosts = bestOfBlogs?.posts || [];
   const publishedBestOfPosts = bestOfPosts.filter(post => !post.comingSoon);
   
   if (publishedBestOfPosts.length > 0) {
-    xml += `  <!-- Best Selections Posts -->\n`;
+    xml += `  <!-- Best Selections Posts (from best-of-blogs.json) -->\n`;
     
     publishedBestOfPosts.forEach(post => {
       if (!post || !post.slug) return;
@@ -151,20 +202,66 @@ function generateSitemap(blogs, bestOfBlogs, products) {
     });
   }
 
-  // Add blog posts
-  const blogPosts = blogs?.posts || [];
-  if (blogPosts.length > 0) {
-    xml += `  <!-- Blog Posts -->\n`;
+  // Add Best-Of posts from products with "best" category
+  if (bestOf.length > 0) {
+    xml += `  <!-- Best Selections Posts (from products) -->\n`;
     
-    blogPosts.forEach(blog => {
-      if (!blog || !blog.slug) return;
+    bestOf.forEach(post => {
+      if (!post || !post.slug) return;
       
-      const lastmod = blog.updatedDate ? 
-        new Date(blog.updatedDate).toISOString().split('T')[0] : 
+      const lastmod = post.updatedDate || post.publishedDate ? 
+        new Date(post.updatedDate || post.publishedDate).toISOString().split('T')[0] : 
         now;
       
       xml += `  <url>
-    <loc>${SITE_URL}/reviews/${blog.slug}</loc>
+    <loc>${SITE_URL}/best/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+`;
+    });
+  }
+
+  // Add best category pages
+  if (bestOfPosts.length > 0) {
+    const bestCategories = [...new Set(
+      bestOfPosts
+        .filter(p => p && p.category)
+        .map(p => p.category)
+    )];
+
+    if (bestCategories.length > 0) {
+      xml += `  <!-- Best Category Pages -->\n`;
+      bestCategories.forEach(category => {
+        if (!category) return;
+        
+        xml += `  <url>
+    <loc>${SITE_URL}/best/category/${categoryToSlug(category)}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+`;
+      });
+    }
+  }
+
+  // Add individual review posts
+  if (reviews.length > 0) {
+    xml += `  <!-- Review Posts -->\n`;
+    
+    reviews.forEach(post => {
+      if (!post || !post.slug) return;
+      
+      const lastmod = post.updatedDate || post.publishedDate ? 
+        new Date(post.updatedDate || post.publishedDate).toISOString().split('T')[0] : 
+        now;
+      
+      xml += `  <url>
+    <loc>${SITE_URL}/reviews/${post.slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -174,10 +271,10 @@ function generateSitemap(blogs, bestOfBlogs, products) {
     });
   }
 
-  // Add category pages if there are multiple categories
+  // Add category pages (excluding "best" categories)
   const categories = [...new Set(
     products
-      .filter(p => p && p.category)
+      .filter(p => p && p.category && !p.category.toLowerCase().includes('best'))
       .map(p => p.category)
   )];
   
@@ -187,7 +284,7 @@ function generateSitemap(blogs, bestOfBlogs, products) {
       if (!category) return;
       
       xml += `  <url>
-    <loc>${SITE_URL}/?category=${encodeURIComponent(category)}</loc>
+    <loc>${SITE_URL}/category/${categoryToSlug(category)}</loc>
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -220,9 +317,7 @@ function generateSitemap(blogs, bestOfBlogs, products) {
     <priority>0.3</priority>
   </url>
 
-`;
-
-  xml += `</urlset>`;
+</urlset>`;
   
   return xml;
 }
@@ -242,21 +337,35 @@ function saveSitemap(xml) {
 function main() {
   try {
     console.log('🗺️  Generating sitemap.xml...');
+    console.log('');
     
-    const blogs = loadBlogs();
-    const bestOfBlogs = loadBestOfBlogs();
     const products = loadProducts();
+    const bestOfBlogs = loadBestOfBlogs();
     
-    const blogPosts = blogs?.posts || [];
+    // Categorize products and verify blog files exist
+    const { reviews, bestOf, missingBlogs } = categorizeProducts(products);
+    
     const bestOfPosts = bestOfBlogs?.posts || [];
     const publishedBestOfPosts = bestOfPosts.filter(p => !p.comingSoon);
     const validProducts = products.filter(p => p && p.category);
     
-    console.log(`📦 Found ${validProducts.length} products`);
-    console.log(`📄 Found ${blogPosts.length} blog posts`);
-    console.log(`⭐ Found ${publishedBestOfPosts.length} best-of posts`);
+    console.log(`📦 Total products: ${validProducts.length}`);
+    console.log(`📄 Review posts (with blog files): ${reviews.length}`);
+    console.log(`⭐ Best-of posts (from products): ${bestOf.length}`);
+    console.log(`⭐ Best-of posts (from best-of-blogs.json): ${publishedBestOfPosts.length}`);
     
-    const xml = generateSitemap(blogs, bestOfBlogs, validProducts);
+    if (missingBlogs.length > 0) {
+      console.log(`⚠️  Products missing blog files: ${missingBlogs.length}`);
+      missingBlogs.slice(0, 5).forEach(slug => {
+        console.log(`   - ${slug}`);
+      });
+      if (missingBlogs.length > 5) {
+        console.log(`   ... and ${missingBlogs.length - 5} more`);
+      }
+    }
+    console.log('');
+    
+    const xml = generateSitemap(reviews, bestOf, bestOfBlogs, validProducts);
     saveSitemap(xml);
     
     console.log('🎉 Sitemap generation completed!');
@@ -264,48 +373,47 @@ function main() {
     console.log('📍 URLs included:');
     console.log(`   - Homepage: ${SITE_URL}/`);
     
-    // Best Selections directory
-    console.log(`   - Best Selections: ${SITE_URL}/best`);
-    
-    // Best Of posts
-    if (publishedBestOfPosts.length > 0) {
-      console.log(`   - Best Selections posts: ${publishedBestOfPosts.length}`);
-      publishedBestOfPosts.slice(0, 3).forEach(post => {
-        if (post && post.slug) {
-          console.log(`     • ${SITE_URL}/best/${post.slug}`);
-        }
+    // Best Selections
+    const totalBestOf = bestOf.length + publishedBestOfPosts.length;
+    if (totalBestOf > 0) {
+      console.log(`   - Best Selections: ${SITE_URL}/best`);
+      console.log(`   - Best Selections posts: ${totalBestOf}`);
+      
+      const allBestOf = [
+        ...publishedBestOfPosts.map(p => ({ slug: p.slug, source: 'best-of-blogs.json' })),
+        ...bestOf.map(p => ({ slug: p.slug, source: 'products.json' }))
+      ];
+      
+      allBestOf.slice(0, 3).forEach(item => {
+        console.log(`     • ${SITE_URL}/best/${item.slug} (${item.source})`);
       });
-      if (publishedBestOfPosts.length > 3) {
-        console.log(`     ... and ${publishedBestOfPosts.length - 3} more`);
+      if (allBestOf.length > 3) {
+        console.log(`     ... and ${allBestOf.length - 3} more`);
       }
     }
     
-    // Blog directory
-    console.log(`   - Blog directory: ${SITE_URL}/reviews`);
-    
-    // Blog posts
-    if (blogPosts.length > 0) {
-      console.log(`   - Blog posts: ${blogPosts.length}`);
-      blogPosts.slice(0, 3).forEach(blog => {
-        if (blog && blog.slug) {
-          console.log(`     • ${SITE_URL}/reviews/${blog.slug}`);
-        }
+    // Reviews
+    if (reviews.length > 0) {
+      console.log(`   - Review posts: ${reviews.length}`);
+      reviews.slice(0, 3).forEach(post => {
+        console.log(`     • ${SITE_URL}/reviews/${post.slug}`);
       });
-      if (blogPosts.length > 3) {
-        console.log(`     ... and ${blogPosts.length - 3} more`);
+      if (reviews.length > 3) {
+        console.log(`     ... and ${reviews.length - 3} more`);
       }
     }
     
+    // Categories
     const categories = [...new Set(
       validProducts
-        .filter(p => p && p.category)
+        .filter(p => p && p.category && !p.category.toLowerCase().includes('best'))
         .map(p => p.category)
     )];
     
     if (categories.length > 0) {
       console.log(`   - Category pages: ${categories.length}`);
       categories.slice(0, 5).forEach(category => {
-        console.log(`     • ${SITE_URL}/?category=${encodeURIComponent(category)}`);
+        console.log(`     • ${SITE_URL}/category/${categoryToSlug(category)}`);
       });
       if (categories.length > 5) {
         console.log(`     ... and ${categories.length - 5} more`);
@@ -315,7 +423,10 @@ function main() {
     console.log(`   - Static pages: 3 (About, Privacy, Terms)`);
     console.log('');
     
-    const totalUrls = 1 + 1 + publishedBestOfPosts.length + 1 + blogPosts.length + categories.length + 3;
+    const totalUrls = 1 + 
+                      (totalBestOf > 0 ? 1 : 0) + totalBestOf + 
+                      reviews.length + 
+                      categories.length + 3;
     console.log(`📊 Total URLs: ${totalUrls}`);
     console.log('');
     console.log('💡 Upload public/sitemap.xml to your server!');

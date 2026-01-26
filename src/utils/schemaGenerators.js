@@ -1,5 +1,7 @@
 // Schema generators for SEO
 
+import { categoryToSlug } from '../utils/urlHelper';
+
 function CleanAndShort(title) {
   const newTitle = title.replace(/®/g, '')
     .replace(/™/g, '')
@@ -197,7 +199,7 @@ export function generateBreadcrumbSchema(category) {
         "@type": "ListItem",
         "position": 2,
         "name": category,
-        "item": `https://candidfindings.com/?category=${encodeURIComponent(category)}`
+        "item": `https://candidfindings.com/category/${categoryToSlug(category)}`
       }
     ]
   };
@@ -397,7 +399,7 @@ export function generateBestOfBreadcrumbSchema(blog = null, category = null) {
       "@type": "ListItem",
       "position": 3,
       "name": category,
-      "item": `https://candidfindings.com/best?category=${encodeURIComponent(category)}`
+      "item": `https://candidfindings.com/best/category/${categoryToSlug(category)}`
     });
   }
 
@@ -408,7 +410,7 @@ export function generateBestOfBreadcrumbSchema(blog = null, category = null) {
         "@type": "ListItem",
         "position": 3,
         "name": blog.category,
-        "item": `https://candidfindings.com/best?category=${encodeURIComponent(blog.category)}`
+        "item": `https://candidfindings.com/best/category/${categoryToSlug(blog.category)}`
       });
     }
     breadcrumbs.push({
@@ -445,7 +447,7 @@ export function generateBestOfWebPageSchema(category = null) {
     "name": pageName,
     "description": pageDescription,
     "url": category && category !== 'All'
-      ? `https://candidfindings.com/best?category=${encodeURIComponent(category)}`
+      ? `https://candidfindings.com/best/category/${categoryToSlug(category)}`
       : 'https://candidfindings.com/best',
     "publisher": {
       "@type": "Organization",

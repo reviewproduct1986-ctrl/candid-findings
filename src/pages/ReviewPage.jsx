@@ -15,6 +15,7 @@ import ProductCard from '../components/ProductCard';
 import { markdownComponents } from '../utils/markdownComponents';
 import { calculateReadTime } from '../utils/readTime';
 import { generateFAQSchema, generateReviewSchema } from '../utils/schemaGenerators';
+import { categoryToSlug } from '../utils/urlHelper';
 import { formatDate } from '../utils/dateFormat';
 import { useData } from '../context/DataContext';
 
@@ -155,7 +156,7 @@ export default function ReviewPage() {
         <Breadcrumbs
           category={product.category}
           title={product.title}
-          back={`/?category=${encodeURIComponent(product.category)}`}
+          back={`/category/${categoryToSlug(product.category)}`}
         />
 
         <article className="bg-white rounded-3xl shadow-xl p-6 md:p-12">

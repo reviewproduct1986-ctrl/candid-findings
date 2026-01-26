@@ -37,8 +37,19 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<ProductListing />} />
+
+          <Route path="/category/:selectedCategory" element={<ProductListing />} />
+          
           <Route 
             path="/best" 
+            element={
+              <Suspense fallback={<RouteLoader />}>
+                <BestOfBlogList />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="/best/category/:selectedCategory" 
             element={
               <Suspense fallback={<RouteLoader />}>
                 <BestOfBlogList />

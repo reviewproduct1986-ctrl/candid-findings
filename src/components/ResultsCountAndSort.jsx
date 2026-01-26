@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpDown, ChevronRight } from 'lucide-react';
+import { slugToCategory } from '../utils/urlHelper';
 
 export default function ResultsCountAndSort({ 
   resultsCount, 
@@ -17,7 +18,7 @@ export default function ResultsCountAndSort({
           <span> for "{searchTerm}"</span>
         )}
         {selectedCategory && selectedCategory !== 'All' && !searchTerm && (
-          <span> in {selectedCategory}</span>
+          <span> in {slugToCategory(selectedCategory)}</span>
         )}
       </p>
 

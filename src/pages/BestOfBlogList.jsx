@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ChevronRight } from 'lucide-react';
 import ReviewHeader from '../components/review/ReviewHeader';
 import Footer from '../components/Footer';
 import GuideCard from '../components/GuideCard';
 import { addReadTimesToPosts } from '../utils/readTime';
+import { useParams } from 'react-router-dom';
 import { generateBestOfListSchema, generateBestOfWebPageSchema, generateBestOfBreadcrumbSchema, generateOrganizationSchema } from '../utils/schemaGenerators';
 import { useData } from '../context/DataContext';
+import { categoryToSlug, slugToCategory } from '../utils/urlHelper';
 
 export default function BestOfBlogList() {
   const { products, bestOfBlogs, loading: dataLoading } = useData();
   const [posts, setPosts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const { selectedCategory = 'All' } = useParams();
+
+  const navigate = useNavigate();
 
   // Process posts when data is loaded
   useEffect(() => {
@@ -45,9 +49,9 @@ export default function BestOfBlogList() {
   const categories = ['All', ...new Set(posts.map(p => p.category).filter(Boolean))];
 
   // Filter posts by category
-  const filteredPosts = selectedCategory === 'All' 
+  const filteredPosts = slugToCategory(selectedCategory) === 'All' 
     ? posts 
-    : posts.filter(p => p.category === selectedCategory);
+    : posts.filter(p => slugToCategory(p.category) === slugToCategory(selectedCategory));
 
   // Separate published and coming soon
   const publishedPosts = filteredPosts.filter(p => !p.comingSoon);
@@ -60,7 +64,7 @@ export default function BestOfBlogList() {
     }
     
     // Find first post in selected category
-    const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+    const categoryPost = publishedPosts.find(p => slugToCategory(p.category) === slugToCategory(selectedCategory));
     
     // Use metaDescription from post
     if (categoryPost?.metaDescription) {
@@ -68,7 +72,7 @@ export default function BestOfBlogList() {
     }
     
     // Fallback for missing metaDescription
-    return `Discover our best ${selectedCategory.toLowerCase()} recommendations`;
+    return `Discover our best ${slugToCategory(selectedCategory).toLowerCase()} recommendations`;
   };
 
   // SEO Helper Functions
@@ -76,26 +80,26 @@ export default function BestOfBlogList() {
     if (selectedCategory === 'All') {
       return 'Browse our expert product recommendations. Curated selections across all categories to help you find exactly what you need.';
     }
-    const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+    const categoryPost = publishedPosts.find(p => slugToCategory(p.category) === slugToCategory(selectedCategory));
     return categoryPost?.metaDescription || 
-      `Discover the best ${selectedCategory.toLowerCase()} products. Expert recommendations and honest reviews to help you choose wisely.`;
+      `Discover the best ${slugToCategory(selectedCategory).toLowerCase()} products. Expert recommendations and honest reviews to help you choose wisely.`;
   };
 
   const getPageTitle = () => {
     if (selectedCategory === 'All') {
       return 'Best Selections - Expert Product Recommendations | CandidFindings';
     }
-    return `Best ${selectedCategory} Products - Curated Recommendations | CandidFindings`;
+    return `Best ${slugToCategory(selectedCategory)} Products - Curated Recommendations | CandidFindings`;
   };
 
   const getKeywords = () => {
     const baseKeywords = ['product recommendations', 'best products', 'expert reviews', 'buying guide', 'product comparison'];
     if (selectedCategory !== 'All') {
-      const categoryPost = publishedPosts.find(p => p.category === selectedCategory);
+      const categoryPost = publishedPosts.find(p => slugToCategory(p.category) === slugToCategory(selectedCategory));
       if (categoryPost?.keywords) {
         return [...categoryPost.keywords, ...baseKeywords].join(', ');
       }
-      return [...baseKeywords, `best ${selectedCategory.toLowerCase()}`].join(', ');
+      return [...baseKeywords, `best ${slugToCategory(selectedCategory).toLowerCase()}`].join(', ');
     }
     return baseKeywords.join(', ');
   };
@@ -121,7 +125,7 @@ export default function BestOfBlogList() {
         <meta property="og:title" content={
           selectedCategory === 'All'
             ? 'Best Selections - Expert Product Recommendations'
-            : `Best ${selectedCategory} Products - Curated Recommendations`
+            : `Best ${slugToCategory(selectedCategory)} Products - Curated Recommendations`
         } />
         <meta property="og:description" content={getMetaDescription()} />
         <meta property="og:url" content="https://candidfindings.com/best" />
@@ -134,7 +138,7 @@ export default function BestOfBlogList() {
         <meta name="twitter:title" content={
           selectedCategory === 'All'
             ? 'Best Selections - Expert Product Recommendations'
-            : `Best ${selectedCategory} Products`
+            : `Best ${slugToCategory(selectedCategory)} Products`
         } />
         <meta name="twitter:description" content={getMetaDescription()} />
         <meta name="twitter:image" content="https://candidfindings.com/twitter-card.jpg" />
@@ -175,7 +179,7 @@ export default function BestOfBlogList() {
         </div>
         <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-blue-100">
           <span>
-            <strong className="text-white">{publishedPosts.length}</strong> {selectedCategory === 'All' ? 'Guides' : `${selectedCategory} Guides`}
+            <strong className="text-white">{publishedPosts.length}</strong> {selectedCategory === 'All' ? 'Guides' : `${slugToCategory(selectedCategory)} Guides`}
           </span>
           <span>•</span>
           <span>
@@ -204,12 +208,14 @@ export default function BestOfBlogList() {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => {
+                  navigate(`/best/category/${categoryToSlug(category)}`);
+                }}
                 className={`
                   px-5 py-2.5 lg:px-4 lg:py-2 rounded-lg font-medium whitespace-nowrap 
                   transition-all text-sm snap-start
                   min-w-fit touch-manipulation
-                  ${selectedCategory === category
+                  ${categoryToSlug(selectedCategory) === categoryToSlug(category)
                     ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300'
                   }

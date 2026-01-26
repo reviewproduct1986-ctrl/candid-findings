@@ -9,7 +9,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://candidfindings.com/</loc>
-    <lastmod>2026-01-18</lastmod>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,141 +17,114 @@
   <!-- Best Selections Directory -->
   <url>
     <loc>https://candidfindings.com/best</loc>
-    <lastmod>2026-01-18</lastmod>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Best Selections Posts -->
-  <url>
-    <loc>https://candidfindings.com/best/tech-products-under-100</loc>
-    <lastmod>2026-01-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/best/books-you-cant-put-down</loc>
-    <lastmod>2026-01-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
+  <!-- Best Selections Posts (from best-of-blogs.json) -->
   <url>
     <loc>https://candidfindings.com/best/3-best-electronics-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/5-books-you-wont-be-able-to-put-down</loc>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/best/3-best-cell-phones-accessories-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/best/5-best-beauty-personal-care-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/best/5-best-home-kitchen-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/best/3-best-sports-outdoors-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/best/3-best-automotive-products</loc>
-    <lastmod>2026-01-17</lastmod>
+    <lastmod>2026-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Blog Posts -->
+  <!-- Best Category Pages -->
+  <url>
+    <loc>https://candidfindings.com/best/category/electronics</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/books</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/cell-phones-and-accessories</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/beauty-and-personal-care</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/home-and-kitchen</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/sports-and-outdoors</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/best/category/automotive</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Review Posts -->
   <url>
     <loc>https://candidfindings.com/reviews/airpods-pro-2-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/best-choice-products-heated-shiatsu-foot-massager-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/akkerds-ipad-case-review-navy-blue</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/crocs-kids-classic-glitter-clog-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/ailun-privacy-screen-protector-iphone-17-pro-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/apple-airpods-pro-3-review-heart-rate-live-translation</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/aphrona-moonlight-pro-led-face-mask-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/amazon-basics-digital-kitchen-scale-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/medicube-zero-pore-pads-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/amazon-basics-neoprene-dumbbells-review</loc>
-    <lastmod>2026-01-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://candidfindings.com/reviews/amazon-basics-extra-thick-yoga-mat-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -186,6 +159,13 @@
   </url>
 
   <url>
+    <loc>https://candidfindings.com/reviews/best-choice-products-heated-shiatsu-foot-massager-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://candidfindings.com/reviews/mkeke-magnetic-iphone-17-pro-max-case-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -194,6 +174,13 @@
 
   <url>
     <loc>https://candidfindings.com/reviews/fintie-ipad-case-corner-protection-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/akkerds-ipad-case-review-navy-blue</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -228,6 +215,13 @@
   </url>
 
   <url>
+    <loc>https://candidfindings.com/reviews/crocs-kids-classic-glitter-clog-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://candidfindings.com/reviews/kids-bento-box-compartments-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -235,7 +229,21 @@
   </url>
 
   <url>
+    <loc>https://candidfindings.com/reviews/ailun-privacy-screen-protector-iphone-17-pro-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://candidfindings.com/reviews/owala-kids-freesip-water-bottle-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/apple-airpods-pro-3-review-heart-rate-live-translation</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -270,7 +278,21 @@
   </url>
 
   <url>
+    <loc>https://candidfindings.com/reviews/aphrona-moonlight-pro-led-face-mask-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://candidfindings.com/reviews/stanley-quencher-h20-rose-quartz-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/amazon-basics-digital-kitchen-scale-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -285,6 +307,13 @@
 
   <url>
     <loc>https://candidfindings.com/reviews/mrs-meyers-rainwater-hand-soap-refill-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/medicube-zero-pore-pads-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -319,79 +348,100 @@
   </url>
 
   <url>
+    <loc>https://candidfindings.com/reviews/amazon-basics-neoprene-dumbbells-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://candidfindings.com/reviews/amazon-basics-extra-thick-yoga-mat-review</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://candidfindings.com/reviews/theo-of-golden-novel-review</loc>
     <lastmod>2026-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://candidfindings.com/reviews/cerave-hydrating-cleanser-review</loc>
+    <lastmod>2026-01-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Category Pages -->
   <url>
-    <loc>https://candidfindings.com/?category=Electronics</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/electronics</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Books</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/books</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Sports</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/sports</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Health%20%26%20Household</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/health-and-household</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Cell%20Phones%20%26%20Accessories</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/cell-phones-and-accessories</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Beauty%20%26%20Personal%20Care</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/beauty-and-personal-care</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Home%20%26%20Kitchen</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/home-and-kitchen</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Clothing%2C%20Shoes%20%26%20Jewelry</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/clothing-shoes-and-jewelry</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Sports%20%26%20Outdoors</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/sports-and-outdoors</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://candidfindings.com/?category=Automotive</loc>
-    <lastmod>2026-01-18</lastmod>
+    <loc>https://candidfindings.com/category/automotive</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -399,21 +449,21 @@
   <!-- Static Pages -->
   <url>
     <loc>https://candidfindings.com/about</loc>
-    <lastmod>2026-01-18</lastmod>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/privacy-policy</loc>
-    <lastmod>2026-01-18</lastmod>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://candidfindings.com/terms</loc>
-    <lastmod>2026-01-18</lastmod>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

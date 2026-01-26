@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Sparkles } from 'lucide-react';
+import { categoryToSlug } from '../utils/urlHelper';
 
 export default function Header({ 
   searchTerm, 
@@ -79,7 +80,7 @@ export default function Header({
                   px-5 py-2.5 lg:px-4 lg:py-2 rounded-lg font-medium whitespace-nowrap 
                   transition-all text-sm snap-start
                   min-w-fit touch-manipulation
-                  ${selectedCategory === category
+                  ${categoryToSlug(selectedCategory) === categoryToSlug(category)
                     ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300'
                   }

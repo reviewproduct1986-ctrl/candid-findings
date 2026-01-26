@@ -1,29 +1,27 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { categoryToSlug } from '../utils/urlHelper';
 
 /**
  * Hook to filter and search products
  * Now receives products from DataContext instead of fetching
  */
-export function useProductFilters(products) {
-  const [searchParams, setSearchParams] = useSearchParams();
+export function useProductFilters(products, selectedCategory = 'All') {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [minRating, setMinRating] = useState(0);
   const [selectedBadges, setSelectedBadges] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get category from URL params
-  const selectedCategory = searchParams.get('category') || 'All';
+  const navigate = useNavigate();
 
   // Function to update category (and URL)
   const setSelectedCategory = (category) => {
     if (category === 'All') {
-      searchParams.delete('category');
+      navigate('/', { replace: true });
     } else {
-      searchParams.set('category', category);
+      navigate(`/category/${categoryToSlug(category)}`);
     }
-    setSearchParams(searchParams);
   };
 
   // Calculate max price from all products
@@ -102,7 +100,7 @@ export function useProductFilters(products) {
     
     // Category filter
     if (selectedCategory !== 'All') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
+      filtered = filtered.filter(p => categoryToSlug(p.category) === categoryToSlug(selectedCategory));
     }
     
     // Price filter

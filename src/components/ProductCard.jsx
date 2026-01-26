@@ -4,6 +4,7 @@ import PreloadLink from './PreloadLink';
 import StarRating from './review/StarRating';
 import OptimizedImage from './OptimizedImage';
 import CallToAction from './CallToAction';
+import { categoryToSlug } from '../utils/urlHelper';
 import '../css/ProductCard.css';
 
 export default function ProductCard({ product, index }) {
@@ -43,7 +44,7 @@ export default function ProductCard({ product, index }) {
       <div className="p-6 flex flex-col flex-1">
         {/* Category Badge */}
         <PreloadLink
-          to={`/?category=${encodeURIComponent(product.category)}`}
+          to={`/category/${categoryToSlug(product.category)}`}
           className="category-badge"
           title={`View all ${product.category} products`}
         >
