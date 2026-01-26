@@ -18,7 +18,7 @@ import { usePagination } from '../hooks/usePagination';
 import { useScrollToGrid } from '../hooks/useScrollToGrid';
 import { generateItemListSchema, generateBreadcrumbSchema } from '../utils/schemaGenerators';
 import { useData } from '../context/DataContext';
-import { categoryToSlug } from '../utils/urlHelper';
+import { categoryToSlug, slugToCategory } from '../utils/urlHelper';
 
 export default function ProductListing() {
   const { selectedCategory = 'All' } = useParams();
@@ -196,7 +196,7 @@ export default function ProductListing() {
             <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
               {selectedCategory && selectedCategory !== 'All' ? (
                 <>
-                  Best {selectedCategory}{' '}
+                  Best {slugToCategory(selectedCategory)}{' '}
                   <span className="bg-gradient-to-r from-amber-200 to-yellow-300 bg-clip-text text-transparent">
                     Products
                   </span>
