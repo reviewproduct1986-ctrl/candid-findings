@@ -16,5 +16,5 @@ export function slugToCategory(slug) {
 }
 
 export function affiliateLink(product) {
-  return `https://amazon.com/dp/${product.asin}?tag=${process.env.AMAZON_TAG}`;
+  return `https://amazon.com/dp/${product.asin}?tag=${process.env.AMAZON_TAG || 'candidfinding-20'}`;
 }
