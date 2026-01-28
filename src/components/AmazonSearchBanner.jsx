@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAmazonSearchUrl } from '../utils/affiliateConfig';
+import { getAmazonSearchUrl } from '../utils/urlHelper';
 
 export default function AmazonSearchBanner({ searchTerm, resultsCount }) {
   if (!searchTerm || resultsCount === 0) return null;

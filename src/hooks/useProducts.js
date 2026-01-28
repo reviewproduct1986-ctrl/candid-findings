@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import Fuse from 'fuse.js';
 import { categoryToSlug } from '../utils/urlHelper';
 
 /**
  * Hook to filter and search products
  * Now receives products from DataContext instead of fetching
+ * Uses Fuse.js for improved fuzzy searching
  */
 export function useProductFilters(products, selectedCategory = 'All') {
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,45 +56,33 @@ export function useProductFilters(products, selectedCategory = 'All') {
     return [...new Set(badges)];
   }, [products]);
 
-  // Fuzzy search function
-  const fuzzyScore = (str, query) => {
-    if (!query) return 1;
-    str = str.toLowerCase();
-    query = query.toLowerCase();
-    
-    let score = 0;
-    let queryIndex = 0;
-    
-    for (let i = 0; i < str.length && queryIndex < query.length; i++) {
-      if (str[i] === query[queryIndex]) {
-        score += 1;
-        queryIndex++;
-      }
-    }
-    
-    return queryIndex === query.length ? score / str.length : 0;
+  // Configure Fuse.js options
+  const fuseOptions = {
+    // Threshold: 0.0 = perfect match, 1.0 = match anything
+    threshold: 0.4,
+    // Location where the match is expected to be found
+    location: 0,
+    // Distance: how far from location to search
+    distance: 100,
+    // Whether to sort by score
+    shouldSort: true,
+    // Include score in results
+    includeScore: true,
+    // Minimum character length before searching
+    minMatchCharLength: 2,
+    // Keys to search with their weights
+    keys: [
+      { name: 'title', weight: 0.5 },        // 50% weight
+      { name: 'category', weight: 0.2 },     // 20% weight
+      { name: 'description', weight: 0.2 },  // 20% weight
+      { name: 'features', weight: 0.1 }      // 10% weight
+    ]
   };
 
-  // Weighted fuzzy search
-  const searchProducts = (products, term) => {
-    if (!term) return products;
-    
-    return products
-      .map(product => {
-        const titleScore = fuzzyScore(product.title, term) * 3;
-        const categoryScore = fuzzyScore(product.category, term) * 2;
-        const descScore = product.description ? fuzzyScore(product.description, term) : 0;
-        const featureScore = product.features 
-          ? Math.max(...product.features.map(f => fuzzyScore(f, term))) 
-          : 0;
-        
-        const totalScore = titleScore + categoryScore + descScore + featureScore;
-        
-        return { ...product, searchScore: totalScore };
-      })
-      .filter(p => p.searchScore > 0)
-      .sort((a, b) => b.searchScore - a.searchScore);
-  };
+  // Create Fuse instance (memoized to avoid recreating on every render)
+  const fuse = useMemo(() => {
+    return new Fuse(products, fuseOptions);
+  }, [products]);
 
   // Apply all filters
   const filteredProducts = useMemo(() => {
@@ -120,9 +110,13 @@ export function useProductFilters(products, selectedCategory = 'All') {
       );
     }
     
-    // Search filter (with fuzzy matching and relevance sorting)
+    // Search filter using Fuse.js
     if (searchTerm) {
-      filtered = searchProducts(filtered, searchTerm);
+      // Create a new Fuse instance with the already filtered products
+      const searchFuse = new Fuse(filtered, fuseOptions);
+      const results = searchFuse.search(searchTerm);
+      // Extract the items from Fuse results
+      filtered = results.map(result => result.item);
     } else {
       // Default sort: newest first (by lastUpdated date)
       filtered = [...filtered].sort((a, b) => {
