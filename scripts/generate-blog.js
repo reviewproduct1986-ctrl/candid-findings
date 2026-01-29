@@ -4,6 +4,8 @@
  * Generate HUMAN-SOUNDING blog posts (not AI-like!)
  * Focus: Natural voice, conversational tone, real opinions
  * Saves each blog as separate file: blog.<slug>.json
+ * 
+ * IMPROVED: Anti-repetition logic to prevent AI patterns
  */
 
 // node --env-file=./secrets/.script.env scripts/generate-blog.js --asin=<ASIN>
@@ -154,6 +156,81 @@ function validateNoDynamicData(blogData) {
   return errors;
 }
 
+function validateUniqueness(blogData) {
+  const errors = [];
+  const allText = [blogData.title, blogData.content].join(' ').toLowerCase();
+  
+  // Get first 200 characters to check opening patterns more carefully
+  const opening = blogData.content.substring(0, 200).toLowerCase();
+  
+  // Check for overused AI patterns that reveal AI authorship
+  const aiPatterns = [
+    { pattern: /promising to (do everything|deliver|revolutionize)/i, msg: 'overused skeptical opening about promises' },
+    { pattern: /yeah,? i rolled my eyes( too)?/i, msg: 'overused cynical eye-rolling opener' },
+    { pattern: /let's talk about/i, msg: 'overused conversational opener' },
+    { pattern: /i'll be honest/i, msg: 'overused honesty signal' },
+    { pattern: /to be honest/i, msg: 'overused honesty signal variant' },
+    { pattern: /look,? i'm (just )?going to say/i, msg: 'overused direct address pattern' },
+    { pattern: /in today's (market|world|landscape)/i, msg: 'generic market reference' },
+    { pattern: /when it comes to/i, msg: 'generic transition phrase' },
+    { pattern: /the standout feature/i, msg: 'generic feature highlight' },
+    { pattern: /one of the most (appealing|impressive|notable)/i, msg: 'generic superlative pattern' },
+    { pattern: /is it perfect\? (no|nope)/i, msg: 'overused rhetorical question pattern' },
+    { pattern: /here's the (deal|thing|kicker)/i, msg: 'overused casual transition' },
+    { pattern: /bottom line:/i, msg: 'overused conclusion marker' },
+    { pattern: /(pretty|fairly|quite) skeptical/i, msg: 'overused skepticism pattern' },
+    { pattern: /i was skeptical/i, msg: 'classic AI skeptical opening' },
+    { pattern: /after (dealing with|struggling with|years of)/i, msg: 'AI backstory pattern' },
+    { pattern: /everyone (kept|was) (recommending|raving about|talking about)/i, msg: 'AI social proof pattern' },
+    { pattern: /game[- ]changer/i, msg: 'overused marketing term' },
+    { pattern: /total game[- ]changer/i, msg: 'overused marketing superlative' },
+    { pattern: /worth (every penny|the hype|mentioning)/i, msg: 'overused value phrase' },
+  ];
+  
+  for (const { pattern, msg } of aiPatterns) {
+    if (pattern.test(allText)) {
+      const match = allText.match(pattern);
+      errors.push(`❌ AI pattern detected: ${msg} (matched: "${match[0]}")`);
+    }
+  }
+  
+  // CRITICAL: Check for the "skeptical but then..." pattern in opening
+  const skepticalPatterns = [
+    // Catch the EXACT pattern user keeps seeing
+    /^.{0,50}after.{0,50}(dealing with|struggling with|years).{0,100}(skeptical|doubtful)/i,
+    /^.{0,100}(skeptical|doubtful|unsure).{0,20}when everyone/i,
+    /everyone.{0,20}(kept|was|started).{0,20}(recommending|suggesting|raving)/i,
+    // Original patterns
+    /^.{0,100}(skeptical|doubtful|unsure).{0,100}(but|however|yet|though)/i,
+    /^.{0,100}(wasn't sure|had doubts|questioned).{0,100}(but|however|turned out)/i,
+    /didn't (think|believe|expect).{0,100}(but|however|actually)/i,
+  ];
+  
+  for (const pattern of skepticalPatterns) {
+    if (pattern.test(opening)) {
+      const match = opening.match(pattern);
+      errors.push(`❌ CRITICAL: Skeptical-but-convinced opening pattern (matched: "${match[0].substring(0, 60)}...")`);
+      break;
+    }
+  }
+  
+  // Check for repetitive structure words in opening
+  const firstParagraph = blogData.content.split('\n\n')[0].toLowerCase();
+  const repetitiveOpeners = [
+    /^(so|well|now|okay),/i,
+    /^let me (tell you|start by)/i,
+    /^i (want to|need to|have to) (talk about|discuss|share)/i,
+  ];
+  
+  for (const pattern of repetitiveOpeners) {
+    if (pattern.test(firstParagraph)) {
+      errors.push(`❌ Repetitive opening pattern detected`);
+    }
+  }
+  
+  return errors;
+}
+
 function parseAIResponse(textContent) {
   console.log('   📝 Parsing response...');
   
@@ -277,6 +354,40 @@ async function generateBlogPost(product, attempt = 1) {
   
   const safeTitle = product.title.replace(/'/g, '').replace(/"/g, '');
 
+  // Randomize opening style for variety
+  const openingStyles = [
+    "Start with a concrete physical detail (weight, size, material, color)",
+    "Begin with a specific performance metric from testing (battery life, speed, capacity)",
+    "Open with the primary use case or who it's designed for",
+    "Start with a direct comparison to a similar product",
+    "Begin with the most practical benefit or feature",
+    "Open with setup or first-use experience (time taken, difficulty)",
+    "Start with what it replaces or improves upon",
+    "Begin with a specific testing scenario and result",
+    "Open with build quality observation (materials, construction)",
+    "Start with price-to-features assessment (no dollar amounts)",
+    "Begin with the main problem it solves",
+    "Open with capacity, size, or dimensional details",
+    "Start with a specific feature that works well",
+    "Begin with what surprised you during testing (no skepticism)",
+    "Open with durability or longevity observation"
+  ];
+  
+  const randomOpening = openingStyles[Math.floor(Math.random() * openingStyles.length)];
+  
+  // Randomize tone variation
+  const toneVariations = [
+    "Be direct and factual - no fluff or setup",
+    "Focus on measurable details and specifications",
+    "Keep it practical with real-world use cases",
+    "Emphasize hands-on testing observations",
+    "Mix technical specs with everyday language",
+    "Prioritize what users actually care about",
+    "Be straightforward - skip the windup"
+  ];
+  
+  const randomTone = toneVariations[Math.floor(Math.random() * toneVariations.length)];
+
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -290,8 +401,24 @@ async function generateBlogPost(product, attempt = 1) {
         max_tokens: getOptimalTokens(product),
         system: `You are a real person writing honest product reviews on your blog.
 
+🚨 CRITICAL CONSTRAINT - YOU ARE FORBIDDEN FROM USING THESE PATTERNS 🚨
+The following opening patterns will cause your output to be AUTOMATICALLY REJECTED:
+1. "After dealing with [problem]..."
+2. "I was skeptical..." or "pretty skeptical..."
+3. "Everyone kept recommending..."
+4. Any combination of backstory + skepticism + praise
+5. "For years I struggled..."
+6. "I wasn't sure this would work..."
+
+If you use ANY of the above patterns, your response will be discarded and you will need to regenerate it.
+Start your review with a FACTUAL, SPECIFIC observation about the product itself.
+
 CRITICAL STYLE RULES:
 - Write like a REAL person, not an AI
+- VARY YOUR OPENING - never use the same style twice
+- Each review should feel completely unique and fresh
+- NO BACKSTORY SETUPS - jump right into the product
+- NO "I was skeptical but..." patterns (biggest AI tell)
 - Use conversational, natural language
 - Include personal observations and opinions
 - Vary your sentence structure (some short, some long)
@@ -301,13 +428,58 @@ CRITICAL STYLE RULES:
 - Skip overly formal language
 - Natural transitions, not robotic ones
 
-ABSOLUTELY AVOID:
-- Formulaic AI phrases like "standout feature" or "One of the most appealing aspects"
-- Generic intros like "In today's market" or "When it comes to"
+OPENING STYLE VARIETY - Must feel different each time:
+✓ Direct feature: "The motor runs quieter than I expected."
+✓ Usage context: "After two weeks of testing, here's what stands out."
+✓ Simple assessment: "This works well for small spaces."
+✓ Specific detail: "The stainless steel build feels premium."
+✓ Practical angle: "If you need something reliable for daily use..."
+✓ Comparison: "Compared to my previous model, the setup is simpler."
+✓ Problem focus: "For anyone dealing with limited counter space..."
+✓ Surprise element: "The battery life exceeded expectations."
+✓ Direct fact: "Battery lasts about six hours with normal use."
+✓ Build observation: "Solid construction, heavier than expected."
+
+ABSOLUTELY FORBIDDEN - These patterns SCREAM AI:
+❌ NEVER: "I was skeptical" or "pretty skeptical" (BIGGEST AI TELL)
+❌ NEVER: "After dealing with [problem] for years..." (AI backstory)
+❌ NEVER: "everyone kept recommending" (fake social proof)
+❌ NEVER: "[skepticism]... but [positive outcome]" (AI formula)
+❌ NEVER: "promising to do everything" or "promising to deliver/revolutionize"
+❌ NEVER: "Yeah, I rolled my eyes too"
+❌ NEVER: "Let's talk about"
+❌ NEVER: "I'll be honest" or "To be honest"
+❌ NEVER: "Look, I'm just going to say it upfront"
+❌ NEVER: "In today's market/world/landscape"
+❌ NEVER: "When it comes to"
+❌ NEVER: "The standout feature"
+❌ NEVER: "One of the most appealing/impressive/notable"
+❌ NEVER: "Is it perfect? No/Nope" (rhetorical question pattern)
+❌ NEVER: "Here's the deal/thing/kicker"
+❌ NEVER: "Bottom line:"
+❌ NEVER: "game-changer" or "total game-changer"
+❌ NEVER: "worth every penny" or "worth the hype"
+❌ NEVER: Starting with skepticism then praise (AI cliche)
+❌ NEVER: Any pattern that could appear in multiple reviews
+❌ NEVER: Personal backstory before discussing product
+
+INSTEAD, START WITH:
+✓ Specific product observation
+✓ Direct feature mention  
+✓ Simple statement about use case
+✓ Build quality or physical trait
+✓ Comparison to alternatives
+✓ Practical testing result
+✓ Who it's designed for
+✓ What problem it solves (without backstory)
+
+ALSO AVOID:
+- Formulaic transitions
 - Predictable headers like "Introduction" and "Conclusion"
 - Overly structured, listy writing
 - Corporate/marketing speak
 - Perfect grammar at expense of naturalness
+- REPETITIVE PHRASES ACROSS POSTS
 
 CRITICAL FOR JSON OUTPUT:
 - NEVER use quotation marks (") in your content
@@ -324,38 +496,83 @@ Product: ${safeTitle}
 Category: ${product.category}
 Features: ${product.features?.join(', ') || 'N/A'}
 
+🎯 YOUR UNIQUE OPENING APPROACH FOR THIS REVIEW:
+${randomOpening}
+
+🎨 TONE GUIDANCE FOR THIS REVIEW:
+${randomTone}
+
+⚠️⚠️⚠️ CRITICAL - YOUR FIRST SENTENCE MUST BE LIKE THESE EXAMPLES ⚠️⚠️⚠️
+
+ACCEPTABLE Opening Sentences (Model your opening after these):
+• "The 12-ounce capacity works well for single servings."
+• "Setup takes about 10-15 minutes from start to finish."
+• "This runs noticeably quieter than my previous model."
+• "Battery life averaged 6 hours during my testing period."
+• "The stainless steel body feels more durable than plastic alternatives."
+• "Designed for compact spaces, this measures 8 by 6 inches."
+• "Temperature range goes from 150 to 400 degrees Fahrenheit."
+• "I've used this daily for the past three weeks."
+• "The motor operates at a relatively low noise level."
+• "Build quality seems solid after a month of regular use."
+
+REJECTED Opening Sentences (If you use ANY of these patterns, your output WILL BE DISCARDED):
+❌ "After dealing with dry skin for years, I was skeptical when everyone kept recommending..."
+❌ "I've struggled with finding good products, but everyone raved about this..."
+❌ "For years I dealt with this problem, so I was doubtful when I heard..."
+❌ "Everyone kept telling me to try this, and I was pretty skeptical..."
+❌ "I wasn't sure this would work after years of disappointing products..."
+❌ "Promising to solve all my problems, I rolled my eyes at first..."
+
+DO NOT START WITH: skepticism, backstory, "everyone recommending", doubt-then-praise pattern
+
+YOUR FIRST SENTENCE MUST BE FACTUAL AND DIRECT LIKE THE ACCEPTABLE EXAMPLES.
+
 WRITING STYLE (CRITICAL):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Write like you're telling a friend about this product!
 
-✅ GOOD EXAMPLES (Natural, Human):
-"Look, I'm just going to say it upfront - this thing actually works."
-"Here's what surprised me most about this..."
-"If you're like me and hate dealing with complicated setups, you'll appreciate this."
-"The build quality? Solid. Not amazing, but definitely good enough."
-"Is it perfect? Nope. But here's why I still recommend it."
+✅ GOOD EXAMPLES (Natural, Human, VARIED):
+"After three weeks of daily use, the motor still runs quietly."
+"Setup took me about ten minutes with no issues."
+"This replaces my old model that died after two years."
+"The weight is the first thing you feel when you pick it up."
+"For the price point, the features are solid."
+"I tested this in my kitchen for a month."
+"The build quality feels durable - metal housing, not plastic."
+"Battery lasts longer than advertised, which is rare."
+"Holds about twelve ounces, perfect for morning coffee."
+"Temperature control is more precise than my last one."
 
-❌ BAD EXAMPLES (AI-like, Avoid):
-"The standout feature of this product is its innovative design."
-"In today's competitive market, this offers exceptional value."
-"One of the most appealing aspects is the comprehensive feature set."
-"When it comes to performance, this delivers on multiple fronts."
-"This represents a significant advancement in the category."
+❌ BAD EXAMPLES (AI-like, NEVER USE THESE):
+"After dealing with dry skin for years, I was skeptical..." ← FORBIDDEN (backstory + skepticism)
+"Everyone kept recommending this, so I was doubtful..." ← FORBIDDEN (social proof + doubt)
+"I wasn't sure this would work, but I was wrong..." ← FORBIDDEN (doubt then reversal)
+"Promising to deliver on every front..." ← FORBIDDEN
+"Yeah, I rolled my eyes too when I saw..." ← FORBIDDEN
+"Let's talk about what makes this special..." ← FORBIDDEN
+"I'll be honest with you..." ← FORBIDDEN
+"The standout feature of this product..." ← FORBIDDEN
+"In today's competitive market..." ← FORBIDDEN
+"When it comes to performance..." ← FORBIDDEN
+"Is it perfect? Nope. But here's why..." ← FORBIDDEN
+"This is a total game-changer..." ← FORBIDDEN
 
 STRUCTURE RULES:
-- Skip generic "Introduction" headers
-- Start with something interesting or an opinion
-- Use natural section headers ("What I Liked", "The Not-So-Great Parts", "Who Should Get This")
-- Mix up sentence lengths
-- Include some personal perspective (I noticed, In my testing, From what I can tell)
-- End with honest recommendation, not a sales pitch
+- NO generic "Introduction" headers
+- Start with something specific, not a windup
+- Use natural section headers based on actual aspects
+- Mix up sentence lengths naturally
+- Include specific observations from use
+- End with honest take, not a sales pitch
+- Make each section transition feel organic
 
 TONE RULES:
-- Conversational, not corporate
-- Honest, even about flaws
-- Relatable language
-- Some personality
-- Natural flow
+- Sound like one person, not a template
+- Be honest about both strengths and flaws
+- Use relatable, everyday language
+- Add specific details from actual use
+- Natural conversational flow
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -365,27 +582,29 @@ CONTENT PROHIBITIONS (Will Be Validated):
 ❌ NO star ratings or numerical ratings
 ❌ NO specific years or dates
 ❌ NO "as of", "currently", "right now"
+❌ NO overused AI phrases from forbidden list
 
 Instead write about:
-✅ Features and how they work
-✅ Real-world use cases
+✅ Features and how they actually work
+✅ Real-world use cases and testing
 ✅ Build quality and materials
 ✅ What works well and what doesn't
 ✅ Who this is actually good for
+✅ Specific observations from use
 
 Requirements:
 1. Natural, engaging title (sound like a real review, not SEO spam)
 2. Meta description (150-160 chars, conversational)
 3. Review content (700-900 words) in MARKDOWN
-   - Use ## for sections (but make them natural, not generic)
-   - Start strong, no boring intro
-   - Mix opinion with facts
+   - Use ## for sections (make them unique and specific)
+   - Start strong with your unique opening
+   - Mix specific observations with practical info
    - Real-world usage examples
-   - Honest pros and cons
-4. 7 specific pros (be specific, not generic)
-5. 3-4 specific cons (real issues, not fake balance)
-6. Honest verdict (2-3 sentences, your real opinion)
-7. Target audience (who will actually benefit)
+   - Honest pros and cons woven in naturally
+4. 7 specific pros (detailed, not generic)
+5. 3-4 specific cons (real issues, not manufactured)
+6. Honest verdict (2-3 sentences, your actual take)
+7. Target audience (specific groups who'd benefit)
 8. 8-10 SEO keywords
 9. URL slug (lowercase-with-hyphens)
 
@@ -424,12 +643,14 @@ CRITICAL JSON RULES:
 ✓ All strings properly closed
 ✓ All braces matched
 
-REMEMBER: 
-- Write like a human, not an AI
+FINAL REMINDERS: 
+- Make THIS review sound completely different from others
+- Avoid ALL forbidden AI patterns
 - No prices, ratings, reviews, dates
-- Be honest and natural
+- Be honest and specific
 - Skip the corporate speak
-- COMPLETE the JSON with closing brace!`
+- COMPLETE the JSON with closing brace!
+- NEVER repeat openings or patterns across reviews!`
           }
         ],
       })
@@ -450,22 +671,26 @@ REMEMBER:
     }
 
     const validationErrors = validateNoDynamicData(blogData);
+    const uniquenessErrors = validateUniqueness(blogData);
     
-    if (validationErrors.length > 0) {
+    const allErrors = [...validationErrors, ...uniquenessErrors];
+    
+    if (allErrors.length > 0) {
       console.log('   ⚠️  VALIDATION FAILED:');
-      validationErrors.forEach(err => console.log(`      ${err}`));
+      allErrors.forEach(err => console.log(`      ${err}`));
       
-      if (attempt < 3) {
-        console.log(`   🔄 Retrying (attempt ${attempt + 1}/3)...`);
+      if (attempt < 5) {
+        console.log(`   🔄 Retrying (attempt ${attempt + 1}/5)...`);
         await new Promise(resolve => setTimeout(resolve, 2000));
         return await generateBlogPost(product, attempt + 1);
       } else {
-        console.log('   ❌ Max retries reached. Skipping.');
+        console.log('   ❌ Max retries reached (5 attempts). Skipping.');
         return null;
       }
     }
 
     console.log('   ✅ Validation passed!');
+    console.log('   ✅ Uniqueness check passed!');
     console.log(`   ✅ Generated ${blogData.content?.length || 0} characters`);
 
     return {
@@ -632,64 +857,114 @@ function saveBlogPosts(blogPosts, products) {
   });
 
   console.log('');
-  console.log('📝 Updating products files with blog slugs...');
+  console.log('📝 Updating products with blog slugs...');
+  console.log(`   Found ${Object.keys(productSlugMap).length} new/updated product-to-slug mappings`);
   
   // Update products with blog slugs
+  let updatedCount = 0;
+  let preservedCount = 0;
+  
   const updatedProducts = products.map(product => {
+    // If this product got a new blog in this run, update its slug
     if (productSlugMap[product.id]) {
+      updatedCount++;
       return {
         ...product,
         slug: productSlugMap[product.id]
       };
     }
+    // Otherwise, keep existing slug if it has one
+    if (product.slug) {
+      preservedCount++;
+    }
     return product;
   });
+  
+  console.log(`   Updated ${updatedCount} product(s) with new slugs`);
+  console.log(`   Preserved ${preservedCount} existing slug(s)`);
   
   // Save updated products to all relevant files
   const productsData = {
     products: updatedProducts,
     metadata: {
       total: updatedProducts.length,
-      updated: new Date().toISOString()
+      updated: new Date().toISOString(),
+      withSlugs: updatedCount + preservedCount
     }
   };
   
+  console.log('');
+  console.log('💾 Writing to product files...');
+  
   // List of possible product files to update
   const productFiles = [
-    path.join(__dirname, '../public/data/products.json'),
-    path.join(__dirname, '../data/products.json'),
-    path.join(__dirname, '../public/data/initial-products.json'),
-    path.join(__dirname, '../data/initial-products.json')
+    { path: path.join(__dirname, '../public/data/products.json'), name: 'public/data/products.json' },
+    { path: path.join(__dirname, '../data/products.json'), name: 'data/products.json' },
+    { path: path.join(__dirname, '../public/data/initial-products.json'), name: 'public/data/initial-products.json' },
+    { path: path.join(__dirname, '../data/initial-products.json'), name: 'data/initial-products.json' }
   ];
   
   // Update all existing product files
-  let updatedCount = 0;
-  productFiles.forEach(filePath => {
+  let filesUpdated = 0;
+  let filesNotFound = 0;
+  
+  productFiles.forEach(({ path: filePath, name }) => {
     try {
       if (fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, JSON.stringify(productsData));
-        console.log(`   ✓ Updated ${path.basename(filePath)}`);
-        updatedCount++;
+        // Read existing file to preserve structure
+        let existing = {};
+        try {
+          existing = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        } catch (parseError) {
+          console.log(`   ⚠️  Could not parse ${name}, will overwrite`);
+        }
+        
+        // Merge: keep existing structure but update products array
+        const merged = {
+          ...existing,
+          products: updatedProducts,
+          metadata: {
+            ...(existing.metadata || {}),
+            total: updatedProducts.length,
+            updated: new Date().toISOString(),
+            withSlugs: updatedCount + preservedCount
+          }
+        };
+        
+        fs.writeFileSync(filePath, JSON.stringify(merged));
+        console.log(`   ✓ Updated ${name}`);
+        filesUpdated++;
+      } else {
+        console.log(`   ⚠️  Not found: ${name}`);
+        filesNotFound++;
       }
     } catch (error) {
-      console.log(`   ⚠️  Failed to update ${path.basename(filePath)}: ${error.message}`);
+      console.log(`   ❌ Failed to update ${name}: ${error.message}`);
     }
   });
   
-  if (updatedCount === 0) {
-    console.log('   ⚠️  No product files found to update');
+  console.log('');
+  console.log(`✅ Saved ${blogPosts.length} individual blog files`);
+  console.log(`✅ Updated ${filesUpdated} product file(s)`);
+  
+  if (filesNotFound > 0) {
+    console.log(`⚠️  ${filesNotFound} product file(s) not found (this may be normal)`);
   }
   
   console.log('');
-  console.log(`✅ Saved ${blogPosts.length} individual blog files`);
-  console.log(`✅ Updated ${updatedCount} product file(s) with blog slugs`);
+  console.log('📋 Summary:');
+  console.log(`   • Blog files created: ${blogPosts.length}`);
+  console.log(`   • Products updated with new slugs: ${updatedCount}`);
+  console.log(`   • Products with preserved slugs: ${preservedCount}`);
+  console.log(`   • Total products with slugs: ${updatedCount + preservedCount}`);
+  console.log(`   • Product files updated: ${filesUpdated}`);
 }
 
 async function main() {
   try {
     console.log('╔═══════════════════════════════════════════╗');
-    console.log('║  Human-Like Blog Generator                ║');
-    console.log('║  (Saves each blog separately)             ║');
+    console.log('║  Human-Like Blog Generator v2.0           ║');
+    console.log('║  (Anti-Repetition Edition)                ║');
     console.log('╚═══════════════════════════════════════════╝');
     console.log('');
     
@@ -709,6 +984,8 @@ async function main() {
     console.log('   - Natural, conversational writing');
     console.log('   - Personal voice and opinions');
     console.log('   - NO AI-sounding phrases');
+    console.log('   - Anti-repetition validation');
+    console.log('   - Randomized opening styles');
     console.log('   - Validation for dynamic data');
     console.log('   - Each blog saved as blog.<slug>.json');
     console.log('   - Updates products.json & initial-products.json');
@@ -740,6 +1017,7 @@ async function main() {
     console.log('   - Natural, conversational tone');
     console.log('   - Personal observations');
     console.log('   - No corporate speak');
+    console.log('   - No repetitive patterns');
     console.log('   - Each saved as separate file');
     console.log('   - Product files updated with slugs');
     console.log('');
