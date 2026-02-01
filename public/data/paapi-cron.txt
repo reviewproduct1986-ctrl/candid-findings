@@ -28830,3 +28830,256 @@ Skipped:           0
 
 ✓ Done!
 
+TIME: 2/1/2026, 12:59:47 PM
+
+╔═══════════════════════════════════════╗
+║   Amazon Product Updater (PA-API)     ║
+╚═══════════════════════════════════════╝
+
+Initializing PA-API client...
+
+Reading: /home/runner/work/candid-findings/candid-findings/public/data/products.json
+
+Found 45 products
+
+✓ Backup created
+
+
+[1/45] Apple AirPods Pro 2 Wireless Earbuds
+  ASIN: B0D1XD1ZV3
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[2/45] The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist 
+  ASIN: 1538742578
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[3/45] The Let Them Theory: A Life-Changing Tool That Millions of People Can't Stop Talking About
+  ASIN: 1401971369
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[4/45] Owala FreeSip Insulated Stainless Steel Water Bottle with Straw, BPA-Free Sports Water Bottle, Great for Travel, 32 Oz, Black Cherry
+  ASIN: B0FK1LF5PM
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[5/45] Boxbollen® Boxing Reflex Ball - Celebrity-Endorsed Home Workout Game - App-Connected Punch Counter - Hand Eye Coordination Training Ball - Christmas Gift for Boxers, All Ages - Stocking Stuffer
+  ASIN: B0BZ8MB4KM
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[6/45] Best Choice Products Heated Shiatsu Foot Massager for Pain Relief, Plantar Fasciitis, Neuropathy, Blood Circulation w/Compact Design - Satin Black
+  ASIN: B08M6G51XP
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[7/45] Mkeke Magnetic for iPhone 17 Pro Max Case Clear, [Compatible with MagSafe] [Not Yellowing] [Military-Grade Drop Protection] Phone Bumper for iPhone 6.9 inch 2025
+  ASIN: B0FJ88517V
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[8/45] Fintie Case for iPad 6th / 5th Generation (2018 2017 Model, 9.7 Inch), iPad Air 2 / Air 1 (9.7 Inch) - [Corner Protection] Multi-Angle Viewing Stand Cover with Pocket, Purple
+  ASIN: B06XRVX2ZB
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[9/45] Akkerds Case Compatible with iPad 10.2 Inch 2021/2020/2019, for iPad 9th/8th/7th Generation Case with Pencil Holder, Protective with Soft TPU Back, Auto Sleep/Wake Cover, Navyblue
+  ASIN: B0D3QFFNSF
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[10/45] Sun Bum Kids SPF 50 Sunscreen Clear Body Spray - Broad Spectrum Water-Resistant with Vitamin E - Wet or Dry Skin Application - Hawaii 104 Act Compliant (Without Octinoxate & Oxybenzone) - 6 oz
+  ASIN: B0BSZ5VJMV
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[11/45] Genexa Children's Clean Acetaminophen | Pediatrician Preferred Ingredients | Pain & Fever Reducer for Kids | Dye Free, 0% Artificial Additives | Ages 2-11, Delicious Organic Blueberry Liquid, 4 fl oz
+  ASIN: B0CHXSLHQZ
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[12/45] Ello Pop & Fill Stainless Steel Water Bottle with Quick Fill Technology, Double Walled Vacuum Insulated Metal, Leak Proof Locking Lid, Sip & Chug, BPA Free, Holiday Gift for Him Her, 22oz, 32oz, 40oz
+  ASIN: B0CPKT4Q41
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[13/45] Ello Duraglass Refresh 3.4 Cup Meal Prep Sets 10Pc, 5 Pack Set- Glass Food Storage Container with Silicone Boot and Airtight BPA-Free Plastic Lids, Dishwasher, Microwave and Freezer Safe,Dusk Delight
+  ASIN: B0FMH4JNRB
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[14/45] Crocs Kids' Classic Glitter Clog
+  ASIN: B0DQY8GKPQ
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[15/45] Bento Box for Kids Girls Boys, Bento Box Adult Lunch Box with 4 Compartments, Lunch Containers with Utensils, Sauce Jar, Muffin Liners for School, 40 Oz/5 Cup, Blue
+  ASIN: B0CM6L132Z
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[16/45] Ailun 3 Pack for iPhone 17 Pro Privacy Screen Protector [6.3 inch] with installation frame, Anti Spy Private Tempered Glass Anti-Scratch Case Friendly
+  ASIN: B0FDQK73N6
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[17/45] Owala Kids FreeSip Insulated Stainless Steel Water Bottle with Straw for Sports, Travel, and School, BPA-Free Sports Water Bottle, 16 oz, Celestial Sphere
+  ASIN: B0CRC73JTS
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[18/45] Apple AirPods Pro 3 Wireless Earbuds, Active Noise Cancellation, Live Translation, Heart Rate Sensing, Hearing Aid Feature, Bluetooth Headphones, Spatial Audio, High-Fidelity Sound, USB-C Charging
+  ASIN: B0FQFB8FMG
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[19/45] Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones
+  ASIN: 0735211299
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[20/45] People We Meet on Vacation
+  ASIN: 1984806750
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[21/45] Ninja Mega Kitchen System, 1500W, 72 oz. Full-Size Blender & 8-Cup Food Processor with (2) 16 oz. To-Go Cups, Total Crushing Technology - Smoothies, Ice Crushing, Purees, Dough & More, Black, BL770
+  ASIN: B00939I7EK
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[22/45] Fullstar The Original Pro Chopper - Vegetable Chopper and Spiralizer, Food Chopper with Container, Fruit Slicer, Kitchen Gadgets & Gifts, Home Essentials (4 in 1, White)
+  ASIN: B0764HS4SL
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[23/45] Aphrona FDA cleared LED Facial Skin Care Mask MOONLIGHT PRO 7 Color Treatment Photon Mask (White)
+  ASIN: B07Z4HDZGW
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[24/45] STANLEY Quencher H2.0 Tumbler with Handle and Straw 30 oz | Flowstate 3-Position Lid | Cup Holder Compatible for Travel | Insulated Stainless Steel Cup | BPA-Free | Rose Quartz 2.0
+  ASIN: B0CP9YB3Q4
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[25/45] Amazon Basics Digital Kitchen Scale with LCD Display, Tare Function, Multiple Units, Weighs up to 11 Pounds, Batteries Included, Black and Stainless Steel
+  ASIN: B06X9NQ8GX
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[26/45] BIODANCE Bio-Collagen Real Deep Mask, Hydrating Overnight Hydrogel Mask, Pore Minimizing, Elasticity, Plumping Improvement, Korean Skin Care, Gifts for Women | 1.19oz(34g) x 4ea
+  ASIN: B0B2RM68G2
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[27/45] MRS. MEYER'S CLEAN DAY Liquid Hand Soap Refill, Rainwater, 33 OZ
+  ASIN: B07MFMWFYL
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[28/45] medicube Toner Pads Zero Pore Pad 2.0 | Dual-Textured Facial Pad for Exfoliation and Pore Care with 4.5% AHA Lactic Acid, 0.45% BHA Salicylic Acid | Ideal for All, Korean Skin Care, 70 Pads (1 Pack)
+  ASIN: B09V7Z4TJG
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[29/45] eos Shea Better Body Lotion Vanilla Cashmere, 24-Hour Moisture Skin Care, Lightweight & Non-Greasy, Natural Shea, Vegan, Vanilla Body Lotion, 16 fl oz
+  ASIN: B08KT2Z93D
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[30/45] Rain-X 5079281-2 Latitude 2-In-1 Wiper Blades, 26 Inch Windshield Wipers (Pack Of 1), Automotive Replacement Windshield Wiper Blades With Patented Rain-X Water Repellency Formula
+  ASIN: B016NA9Y4S
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[31/45] Kaistyle for Magsafe Car Mount【20 Strong Magnets】Magnetic Phone Holder for Car Phone Holder Mount Dash Mounted Holders Cell Phone Holders for Your Car Accessories for Women Men for iPhone 17 16 15 14
+  ASIN: B0C1Y8Z6VT
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[32/45] Mobil 1 Advanced Fuel Economy Full Synthetic Motor Oil 0W-20, 5 Quart
+  ASIN: B00J00X5YO
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[33/45] Amazon Basics Neoprene Dumbbell Hand Weights for Exercise and Muscle Toning
+  ASIN: B01LR5RO5U
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[34/45] Amazon Basics Extra Thick Exercise Yoga Mat with Carrying Strap
+  ASIN: B01LP0U5X0
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[35/45] Theo of Golden: A Novel
+  ASIN: 1668236516
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[36/45] CeraVe Hydrating Facial Cleanser, Moisturizing Face Wash For Dry Skin, Hyaluronic Acid + Ceramides + Glycerin, Hydrating Cleanser For Normal To Dry Skin, National Eczema Association Certified
+  ASIN: B01MSSDEPK
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[37/45] Taygeer Travel Backpack for Women, Carry On Backpack with USB Charging Port & Shoe Pouch, TSA 15.6inch Laptop Mochila Flight Approved, Nurse Bag Casual Daypack for Weekender Business Hiking, Pink
+  ASIN: B09MQWWP87
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[38/45] THERMOS Stainless King Vacuum-Insulated Beverage Bottle, 68 Ounce, Midnight Blue
+  ASIN: B08JWGP2J1
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[39/45] Instant Pot Duo 7-in-1 Electric Pressure Cooker, Slow Cooker, Rice, Steamer, Sauté, Yogurt Maker, Warmer & Sterilizer, Includes App With Over 800 Recipes, Stainless Steel, 6 Quart
+  ASIN: B00FLYWNYQ
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[40/45] Poo-Pourri Before-You-Go Toilet Spray, Original Citrus, 4 Fl Oz, Up to 200 Uses, Bathroom Odor Deodorizer, Plant-Based with Essential Oils, for Home or Work, Lemon, Bergamot and Lemongrass Scent
+  ASIN: B0108XRHJU
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[41/45] bella 2 Slice Slim Toaster, Fits-anywhere™ Kitchenware, 6 Setting Shade Control with Reheat & Cancel Buttons, Fits sourdough, 10” Long Slot, Anti Jam & Auto Shutoff, 900 Watt, Oatmilk
+  ASIN: B0CYJBB2JQ
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[42/45] Our Place Always Pan 2.0-10.5” (2.6 Qt) Nonstick, Toxin-Free Ceramic Cookware | Patented 10-in-1 Aluminum Frying & Sauté Pan | Safe for Oven, Induction & All Cooktops up to 450°F | Blue Salt
+  ASIN: B0C6RZY11P
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[43/45] NOCO Boost GB40: 1000A UltraSafe Jump Starter – 12V Lithium Battery Booster Pack, Portable Jump Box, Power Bank & Jumper Cables - for 6.0L Gas and 3.0L Diesel Engines
+  ASIN: B015TKUPIC
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[44/45] Airmoto Tire Inflator Portable Air Compressor - Air Pump for Car Tires with Digital Pressure Gauge, LED Light and Auto Shut-Off Function - Cordless Pump for Car, Motorcycle, Bicycle, Ball
+  ASIN: B094DMH7ZM
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+[45/45] AstroAI Tire Inflator Portable Air Compressor Air Pump for Car Tires-Car Accessories, 9.8Ft Cord-12V DC-Powered Auto Pump with Digital Pressure Gauge, Emergency LED Light for Bicycle, Balloons, Yellow
+  ASIN: B07QR4Q42L
+  Fetching from PA-API...
+  ✗ Error: Forbidden
+
+
+╔═══════════════════════════════════════╗
+║            Summary                    ║
+╚═══════════════════════════════════════╝
+
+Total products:    45
+Updated:           0
+Unavailable:       0
+Errors:            45
+Skipped:           0
+
+✓ Done!
+
