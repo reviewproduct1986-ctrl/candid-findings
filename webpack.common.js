@@ -59,7 +59,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      title: 'CandidFindings - Honest Product Reviews & Candid Findings',
+      title: 'CandidFindings - Product Reviews & Candid Findings',
       // Minify in production mode
       minify: process.env.NODE_ENV === 'production' ? {
         removeComments: true,

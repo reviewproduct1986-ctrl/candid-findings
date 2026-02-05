@@ -9,7 +9,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
       <Helmet>
         <title>About Us - CandidFindings</title>
-        <meta name="description" content="Learn about our review process and commitment to honest, unbiased product recommendations." />
+        <meta name="description" content="Learn about our review process and commitment to unbiased product recommendations." />
         <link rel="canonical" href="https://candidfindings.com/about" />
       </Helmet>
 
@@ -35,7 +35,7 @@ export default function AboutPage() {
               About CandidFindings
             </h1>
             <p className="text-xl text-slate-600">
-              Helping you make smarter shopping decisions through honest, thorough product reviews.
+              Helping you make smarter shopping decisions through unbiased product reviews.
             </p>
           </div>
 
@@ -43,12 +43,11 @@ export default function AboutPage() {
           <section className="mb-10">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              We're passionate about cutting through marketing hype to deliver honest, 
-              unbiased product reviews that help you make informed purchasing decisions.
+              We're passionate about cutting through marketing hype to deliver unbiased product reviews that help you make informed purchasing decisions.
             </p>
             <p className="text-slate-700 leading-relaxed">
               In a world of sponsored content and paid reviews, we believe consumers 
-              deserve honest opinions they can trust.
+              deserve unbiased opinions they can trust.
             </p>
           </section>
 
@@ -93,7 +92,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg text-slate-900 mb-2">
-                    3. Honest Recommendations
+                    3. Unbiased Recommendations
                   </h3>
                   <p className="text-slate-600">
                     We only recommend products we genuinely believe provide value. 

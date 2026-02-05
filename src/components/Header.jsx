@@ -28,7 +28,7 @@ export default function Header({
               <h1 className="font-bold text-slate-900 text-base lg:text-lg leading-tight group-hover:text-violet-600 transition-colors">
                 CandidFindings
               </h1>
-              <p className="text-xs text-slate-500 leading-tight">Honest Recommendations</p>
+              <p className="text-xs text-slate-500 leading-tight">Unbiased Recommendations</p>
             </div>
           </Link>
 

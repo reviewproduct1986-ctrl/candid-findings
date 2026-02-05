@@ -118,7 +118,7 @@ export default function TermsOfService() {
 
               <h3 className="text-xl font-semibold text-slate-900 mb-3">Reviews and Opinions</h3>
               <p className="text-slate-700 mb-4">
-                Our reviews represent our honest opinions based on research and analysis. Individual experiences may vary. We encourage you to do your own research before making purchase decisions.
+                Our reviews represent our unbiased opinions based on research and analysis. Individual experiences may vary. We encourage you to do your own research before making purchase decisions.
               </p>
             </section>
 
@@ -135,7 +135,7 @@ export default function TermsOfService() {
                 <li>We may earn a commission at no additional cost to you</li>
                 <li>The price you pay is the same as going directly to Amazon</li>
                 <li>We only recommend products we believe provide value</li>
-                <li>Our reviews remain honest and unbiased</li>
+                <li>Our reviews remain unbiased</li>
               </ul>
             </section>
 

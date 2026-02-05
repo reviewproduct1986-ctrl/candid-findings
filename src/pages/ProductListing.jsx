@@ -78,11 +78,11 @@ export default function ProductListing() {
   // Generate page metadata
   const pageTitle = selectedCategory && selectedCategory !== 'All'
     ? `${selectedCategory} Products | CandidFindings`
-    : 'CandidFindings | Honest Product Reviews & Recommendations';
+    : 'CandidFindings | Unbiased Product Reviews & Recommendations';
 
   const pageDescription = selectedCategory && selectedCategory !== 'All'
-    ? `Browse our curated selection of ${selectedCategory} products. Expert reviews, honest opinions, and smart recommendations to help you make better buying decisions.`
-    : 'Discover expert-curated product reviews and honest opinions. From electronics to home essentials, find products you\'ll actually love with CandidFindings.';
+    ? `Browse our curated selection of ${selectedCategory} products. Expert reviews, unbiased opinions, and smart recommendations to help you make better buying decisions.`
+    : 'Discover expert-curated product reviews and unbiased opinions. From electronics to home essentials, find products you\'ll actually love with CandidFindings.';
 
   // Generate schemas
   const itemListSchema = useMemo(() => 
@@ -212,8 +212,8 @@ export default function ProductListing() {
             </h1>
             <p className="text-lg sm:text-xl text-violet-100 mb-8">
               {selectedCategory && selectedCategory !== 'All'
-                ? `Expert-curated ${selectedCategory.toLowerCase()} reviews and honest opinions`
-                : 'Expert-curated reviews and honest opinions to help you make smarter choices'
+                ? `Expert-curated ${selectedCategory.toLowerCase()} reviews and unbiased opinions`
+                : 'Expert-curated reviews and unbiased opinions to help you make smarter choices'
               }
             </p>
             <div className="flex flex-wrap gap-4 justify-center text-sm">

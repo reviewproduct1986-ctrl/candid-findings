@@ -3,8 +3,7 @@ name: Update Product Data
 on:
   # Run every two hours
   schedule:
-    # change to - cron: '48 /2 * * *' after paapi api access is back
-    - cron: '48 2 * * *'
+    - cron: '48 */6 * * *'
   
   # Manual trigger
   workflow_dispatch:

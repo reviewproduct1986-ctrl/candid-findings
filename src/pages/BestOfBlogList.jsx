@@ -82,7 +82,7 @@ export default function BestOfBlogList() {
     }
     const categoryPost = publishedPosts.find(p => slugToCategory(p.category) === slugToCategory(selectedCategory));
     return categoryPost?.metaDescription || 
-      `Discover the best ${slugToCategory(selectedCategory).toLowerCase()} products. Expert recommendations and honest reviews to help you choose wisely.`;
+      `Discover the best ${slugToCategory(selectedCategory).toLowerCase()} products. Expert recommendations and unbiased reviews to help you choose wisely.`;
   };
 
   const getPageTitle = () => {

@@ -15,7 +15,7 @@ export default function ReviewHeader() {
               <h1 className="font-bold text-slate-900 text-base lg:text-lg leading-tight">
                 CandidFindings
               </h1>
-              <p className="text-xs text-slate-500 leading-tight">Honest Recommendations</p>
+              <p className="text-xs text-slate-500 leading-tight">Unbiased Recommendations</p>
             </div>
           </Link>
           <Link

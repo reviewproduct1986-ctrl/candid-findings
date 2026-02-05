@@ -40,7 +40,7 @@ export default function Footer() {
             </p>
           </div>
           <p className="text-sm text-slate-300 mb-4">
-            Honest product reviews and candid findings
+            Product reviews and candid findings
           </p>
           <div className="flex gap-6 text-sm">
             <Link to="/privacy-policy" className="text-slate-300 hover:text-violet-400 transition-colors">
