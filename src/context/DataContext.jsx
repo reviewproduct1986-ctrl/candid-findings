@@ -14,7 +14,7 @@ export function DataProvider({ children }) {
       fetch('/data/best-of-blogs.json').then(res => res.json())
     ])
       .then(([productsData, bestOfBlogsData]) => {
-        setProducts(productsData.products || []);
+        setProducts(productsData.products?.filter(({ available }) => Boolean(available)) || []);
         setBestOfBlogs(bestOfBlogsData.posts || []);
         setLoading(false);
       })

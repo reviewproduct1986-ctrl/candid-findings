@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { categoryToSlug } from '../utils/urlHelper';
 
