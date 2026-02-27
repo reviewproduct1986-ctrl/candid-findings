@@ -9,6 +9,7 @@
  */
 
 // node --env-file=./secrets/.script.env scripts/generate-blog.js --asin=<ASIN>
+// node scripts/generate-sitemap.js
 
 const fs = require('fs');
 const path = require('path');
