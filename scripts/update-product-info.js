@@ -51,7 +51,8 @@ async function main() {
   }
   
   const data = JSON.parse(fs.readFileSync(productsPath, 'utf8'));
-  const products = data.products || [];
+  const allProducts = data.products || [];
+  const products = allProducts.filter(({ available }) => available);
   
   let initialData = null;
   const hasInitial = fs.existsSync(initialProductsPath);
