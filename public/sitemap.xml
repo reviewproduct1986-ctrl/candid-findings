@@ -599,6 +599,13 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://candidfindings.com/reviews/crocs-classic-clogs-review</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Category Pages -->
   <url>
     <loc>https://candidfindings.com/category/electronics</loc>
